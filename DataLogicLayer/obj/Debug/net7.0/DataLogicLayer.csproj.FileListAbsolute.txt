@@ -1,0 +1,14 @@
+d:\Projects\PizzashopMVC\DataLogicLayer\bin\Debug\net7.0\DataLogicLayer.deps.json
+d:\Projects\PizzashopMVC\DataLogicLayer\bin\Debug\net7.0\DataLogicLayer.runtimeconfig.json
+d:\Projects\PizzashopMVC\DataLogicLayer\bin\Debug\net7.0\DataLogicLayer.dll
+d:\Projects\PizzashopMVC\DataLogicLayer\bin\Debug\net7.0\DataLogicLayer.pdb
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.csproj.AssemblyReference.cache
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.GeneratedMSBuildEditorConfig.editorconfig
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.AssemblyInfoInputs.cache
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.AssemblyInfo.cs
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.csproj.CoreCompileInputs.cache
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.dll
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\refint\DataLogicLayer.dll
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.pdb
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\DataLogicLayer.genruntimeconfig.cache
+d:\Projects\PizzashopMVC\DataLogicLayer\obj\Debug\net7.0\ref\DataLogicLayer.dll

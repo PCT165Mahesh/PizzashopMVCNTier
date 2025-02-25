@@ -1,0 +1,17 @@
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.deps.json
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.runtimeconfig.json
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.dll
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.pdb
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\DataLogicLayer.dll
+d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\DataLogicLayer.pdb
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.AssemblyReference.cache
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.GeneratedMSBuildEditorConfig.editorconfig
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.AssemblyInfoInputs.cache
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.AssemblyInfo.cs
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.CoreCompileInputs.cache
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.CopyComplete
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.dll
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\refint\BusinessLogicLayer.dll
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.pdb
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.genruntimeconfig.cache
+d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\ref\BusinessLogicLayer.dll
