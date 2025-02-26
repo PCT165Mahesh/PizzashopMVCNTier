@@ -9,11 +9,11 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PizzashopMVCNtier
 build_property.RootNamespace = PizzashopMVCNtier
-build_property.ProjectDir = d:\Projects\PizzashopMVC\PizzashopMVCNtier\
+build_property.ProjectDir = D:\Projects\PizzashopMVC\PizzashopMVCNtier\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = d:\Projects\PizzashopMVC\PizzashopMVCNtier
+build_property.MSBuildProjectDirectory = D:\Projects\PizzashopMVC\PizzashopMVCNtier
 build_property._RazorSourceGeneratorDebug = 
 
 [D:/Projects/PizzashopMVC/PizzashopMVCNtier/Views/Dashboard/ChangePassword.cshtml]
@@ -46,10 +46,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Projects/PizzashopMVC/PizzashopMVCNtier/Views/Home/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSZXNldFBhc3N3b3JkLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Projects/PizzashopMVC/PizzashopMVCNtier/Views/Home/Successful.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdWNjZXNzZnVsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Projects/PizzashopMVC/PizzashopMVCNtier/Views/Shared/Error.cshtml]

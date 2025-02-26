@@ -12,6 +12,11 @@ public class ResetPasswordService : IResetPasswordService
         _userRepository = userRepository;
         _encryptionService = encryptionService;
     }
+
+    /*-------------------------------------------------------------------------------------------------------------Reset Password Service Implementation
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
+    #region  Reset Password
     public async Task<bool> ResetPassword(string password, string newPassword, string email)
     {
         if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(newPassword) && password.Equals(newPassword))
@@ -31,5 +36,5 @@ public class ResetPasswordService : IResetPasswordService
         }
         return false;
     }
-
+    #endregion
 }

@@ -16,6 +16,12 @@ public class ChangePasswordService : IChangePasswordService
         _resetPasswordService = resetPasswordService;
         _encryptionService = encryptionService;
     }
+
+
+    /*-------------------------------------------------------------------------------------------------------------Change User Password Service Implementation
+    ------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    #region Change Password Method
     public async Task<bool> ChangePassword(string currentPassword, string newPassword, string confirmNewPassword, string email)
     {
         if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(confirmNewPassword) && newPassword.Equals(confirmNewPassword))
@@ -36,5 +42,6 @@ public class ChangePasswordService : IChangePasswordService
         }
         return false;
     }
+    #endregion
 
 }

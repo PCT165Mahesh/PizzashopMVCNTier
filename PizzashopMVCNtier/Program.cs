@@ -40,6 +40,9 @@ builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<IUserDetailService, UserDetailService>();
 builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 // Add session Servies
 builder.Services.AddSession(options =>

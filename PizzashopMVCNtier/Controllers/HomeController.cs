@@ -26,7 +26,7 @@ public class HomeController : Controller
     /* ------------------------------------------------------------------------------------------------------Login Action-------------
     -------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Login
     [HttpGet]
     public IActionResult Login()
     {
@@ -44,37 +44,45 @@ public class HomeController : Controller
     public async Task<IActionResult> Login(LoginViewModel model)
     {
 
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var token = await _loginService.LoginUser(model.Email, model.Password);
-            if (token != null)
+            ModelState.AddModelError("", "Invalid Credentails");
+            return View(model);
+        }
+
+
+        var token = await _loginService.LoginUser(model.Email, model.Password);
+        if (token != null)
+        {
+            // Cookie 
+            CookieOptions options = new CookieOptions
             {
-                // Cookie 
-                CookieOptions options = new CookieOptions
+                Expires = DateTime.Now.AddHours(1),
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.Strict
+            };
+
+            Response.Cookies.Append("SuperSecretAuthToken", token, options);
+
+            if (model.RememberMe)
+            {
+                Response.Cookies.Append("UserEmail", model.Email, new CookieOptions
                 {
-                    Expires = model.RememberMe ? DateTime.Now.AddHours(5) : DateTime.Now.AddHours(1),
+                    Expires = DateTime.Now.AddHours(5),
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Strict
-                };
-
-                Response.Cookies.Append("SuperSecretAuthToken", token, options);
-
-                if (model.RememberMe)
-                {
-                    Response.Cookies.Append("UserEmail", model.Email, options);
-                }
-
-                TempData["SuccessMessage"] = "Login Successful!";
-                return RedirectToAction("Index", "Dashboard");
+                });
             }
-            TempData["ErrorMessage"] = "Invalid Email or Password!";
+
+            TempData["SuccessMessage"] = "Login Successful!";
+            return RedirectToAction("Index", "Dashboard");
         }
-        else
-        {
-            ModelState.AddModelError("", "Invalid Credentails");
-        }
+
+        TempData["ErrorMessage"] = "Invalid Email or Password!";
         return View(model);
+        
     }
     #endregion
 
@@ -82,7 +90,7 @@ public class HomeController : Controller
     /* -------------------------------------------------------------------------------------------------------Logout Action---------------
     --------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Logout
     public IActionResult Logout()
     {
         Response.Cookies.Delete("UserEmail");
@@ -94,7 +102,7 @@ public class HomeController : Controller
     /* ------------------------------------------------------------------------------------------------------Forgot Password Action-------------
     ---------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Forgot Password
     [HttpGet]
     public IActionResult ForgotPassword(string email)
     {
@@ -139,7 +147,7 @@ public class HomeController : Controller
     /* ------------------------------------------------------------------------------------------------------Reset Password Action-------------
     ---------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Reset Password
 
     [HttpGet]
     public IActionResult ResetPassword(string email)
@@ -161,7 +169,8 @@ public class HomeController : Controller
                 TempData["SuccessMessage"] = "Password Reset successfully";
                 return RedirectToAction("Login", "Home");
             }
-            else{
+            else
+            {
                 ModelState.AddModelError("", "User Not Found");
                 return View(model);
             }
@@ -171,11 +180,6 @@ public class HomeController : Controller
 
     #endregion
 
-
-    public IActionResult Successful()
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

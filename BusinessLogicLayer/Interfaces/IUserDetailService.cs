@@ -12,9 +12,16 @@ public interface IUserDetailService
     public string ImgUrl(string token);
     public string Email(string token);
 
-    // public JsonResult GetUserDetails(int pageNo, int pageSize, string search);
+    /*-------------------------------------------------------------------------------------------------------------Get User Details Method Implementation
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+    public Task<long> GetUserIdByUserNameAsync(string userName);
 
     public Task<ProfileDataViewModel> GetProfileData(string email);
 
+    public Task<JsonResult> GetUserDetails(int pageNo, int pageSize, string search);
+
+    /*-------------------------------------------------------------------------------------------------------------Update Profile Data Method Implementation
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
     public Task<bool> UpdateUserProfileData(ProfileDataViewModel model, string email);
+
 }

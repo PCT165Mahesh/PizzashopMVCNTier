@@ -134,49 +134,49 @@
                     </div>
 
                     <ul>
-                        <li>
-                            <a href="./user_list.html">
+                        <li class="@((ViewData["ActiveLink"] as string) == "Dashboard" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="Dashboard">
                                 <img src="~/images/icons/border-all.svg" alt="" />
                                 <span class="sidebar_desc">Dashboard</span>
                             </a>
                         </li>
-                        <li class="active">
-                            <a href="./user_list.html">
+                        <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
+                            <a asp-action="Index" asp-controller="User">
                                 <img src="~/images/icons/people.svg" alt="" />
                                 <span class="sidebar_desc">Users</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="./permissions.html">
+                        <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                            <a href="">
                                 <img src="~/images/icons/person-gear.svg" alt="" />
                                 <span class="sidebar_desc">Roles and Permisions</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
                             <a href="">
                                 <img src="~/images/icons/customer.svg" alt="" />
                                 <span class="sidebar_desc">Menu</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
                             <a href="">
                                 <img src="~/images/icons/square-fill.svg" alt="" />
                                 <span class="sidebar_desc">Table and Section</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Taxes" ? "active" : "")">
                             <a href="">
                                 <img src="~/images/icons/cash-coin.svg" alt="" />
                                 <span class="sidebar_desc">Taxes and Fees</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
                             <a href="">
                                 <img src="~/images/icons/clipboard-check.svg" alt="" />
                                 <span class="sidebar_desc">Order</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
                             <a href="">
                                 <img src="~/images/icons/person-rolodex.svg" alt="" />
                                 <span class="sidebar_desc">Customers</span>

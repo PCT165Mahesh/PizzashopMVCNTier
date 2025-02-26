@@ -16,10 +16,16 @@ public class JwtService
         _audience = configuration["JwtConfig:Audience"];
     }
 
+    /*-----------------------------------------------------------------------------------------------------------------------Generate Token
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
+    #region Generate Token
     public string GenerateJwtToken(string email, string role, string userName, string imgUrl)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_key); // Secret Code (Salt)
+
+        imgUrl = !string.IsNullOrEmpty(imgUrl) ? imgUrl : "/uploads/Default_pfp.svg.png";
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -41,9 +47,12 @@ public class JwtService
         return tokenHandler.WriteToken(token);
     }
 
+    #endregion
 
+    /*-------------------------------------------------------------------------------------------------------------------Validate Token Methodd
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
 
-     //  Validate the Token
+    #region  Validate Token
     public bool ValidateToken(string token)
     {
         if (string.IsNullOrEmpty(token))
@@ -72,8 +81,13 @@ public class JwtService
         }
     }
 
+    #endregion
 
-    // Extracts claims from a JWT token.
+
+    /*-------------------------------------------------------------------------------------------------------------Get Claim Value from Token
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
+    #region Get Claim Value
     public ClaimsPrincipal? GetClaimsFromToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
@@ -90,4 +104,5 @@ public class JwtService
         var value = claimsPrincipal?.FindFirst(claimType)?.Value;
         return value;
     }
+    #endregion
 }

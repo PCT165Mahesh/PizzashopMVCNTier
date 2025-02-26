@@ -15,22 +15,24 @@ public class DashboardController : Controller
     private readonly IUserDetailService _userDetailService;
     private readonly ICountryService _countryService;
     private readonly IChangePasswordService _changePasswordService;
+    private readonly IRoleService _roleService;
 
-
-    public DashboardController(JwtService jwtService, IUserDetailService userDetailService, ICountryService countryService, IChangePasswordService changePasswordService)
+    
+    public DashboardController(JwtService jwtService, IUserDetailService userDetailService, 
+        ICountryService countryService, IChangePasswordService changePasswordService, IRoleService roleService)
     {
         _jwtService = jwtService;
         _userDetailService = userDetailService;
         _countryService = countryService;
         _changePasswordService = changePasswordService;
-
+        _roleService = roleService;
     }
 
 
     /* ------------------------------------------------------------------------------------------------------Dashboard Action-------------
 -------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Dashboard
     public IActionResult Index()
     {
         var token = Request.Cookies["SuperSecretAuthToken"];
@@ -49,12 +51,10 @@ public class DashboardController : Controller
     #endregion
 
 
-
     /* ----------------------------------------------------------------------------------------------Profile Details Action----------
 -------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-    #region 
+    #region Profile Data
     [HttpGet]
     public async Task<IActionResult> ProfileDetails()
     {
@@ -96,8 +96,7 @@ public class DashboardController : Controller
     /* ----------------------------------------------------------------------------------------------Change Password Action----------
 -------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-    #region 
+    #region Change Password
     [HttpGet]
     public IActionResult ChangePassword()
     {
@@ -132,7 +131,7 @@ public class DashboardController : Controller
     /* ----------------------------------------------------------------------------------------------Country State city Details Action----------
 -------------------------------------------------------------------------------------------------------------------------------------*/
 
-    #region 
+    #region Coutry, City, States, Roles
 
     [HttpGet]
     public JsonResult GetCountries()
@@ -161,13 +160,11 @@ public class DashboardController : Controller
         return Json(cities);
     }
 
-    // [HttpGet]
-    // public JsonResult GetRoles()
-    // {
-
-    //     var roles = _context.Roles.ToList();
-    //     return Json(roles);
-    // }
-
+    [HttpGet]
+    public async Task<JsonResult> GetRoles()
+    {
+        var roles = await _roleService.GetRolesAsync();
+        return Json(roles);
+    }
     #endregion
 }

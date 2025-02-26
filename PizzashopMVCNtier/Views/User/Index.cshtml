@@ -163,7 +163,7 @@
             type: "GET",
             data: { pageNo: pageNo, pageSize: pageSize, search: searchQuery },
             success: function (response) {
-                var users = response.users;
+                var users = response.userList;;
                 totalRecords = response.totalRecords;
                 $("#userListBody").empty();
 
@@ -177,7 +177,7 @@
                             <tr>
                                 <td>
                                     <img src="${user.imgUrl ? user.imgUrl : '/images/Default_pfp.svg.png'}" 
-                                        alt="User Image"class="rounded-circle" width="25px" height="25px">
+                                        class="rounded-circle" width="25px" height="25px">
                                     ${user.firstName} ${user.lastName}
                                 </td>
                                 <td>${user.email}</td>
@@ -264,7 +264,7 @@
             $("#confirmDeleteBtn").on("click", function () {
                 if (userIdToDelete) {
                     $.ajax({
-                        url: "/User/SoftDeleteUser",
+                        url: "/User/DeleteUser",
                         type: "POST",
                         data: { id: userIdToDelete }, // Send data as form data
                         headers: {

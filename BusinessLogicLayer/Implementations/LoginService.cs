@@ -20,6 +20,12 @@ public class LoginService : ILoginService
         _userRepository = userRepository;
         _roleRepository = roleRepository;
     }
+
+    /*-------------------------------------------------------------------------------------------------------------Login User Service Implementation
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    #region  Login User Service
     public async Task<string> LoginUser(string email, string password)
     {
         //Get the user from ther user repository
@@ -41,4 +47,5 @@ public class LoginService : ILoginService
         return null;
     }
 
+    #endregion
 }

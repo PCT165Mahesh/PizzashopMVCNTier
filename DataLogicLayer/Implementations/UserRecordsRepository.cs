@@ -12,7 +12,13 @@ public class UserRecordsRepository : IGetUserRecordsRepository
     {
         _context = context;
     }
-    public (List<UserListViewModel> Users, int totalRecords) GetAllUserRecords(int pageNo, int pageSize, string search)
+
+
+    /*-----------------------------------------------------------------------------------------------Get User Records based on Search, Page no Method Implementation
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    #region  Get User Records for Pagination
+   public async Task<PaginationViewModel> GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
     {
         var query = from u in _context.Users
                     join r in _context.Roles on u.Roleid equals r.RoleId
@@ -35,14 +41,14 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                         ImgUrl = u.Imgurl
                     };
 
-
-        var totalRecords = query.Count();
-        var users = query.OrderBy(u => u.FirstName)
+        var totalRecords = await query.CountAsync();
+        var users = await query.OrderBy(u => u.FirstName)
                     .Skip((pageNo - 1) * pageSize)
                     .Take(pageSize)
-                    .ToList();
+                    .ToListAsync();
 
-        return (users, totalRecords);
+        return new PaginationViewModel { UserList = users, TotalRecords = totalRecords };
     }
+    #endregion
 
 }

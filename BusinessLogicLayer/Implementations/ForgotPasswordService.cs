@@ -19,6 +19,11 @@ public class ForgotPasswordService : IForgotPasswordService
 
     }
 
+    /*-------------------------------------------------------------------------------------------------------------Forgot Password Service Implementation
+    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    #region Forgot password Service
     public async Task<bool> ForgotPassword(string email, string? resetPasswordLink)
     {
         string subject = "Password Reset Link";
@@ -54,4 +59,6 @@ public class ForgotPasswordService : IForgotPasswordService
         await _emailSender.SendEmailAsync(email, subject, emailBody);
         return true;
     }
+
+    #endregion
 }
