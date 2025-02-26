@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6dnDjENDhwN32iFC6JnKwFT1NeH+bVyBqfuPAGZqTVE=",
+  "Hash": "bNPfoFOpxp6C1lwq7VIsoxlGLvvBEn6u/Sxf+sn8GBs=",
   "Source": "PizzashopMVCNtier",
   "BasePath": "_content/PizzashopMVCNtier",
   "Mode": "Default",
@@ -2023,6 +2023,23 @@
       "OriginalItemSpec": "wwwroot\\uploads\\297264d4-75a3-4bd6-b360-0b10bc271db6_toppng.com-warning-icon-2400x2400.png"
     },
     {
+      "Identity": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\39a41b7e-46f3-4573-9f3a-98e834b333f9_dining-menu.png",
+      "SourceId": "PizzashopMVCNtier",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\",
+      "BasePath": "_content/PizzashopMVCNtier",
+      "RelativePath": "uploads/39a41b7e-46f3-4573-9f3a-98e834b333f9_dining-menu.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\39a41b7e-46f3-4573-9f3a-98e834b333f9_dining-menu.png"
+    },
+    {
       "Identity": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\45d18989-758e-4e59-b86e-d1d5cb2f3191_dominos_background.jpg",
       "SourceId": "PizzashopMVCNtier",
       "SourceType": "Discovered",
@@ -2072,6 +2089,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\689d8b9e-9661-41b6-8a99-f52523826e48_icons8-google-48.png"
+    },
+    {
+      "Identity": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png",
+      "SourceId": "PizzashopMVCNtier",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\",
+      "BasePath": "_content/PizzashopMVCNtier",
+      "RelativePath": "uploads/80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png"
     },
     {
       "Identity": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\885c02d1-9380-4a1d-bcc2-5cb278bc17c6_toppng.com-warning-icon-2400x2400.png",

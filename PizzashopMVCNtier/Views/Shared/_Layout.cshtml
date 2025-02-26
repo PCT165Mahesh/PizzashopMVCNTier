@@ -79,7 +79,7 @@
                 @if (User.IsInRole("Super Admin"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
-                        <a href="./permissions.html">
+                        <a asp-action="Role" asp-controller="RolePermission">
                             <img src="~/images/icons/person-gear.svg" alt="" />
                             <span class="sidebar_desc">Roles and Permisions</span>
                         </a>
@@ -147,7 +147,7 @@
                             </a>
                         </li>
                         <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
-                            <a href="">
+                            <a asp-action="Role" asp-controller="RolePermission">
                                 <img src="~/images/icons/person-gear.svg" alt="" />
                                 <span class="sidebar_desc">Roles and Permisions</span>
                             </a>

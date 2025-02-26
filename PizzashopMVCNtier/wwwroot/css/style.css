@@ -411,6 +411,20 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   pointer-events: none;
 }
 
+
+
+
+/* Roles and Permissions Table */
+.role_table{
+  max-width: 1300px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.role_table table{
+  color: rgb(110, 107, 107);
+}
+
 /* Media Query */
 
 @media (max-width: 767px) {
