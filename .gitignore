@@ -477,7 +477,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # Bin Folder
-bin/
+PizzashopMVCNtier/bin/
+DataLogicLayer/bin/
+BusinessLogicLayer/bin/
 
 # Obj Folder
-obj/
+PizzashopMVCNtier/obj/
+DataLogicLayer/obj/
+BusinessLogicLayer/obj/
+
