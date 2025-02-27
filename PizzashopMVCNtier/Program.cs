@@ -30,6 +30,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IGetUserRecordsRepository, UserRecordsRepository>();
 builder.Services.AddScoped<ICountryDetailRepository, CountryDetailRepository>();
+builder.Services.AddScoped<IRolePermissionsRepository, RolePermissionsRepository>();
 
 
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
 
 // Add session Servies
