@@ -1,3 +1,4 @@
+@model DataLogicLayer.ViewModels.RolePermissionViewModel
 @{
   ViewData["Title"] = "Add User Page";
   Layout = "~/Views/Shared/_Layout.cshtml";
@@ -58,324 +59,65 @@
               </tr>
             </thead>
             <tbody class="table-group-divider">
-              <tr>
-                <!-- 1st row  -->
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >Users</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
 
-              <!-- 2nd row -->
-              <tr>
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >RoleAndPermission</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
 
-              <!-- 3rd Row -->
-              <tr>
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >Menu</label
-                    >
-                  </div>
-                </td>
-                <td>
+              @foreach (var permmission in Model.Permissions){
+                <tr>
+                  <td>
+                    <div class="mb-3 form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="exampleCheck1"
+                        data-id="@permmission.PermissionId"
+                      />
+                      <label class="form-check-label" for="exampleCheck1"
+                        >@permmission.PermissionName</label
+                      >
+                    </div>
+                  </td>
+                  <!-- View--->
+                  <td>
                   <div class="form-check form-switch">
                     <input
-                      class="form-check-input"
+                      class="form-check-input view_switch"
+                      data-id="@permmission.PermissionId"
                       type="checkbox"
                       role="switch"
                       id="flexSwitchCheckDefault"
+                      @(permmission.View ? "checked" : "")
                     />
                   </div>
                 </td>
+                <!--Add Or Edit--->
                 <td>
                   <div class="form-check form-switch">
                     <input
-                      class="form-check-input"
+                      class="form-check-input add_switch"
+                      data-id="@permmission.PermissionId"
                       type="checkbox"
                       role="switch"
                       id="flexSwitchCheckDefault"
+                      @(permmission.AddOrEdit ? "checked" : "")
                     />
                   </div>
                 </td>
+                <!--Delete--->
                 <td>
                   <div class="form-check form-switch">
                     <input
-                      class="form-check-input"
+                      class="form-check-input delete_switch"
+                      data-id="@permmission.PermissionId"
                       type="checkbox"
                       role="switch"
                       id="flexSwitchCheckDefault"
+                      @(permmission.Delete ? "checked" : "")
                     />
                   </div>
                 </td>
-              </tr>
+                </tr>
+              }
 
-              <!-- 4th row -->
-              <tr>
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >TableAndSection</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <!-- 5th row -->
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >TaxAndFee</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <!-- 6th row -->
-              <tr>
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >Order</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
-              <!-- 7th Row -->
-              <tr>
-                <td>
-                  <div class="mb-3 form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input row-checkbox"
-                      id="exampleCheck1"
-                    />
-                    <label class="form-check-label" for="exampleCheck1"
-                      >Customers</label
-                    >
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                    />
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
 
@@ -386,3 +128,27 @@
           </div>
         </div>
 </div>
+
+
+@section Scripts{
+  <script>
+    $('.view_switch').on("change", function() {
+      var id = $(this).data("id");
+      var view = $(this).prop("checked");
+      $('.add_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.add_switch[data-id="' + id + '"]').prop("disabled", !view);
+      $('.delete_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.delete_switch[data-id="' + id + '"]').prop("disabled", true);
+    })
+
+    // Add btn properties
+    $('.add_switch').on("change", function() {
+      var id = $(this).data("id");
+      var add = $(this).prop("checked");
+      $('.delete_switch[data-id="' + id + '"]').prop("checked", false);
+      $('.delete_switch[data-id="' + id + '"]').prop("disabled", !add);
+    })
+
+    
+  </script>
+}

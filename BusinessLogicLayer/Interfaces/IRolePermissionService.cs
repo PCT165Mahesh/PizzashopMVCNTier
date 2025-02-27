@@ -5,4 +5,6 @@ namespace BusinessLogicLayer.Interfaces;
 public interface IRolePermissionService
 {
     public RolePermissionViewModel GetRolePermissions(long roleId);
+
+    public Task<bool> EditRolepermissions(RolePermissionViewModel model, long userId);
 }

@@ -24,10 +24,10 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                     join r in _context.Roles on u.Roleid equals r.RoleId
                     where u.Isdeleted == false &&
                         (string.IsNullOrEmpty(search) ||
-                        EF.Functions.ILike(u.Firstname, $"%{search}%") ||
-                        EF.Functions.ILike(u.Lastname, $"%{search}%") ||
-                        EF.Functions.ILike(u.Email, $"%{search}%") ||
-                        EF.Functions.ILike(r.Rolename, $"%{search}%")
+                        u.Firstname.Contains(search) ||
+                        u.Lastname.Contains(search) ||
+                        u.Email.Contains(search) ||
+                        r.Rolename.Contains(search)
                         )
                     select new UserListViewModel
                     {

@@ -14,6 +14,13 @@ public class RolePermissionService : IRolePermissionService
         _rolePermissionsRepository = rolePermissionsRepository;
 
     }
+
+    public Task<bool> EditRolepermissions(RolePermissionViewModel model, long userId)
+    {
+        return _rolePermissionsRepository.EditPermission(model, userId);
+    }
+
+
     public RolePermissionViewModel GetRolePermissions(long roleId)
     {
         List<PermissionsViewModel> permissionList = _rolePermissionsRepository.GetRoleAndPermissions(roleId);

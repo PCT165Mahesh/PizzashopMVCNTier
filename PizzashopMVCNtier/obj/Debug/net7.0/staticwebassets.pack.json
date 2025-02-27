@@ -485,6 +485,10 @@
       "PackagePath": "staticwebassets\\uploads\\689d8b9e-9661-41b6-8a99-f52523826e48_icons8-google-48.png"
     },
     {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\71b7b54f-f300-4be7-bd9d-6d7e456e13ff_transperent-pizza.png",
+      "PackagePath": "staticwebassets\\uploads\\71b7b54f-f300-4be7-bd9d-6d7e456e13ff_transperent-pizza.png"
+    },
+    {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png",
       "PackagePath": "staticwebassets\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png"
     },
