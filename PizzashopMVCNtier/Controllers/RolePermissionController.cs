@@ -44,6 +44,7 @@ public class RolePermissionController :Controller
     #endregion
 
     
+    #region  Permissions Get and Post
     [HttpGet]
     public async Task<IActionResult> Permission(long id){
         var token = Request.Cookies["SuperSecretAuthToken"];
@@ -82,4 +83,5 @@ public class RolePermissionController :Controller
 
         return View(model);
     }
+    #endregion
 }

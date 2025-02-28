@@ -87,7 +87,7 @@
                 }
 
                 <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
-                    <a href="./menu.html">
+                    <a asp-action="Index" asp-controller="Menu">
                         <img src="~/images/icons/menu-icon.png" alt="" />
                         <span class="sidebar_desc">Menu</span>
                     </a>
@@ -153,7 +153,7 @@
                             </a>
                         </li>
                         <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
-                            <a href="">
+                            <a asp-action="Index" asp-controller="Menu">
                                 <img src="~/images/icons/customer.svg" alt="" />
                                 <span class="sidebar_desc">Menu</span>
                             </a>

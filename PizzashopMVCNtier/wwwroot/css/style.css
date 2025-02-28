@@ -312,18 +312,20 @@ input[type="file"] {
 /* <----- Menu Page CSS -----> */
 
 /* Menu Page CSS */
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
   color: black !important;
   background-color: #ffffff !important;
-  border-bottom: 2px solid #0066a7;
-  border-radius: 0;
+  border-radius: 0 !important;
+  border: none;
+  border-bottom: 2px solid #0066a7 !important;
 }
-
 .nav-link {
   color: black !important;
 }
 
+.tab_btn:hover{
+  border: none !important;
+}
 /* Category Scroll Bar */
 .category_part {
   background-color: #f6f6f6;
@@ -480,10 +482,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
   .category_part {
     width: 100%;
-  }
-
-  .tab_content {
-    flex-direction: column;
   }
 }
 
