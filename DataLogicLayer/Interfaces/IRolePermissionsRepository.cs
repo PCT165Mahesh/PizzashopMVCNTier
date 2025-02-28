@@ -7,5 +7,5 @@ public interface IRolePermissionsRepository
 {
     public List<PermissionsViewModel> GetRoleAndPermissions(long roleId);
 
-    public Task<bool> EditPermission(RolePermissionViewModel model, long userId);
+    public Task<bool> EditPermission(long roleId, List<PermissionsViewModel> PermissionList, long userId);
 }

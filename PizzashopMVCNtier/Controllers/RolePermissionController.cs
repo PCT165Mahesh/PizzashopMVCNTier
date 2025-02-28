@@ -64,16 +64,20 @@ public class RolePermissionController :Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> Permission(RolePermissionViewModel model){
+    public async Task<IActionResult> Permission(long roleId, List<PermissionsViewModel> model){
         var token = Request.Cookies["SuperSecretAuthToken"];
         var userName = _userDetailService.UserName(token);
 
-        var userId =await _userDetailService.GetUserIdByUserNameAsync(userName);
+        var userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
 
-        var result =await _rolePermissionService.EditRolepermissions(model, userId);
+        if(model == null){
+            ModelState.AddModelError("", "Permission List is Empty");
+            return View(model);
+        }
+        var result = await _rolePermissionService.EditRolepermissions(roleId ,model, userId);
 
         if(result){
-            return RedirectToAction("Index");
+            return RedirectToAction("Permission", "RolePermission");
         }
 
         return View(model);

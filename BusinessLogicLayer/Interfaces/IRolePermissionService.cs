@@ -6,5 +6,5 @@ public interface IRolePermissionService
 {
     public RolePermissionViewModel GetRolePermissions(long roleId);
 
-    public Task<bool> EditRolepermissions(RolePermissionViewModel model, long userId);
+    public Task<bool> EditRolepermissions(long roleId, List<PermissionsViewModel> model, long userId);
 }

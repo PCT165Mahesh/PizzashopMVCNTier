@@ -99,6 +99,7 @@
                       role="switch"
                       id="flexSwitchCheckDefault"
                       @(permmission.AddOrEdit ? "checked" : "")
+                      @(!permmission.View ? "disabled" : "")
                     />
                   </div>
                 </td>
@@ -112,6 +113,7 @@
                       role="switch"
                       id="flexSwitchCheckDefault"
                       @(permmission.Delete ? "checked" : "")
+                      @(!permmission.AddOrEdit ? "disabled" : "")
                     />
                   </div>
                 </td>
@@ -123,8 +125,8 @@
 
           <!-- Buttons -->
           <div class="d-flex justify-content-end">
-            <button class="btn create_user_btn me-3">Save</button>
-            <button class="btn cancle_btn">Cancel</button>
+            <button class="btn create_user_btn me-3" id="save_permissions">Save</button>
+            <button type="reset" class="btn cancle_btn">Cancel</button>
           </div>
         </div>
 </div>
@@ -148,6 +150,34 @@
       $('.delete_switch[data-id="' + id + '"]').prop("checked", false);
       $('.delete_switch[data-id="' + id + '"]').prop("disabled", !add);
     })
+
+    $('#save_permissions').on("click",function() {
+      console.log("Button clicked");
+      var roleId = '@Model.RoleId';
+      var permissionList = [];
+
+        $('.view_switch').each(function() {
+          var permissionId = $(this).data("id");
+          permissionList.push({
+            PermissionId : permissionId,
+            View : $(this).prop("checked"),
+            AddOrEdit : $('.add_switch[data-id="' + permissionId + '"]').prop("checked"),
+            Delete : $('.delete_switch[data-id="' + permissionId + '"]').prop("checked")
+          })
+        })
+
+      $.ajax({
+            url: '@Url.Action("Permission", "RolePermission")',
+            type: "POST",
+            data:{roleId : roleId, model:permissionList},
+            success: function (roles) {
+              toastr.success("Permissions Updated Succesfully");
+            },
+            error: function () {
+              toastr.error("Error updating Permissions");
+            }
+        });
+    });
 
     
   </script>

@@ -17,23 +17,29 @@ public class RolePermissionsRepository : IRolePermissionsRepository
 
     }
 
-    public async Task<bool> EditPermission(RolePermissionViewModel model, long userId)
+    public async Task<bool> EditPermission(long roleId, List<PermissionsViewModel> PermissionList, long userId)
     {
-       List<Rolesandpermission> permissions = await _context.Rolesandpermissions.Where(rp => rp.Roleid == model.RoleId).ToListAsync();
-       if(permissions == null){
+       
+
+       if(PermissionList == null){
         return false;
        }
 
-       foreach(var permList in model.Permissions){
-        // Inner Loop for the rolePermisions tab;e
-        foreach(var rolePerm in permissions){
-            rolePerm.Permissionid = permList.PermissionId;
-            rolePerm.Canview = permList.View;
-            rolePerm.Canaddedit = permList.AddOrEdit;
-            rolePerm.Candelete = permList.Delete;
-            _context.Rolesandpermissions.Update(rolePerm);
-            await _context.SaveChangesAsync();
+       foreach(var permission in PermissionList){
+        var rolePermission = _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId && rp.Permissionid == permission.PermissionId).FirstOrDefault();
+
+        if(rolePermission == null){
+            return false;
         }
+
+        rolePermission.Canview = permission.View;
+        rolePermission.Canaddedit = permission.AddOrEdit;
+        rolePermission.Candelete = permission.Delete;
+        rolePermission.UpdatedAt = DateTime.Now;
+        rolePermission.UpdatedBy = userId;
+
+        _context.Rolesandpermissions.Update(rolePermission);
+        await _context.SaveChangesAsync();
        }
         return true;
     }
