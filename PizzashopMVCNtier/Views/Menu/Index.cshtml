@@ -45,9 +45,21 @@
           <!-- Category List Starts -->
           <div class="category_list">
             <ul class="p-0">
-              <li class="category_active pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Sandwich
+              <li class="category_active list-items pb-3 d-flex align-items-center justify-content-between">
+                <div>
+                  <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid"/>
+                <span>Sandwich</span>
+                </div>
+                <div class="editDeleteBtn d-flex">
+                  <a class="btn user_action p-0 me-1"  id="editButton">
+                    <img src="/images/icons/edit-pen.svg" alt="" />
+                  </a>
+                  <a class="btn user_action user_action_delete deleteUserBtn p-0 me-1" data-id="${user.userId}" id="deleteBtn"
+                    data-bs-toggle="modal" data-bs-target="#myModal">
+                    <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                  </a>
+                </div>
+                
               </li>
               <li class="pb-3">
                 <img src="~/images/icons/grid-3x2.svg" alt="" />
@@ -577,3 +589,15 @@
     </div>
   </div>
 </div>
+
+
+@section Scripts{
+  <script>
+    $('.list-items').mouseover(function() {
+      $(this).children("div.editDeleteBtn").css("visibility","visible");
+    })
+    $('.list-items').mouseout(function() {
+      $(this).children("div.editDeleteBtn").css("visibility","hidden");
+    })
+  </script>
+}

@@ -342,12 +342,17 @@ input[type="file"] {
   list-style: none;
 }
 
-.category_list ul li img {
+.item-grid {
   transform: rotate(90deg);
 }
 
 .category_active {
   color: #0066a7;
+}
+
+/* Edit Delete Button in Menu */
+.editDeleteBtn{
+  visibility: visible;
 }
 
 /* Profile Data CSS part */
