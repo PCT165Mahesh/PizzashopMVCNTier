@@ -20,12 +20,10 @@ public class JwtService
     -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Generate Token
-    public string GenerateJwtToken(string email, string role, string userName, string imgUrl)
+    public string GenerateJwtToken(string email, string role, string userName)
     {
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         byte[] key = Encoding.UTF8.GetBytes(_key); // Secret Code (Salt)
-
-        imgUrl = !string.IsNullOrEmpty(imgUrl) ? imgUrl : "/uploads/Default_pfp.svg.png";
 
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -33,8 +31,7 @@ public class JwtService
             {
                 new Claim("email", email),
                 new Claim("role", role),
-                new Claim("userName", userName),
-                new Claim("imgUrl", imgUrl)
+                new Claim("userName", userName)
                 //new Claim("ClaimName", "Dynamic Value for Claim") Custom Claim
             }),
             Expires = DateTime.UtcNow.AddHours(5),

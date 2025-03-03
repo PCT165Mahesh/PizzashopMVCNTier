@@ -48,7 +48,7 @@ public class LoginService : ILoginService
             //Fetch the role 
             Role roleObj =await _roleRepository.GetRoleById(user.Roleid);
             // Generate a new JWT token
-            string newToken = _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username, user.Imgurl);
+            string newToken = _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username);
 
             // Update the JWT token in the session
             if(newToken != null)
@@ -81,7 +81,7 @@ public class LoginService : ILoginService
         if(user.Password == _encryptSercive.EncryptPassword(password)){
 
             // generate the Jwt token
-            string token = _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username, user.Imgurl);
+            string token = _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username);
             if(token != null){
                 // Store JWT Token in Session
                 _httpContextAccessor?.HttpContext?.Session.SetString("SuperSecretAuthToken", token);
