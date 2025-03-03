@@ -41,7 +41,7 @@ public class UserRepository : IUserRepository
     -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Add User Implementation
-    public async Task<User> AddUserAsync(AddUserViewModel model)
+    public async Task<User> AddUserAsync(AddUserViewModel model, long adminId)
     {
         var user = new User
         {
@@ -57,7 +57,7 @@ public class UserRepository : IUserRepository
             Address = model.Address,
             Zipcode = model.Zipcode,
             Phone = model.Phone,
-            CreatedBy = model.UserId,
+            CreatedBy = adminId,
         };
 
         // Handle Image Upload

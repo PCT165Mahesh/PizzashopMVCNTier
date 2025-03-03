@@ -16,7 +16,7 @@ public interface IUserRepository
 
     /*---------------------------------------------------------------------------Add User Method Definations
     -------------------------------------------------------------------------------------------------------*/
-    public Task<User> AddUserAsync(AddUserViewModel model);
+    public Task<User> AddUserAsync(AddUserViewModel model, long adminId);
 
 
     /*---------------------------------------------------------------------------Update/Edit User Method Definations

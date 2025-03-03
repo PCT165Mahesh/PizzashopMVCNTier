@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using BusinessLogicLayer.Common;
+using BusinessLogicLayer.Constants;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PizzashopMVCNtier.Models;
@@ -28,14 +32,13 @@ public class HomeController : Controller
 
     #region Login
     [HttpGet]
-    public IActionResult Login()
+    public async Task<IActionResult> Login()
     {
-
-        if (Request.Cookies["UserEmail"] != null)
-        {
+        
+        var result = await _loginService.LoginRefresh();
+        if(result){
             return RedirectToAction("Index", "Dashboard");
         }
-
         return View();
     }
 
@@ -46,41 +49,23 @@ public class HomeController : Controller
 
         if (!ModelState.IsValid)
         {
-            ModelState.AddModelError("", "Invalid Credentails");
+            TempData["NotificationMessage"] = NotificationMessages.InvalidCredentials;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
 
 
-        var token = await _loginService.LoginUser(model.Email, model.Password);
-        if (token != null)
+        var token = await _loginService.LoginUser(model.Email, model.Password, model.RememberMe);
+        if (token)
         {
-            // Cookie 
-            CookieOptions options = new CookieOptions
-            {
-                Expires = DateTime.Now.AddHours(1),
-                HttpOnly = true,
-                Secure = true, 
-                SameSite = SameSiteMode.Strict
-            };
-
-            Response.Cookies.Append("SuperSecretAuthToken", token, options);
-
-            if (model.RememberMe)
-            {
-                Response.Cookies.Append("UserEmail", model.Email, new CookieOptions
-                {
-                    Expires = DateTime.Now.AddHours(5),
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict
-                });
-            }
-
-            TempData["SuccessMessage"] = "Login Successful!";
+            TempData["NotificationMessage"] = NotificationMessages.LoginSuccess;
+            TempData["NotificationType"] = NotificationType.Success.ToString(); 
             return RedirectToAction("Index", "Dashboard");
         }
 
-        TempData["ErrorMessage"] = "Invalid Email or Password!";
+        //If Login Service return false
+        TempData["NotificationMessage"] = NotificationMessages.InvalidCredentials;
+        TempData["NotificationType"] = NotificationType.Error.ToString();
         return View(model);
         
     }
@@ -91,10 +76,10 @@ public class HomeController : Controller
     --------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Logout
+    [Authorize]
     public IActionResult Logout()
     {
-        Response.Cookies.Delete("UserEmail");
-        Response.Cookies.Delete("SuperSecretAuthToken");
+        _loginService.Logout();
         return RedirectToAction("Login", "Home");
     }
     #endregion
@@ -107,11 +92,7 @@ public class HomeController : Controller
     public IActionResult ForgotPassword(string email)
     {
 
-        if (string.IsNullOrEmpty(email))
-        {
-            ViewBag.UserEmail = "";
-        }
-        ViewBag.UserEmail = email;
+        ViewBag.UserEmail = string.IsNullOrEmpty(email) ? "" : email;
         return View();
     }
 
@@ -129,12 +110,13 @@ public class HomeController : Controller
             // If Email is send then Toast Message Display
             if (result)
             {
-                TempData["SuccessMessage"] = "Email sent successfully";
+                TempData["NotificationMessage"] =NotificationMessages.EmailSentSuccessfully;
+                TempData["NotificationType"] = NotificationType.Success.ToString(); 
             }
             else
             {
-                ModelState.AddModelError("", "Email Is not found");
-                TempData["ErrorMessage"] = "Email is not Register";
+                TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
+                TempData["NotificationType"] = NotificationType.Error.ToString();
             }
             return View();
         }
@@ -152,7 +134,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult ResetPassword(string email)
     {
-        ViewData["Email"] = email;
+        ViewData["UserEmail"] = string.IsNullOrEmpty(email) ? "" : email;
         return View();
     }
 
@@ -166,12 +148,14 @@ public class HomeController : Controller
             // If password Reset Successfully
             if (result)
             {
-                TempData["SuccessMessage"] = "Password Reset successfully";
+                TempData["NotificationMessage"] = NotificationMessages.PasswordChanged;
+                TempData["NotificationType"] = NotificationType.Success.ToString();
                 return RedirectToAction("Login", "Home");
             }
             else
             {
-                ModelState.AddModelError("", "User Not Found");
+                TempData["NotificationMessage"] = NotificationMessages.PasswordChangeFailed;
+                TempData["NotificationType"] = NotificationType.Error.ToString();         
                 return View(model);
             }
         }

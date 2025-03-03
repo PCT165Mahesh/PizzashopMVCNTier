@@ -27,17 +27,8 @@ public class RolePermissionController :Controller
     #region Role List
     [HttpGet]
     public async Task<IActionResult> Role(){
-        var token = Request.Cookies["SuperSecretAuthToken"];
-
-        var userName = _userDetailService.UserName(token);
-        var imgUrl = _userDetailService.ImgUrl(token);
-
-        ViewData["UserName"] = userName;
-        ViewData["ImgUrl"] = imgUrl;
-
-        ViewData["Activelink"] = "Role";
         List<Role> roleObj = await _roleService.GetRolesAsync();
-
+        ViewData["Activelink"] = "Role";
         return View(roleObj);
     }
 
@@ -46,27 +37,18 @@ public class RolePermissionController :Controller
     
     #region  Permissions Get and Post
     [HttpGet]
-    public async Task<IActionResult> Permission(long id){
-        var token = Request.Cookies["SuperSecretAuthToken"];
-
-        var userName = _userDetailService.UserName(token);
-        var imgUrl = _userDetailService.ImgUrl(token);
-
-        ViewData["UserName"] = userName;
-        ViewData["ImgUrl"] = imgUrl;
-
+    public async Task<IActionResult> Permission(long id)
+    {
         RolePermissionViewModel model = _rolePermissionService.GetRolePermissions(id);
-        
         Role roleObj = await _roleService.GetRoleByIdAsync(id);
-        string roleName = roleObj.Rolename;
-        ViewData["RoleName"] = roleName;
+        ViewData["RoleName"] = roleObj.Rolename;
         return View(model);
     }
 
 
     [HttpPost]
     public async Task<IActionResult> Permission(long roleId, List<PermissionsViewModel> model){
-        var token = Request.Cookies["SuperSecretAuthToken"];
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         var userName = _userDetailService.UserName(token);
 
         var userId = await _userDetailService.GetUserIdByUserNameAsync(userName);

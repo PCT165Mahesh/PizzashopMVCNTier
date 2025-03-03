@@ -18,7 +18,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
     --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region  Get User Records for Pagination
-   public async Task<PaginationViewModel> GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
+   public async Task<UserViewModel> GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
     {
         var query = from u in _context.Users
                     join r in _context.Roles on u.Roleid equals r.RoleId
@@ -47,7 +47,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                     .Take(pageSize)
                     .ToListAsync();
 
-        return new PaginationViewModel { UserList = users, TotalRecords = totalRecords };
+        return new UserViewModel { UserList = users, TotalRecords = totalRecords };
     }
     #endregion
 

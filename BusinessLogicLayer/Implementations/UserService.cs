@@ -64,11 +64,14 @@ public class UserService : IUserService
     -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Add User Service
-    public async Task<bool> AddUserAsync(AddUserViewModel model)
+    public async Task<bool> AddUserAsync(AddUserViewModel model, string userName)
     {
         string _password = model.Password;
         model.Password = _encryptionService.EncryptPassword(model.Password);
-        var user = await _userRepository.AddUserAsync(model);
+
+        var adminUser  = await _userRepository.GetUserByUserName(userName);
+
+        var user = await _userRepository.AddUserAsync(model, adminUser.Id);
         
         if(user != null){
             // Prepare Email Content

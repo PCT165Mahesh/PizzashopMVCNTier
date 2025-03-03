@@ -140,33 +140,6 @@
   </script>
 
   <script>
-    $(document).ready(function () {
-
-      toastr.options = {
-        "closeButton": true,  // Adds a close button
-        "progressBar": true,  // Shows a progress bar
-        "positionClass": "toast-top-right",  // Position of toast
-        "timeOut": "5000",  // Auto-close after 5 seconds
-        "extendedTimeOut": "2000",  // Extra time if hovered
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut",
-        "iconClass": ""  // Removes the icon class
-      };
-
-      var successMessage = '@(TempData["SuccessMessage"] ?? "")';
-      var errorMessage = '@(TempData["ErrorMessage"] ?? "")';
-
-      if (successMessage && successMessage.trim() !== "") {
-        toastr.success(successMessage);
-      }
-
-      if (errorMessage.trim() !== "") {
-        toastr.error(errorMessage);
-      }
-    });
-  </script>
-
-  <script>
     document.getElementById('forgotPasswordLink').addEventListener('click', function () {
       var email = document.getElementById("LoginEmail").value;
       this.href = '@Url.Action("ForgotPassword", "Home")' + '?Email=' + encodeURIComponent(email);

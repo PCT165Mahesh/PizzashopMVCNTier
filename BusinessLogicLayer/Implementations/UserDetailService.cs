@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessLogicLayer.Implementations;
@@ -15,14 +16,17 @@ public class UserDetailService : IUserDetailService
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly ICountryDetailRepository _countryDetailRepository;
+     private readonly IHttpContextAccessor _httpContextAccessor;
+
 
 
     public UserDetailService(JwtService jwtService, IGetUserRecordsRepository userRecordsRepository, 
-                IUserRepository userRepository, IRoleRepository roleRepository, ICountryDetailRepository countryDetailRepository)
+                IUserRepository userRepository, IRoleRepository roleRepository, ICountryDetailRepository countryDetailRepository,
+                IHttpContextAccessor httpContextAccessor)
     {
         _jwtService = jwtService;
         _userRecordsRepository = userRecordsRepository;
-
+        _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _countryDetailRepository = countryDetailRepository;
@@ -95,7 +99,7 @@ public class UserDetailService : IUserDetailService
 
     public async Task<JsonResult> GetUserDetails(int pageNo, int pageSize, string search)
     {
-        PaginationViewModel model = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search);
+        UserViewModel model = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search);
 
         return new JsonResult(new { model.UserList, model.TotalRecords });
     }
@@ -122,8 +126,18 @@ public class UserDetailService : IUserDetailService
         {
             return false;
         }
+        var result = await _userRepository.UpdateUserProfileData(user, model);
+        if(!result)
+        {
+            return false;
+        }
+        HttpContext? context = _httpContextAccessor.HttpContext;
+        context.Session.Remove("UserName");
+        context.Session.Remove("ProfileImage");
 
-        return await _userRepository.UpdateUserProfileData(user, model);
+        context.Session.SetString("UserName", user.Username);
+        context.Session.SetString("ProfileImage", user.Imgurl ?? "/uploads/Default_pfp.svg.png");
+        return true;
     }
 
     #endregion

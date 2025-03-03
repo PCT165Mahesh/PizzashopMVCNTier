@@ -240,6 +240,9 @@
                         processData: false,
                         success: function () {
                             toastr.success("Profile updated successfully!");
+                            setTimeout(function () {
+                                location.reload(); // Refresh user list
+                            }, 5000);
                         },
                         error: function () {
                             toastr.error("Error updating profile");

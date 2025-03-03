@@ -4,6 +4,9 @@ namespace BusinessLogicLayer.Interfaces;
 
 public interface ILoginService
 {
-    public Task<string> LoginUser(string email, string password);
+    public Task<bool> LoginRefresh();
+    public Task<bool> LoginUser(string email, string password, bool rememberMe);
+
+    public void Logout();
 
 }

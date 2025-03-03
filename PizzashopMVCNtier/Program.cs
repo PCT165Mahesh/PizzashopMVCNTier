@@ -14,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
 
 // Database Connecion String
 var conn = builder.Configuration.GetConnectionString("PizzashopDB");
@@ -45,8 +47,6 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
-
-// Add session Servies
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
@@ -54,50 +54,50 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
-// JWt Token Configurations
-builder.Services.AddAuthentication(x=>{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+// Add Authentication and JWT Configuration
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["JwtConfig:Issuer"],  // The issuer of the token (e.g., your app's URL)
-            ValidAudience = builder.Configuration["JwtConfig:Audience"], // The audience for the token (e.g., your API)
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]?? "")), // The key to validate the JWT's signature
-            RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.Name 
-        };
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+        ValidAudience = builder.Configuration["JwtConfig:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"] ?? "")),
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
+    };
 
-        options.Events = new JwtBearerEvents
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            OnMessageReceived = context =>
+            // Retrieve token from Session
+            var token = context.HttpContext.Session.GetString("SuperSecretAuthToken");
+            if (!string.IsNullOrEmpty(token))
             {
-                // Check for the token in cookies
-                var token = context.Request.Cookies["SuperSecretAuthToken"]; // Change "AuthToken" to your cookie name if it's different
-                if (!string.IsNullOrEmpty(token))
-                {
-                    context.Request.Headers["Authorization"] = "Bearer " + token;
-                }
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                // Redirect to login page when unauthorized instead of returning 401
-                context.HandleResponse();
-                context.Response.Redirect("/Home/Login");
-                return Task.CompletedTask;
+                context.Request.Headers["Authorization"] = "Bearer " + token;
             }
-        };
-    }
-);
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            // Redirect to login page when unauthorized instead of returning 401
+            context.HandleResponse();
+            context.Response.Redirect("/Home/Login");
+            return Task.CompletedTask;
+        }
+    };
+});
 
 builder.Services.AddAuthorization();
 

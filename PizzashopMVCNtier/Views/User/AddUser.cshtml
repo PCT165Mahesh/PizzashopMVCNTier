@@ -22,7 +22,7 @@
     <!-- Edit User Form Starting -->
     <div class="form_container">
         <form id="addUserForm" asp-action="AddUser" asp-controller="User" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="@Model.UserId" value="@ViewData["userId"]">
+            @* <input type="hidden" asp-for="@Model.UserId" value="@ViewData["userId"]"> *@
             <div class="row">
                 <div class="form-floating col-md-6 mb-3">
                     <input asp-for="@Model.FirstName" type="text" class="form-control" id="firstName" placeholder="John" />
@@ -104,7 +104,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-<script>
+    @* <script>
         $(document).ready(function () {
 
             toastr.options = {
@@ -130,7 +130,7 @@
                 toastr.error(errorMessage);
             }
         });
-    </script>
+    </script> *@
 
     <script>
         $(document).ready(function () {

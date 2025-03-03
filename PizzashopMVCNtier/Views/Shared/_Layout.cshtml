@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName") ?? "Guest";
+    var profileImage = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -31,15 +39,17 @@
             <!-- User Profile Image -->
             <div class="dropdown">
                 <img 
-                src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])"
+                @* src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
+                src="@profileImage"
                 alt="" class="rounded-circle me-3" height="50px" width="50px"
                 class="me-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="border-bottom"><a class="dropdown-item">
-                            <img src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])"
+                            @* <img src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
+                            <img src="@profileImage"
                              alt="" width="40px" height="40px" class="rounded-circle">
-                            <span class="ms-2">@ViewData["UserName"]</span>
+                            <span class="ms-2">@userName</span>
                         </a></li>
                     <li class="mt-2"><a class="dropdown-item" asp-action="ProfileDetails" asp-controller="Dashboard">
                             <img src="~/images/icons/person-circle.svg" alt="" width="20px">
@@ -76,7 +86,7 @@
                         <span class="sidebar_desc">Users</span>
                     </a>
                 </li>
-                @if (User.IsInRole("Super Admin"))
+                @if (User.IsInRole("SuperAdmin"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
                         <a asp-action="Role" asp-controller="RolePermission">
@@ -146,12 +156,15 @@
                                 <span class="sidebar_desc">Users</span>
                             </a>
                         </li>
-                        <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
-                            <a asp-action="Role" asp-controller="RolePermission">
-                                <img src="~/images/icons/person-gear.svg" alt="" />
-                                <span class="sidebar_desc">Roles and Permisions</span>
-                            </a>
-                        </li>
+                        @if(User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                                <a asp-action="Role" asp-controller="RolePermission">
+                                    <img src="~/images/icons/person-gear.svg" alt="" />
+                                    <span class="sidebar_desc">Roles and Permisions</span>
+                                </a>
+                            </li>
+                        }
                         <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
                             <a asp-action="Index" asp-controller="Menu">
                                 <img src="~/images/icons/customer.svg" alt="" />
@@ -213,8 +226,6 @@
                 </div>
             </div>
         </div>
-
-
         @RenderBody()
     </div>
 
@@ -229,6 +240,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/js/custom.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Toastr Notification Partial -->
+     @await Html.PartialAsync("_ToastrNotification")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

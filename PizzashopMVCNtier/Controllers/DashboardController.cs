@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.ViewModels;
@@ -35,17 +36,7 @@ public class DashboardController : Controller
     #region Dashboard
     public IActionResult Index()
     {
-        var token = Request.Cookies["SuperSecretAuthToken"];
-
-
-        var userName = _userDetailService.UserName(token);
-        var imgUrl = _userDetailService.ImgUrl(token);
-
-
         ViewData["ActiveLink"] = "Dashboard";
-
-        ViewData["UserName"] = userName;
-        ViewData["ImgUrl"] = imgUrl;
         return View();
     }
     #endregion
@@ -59,34 +50,34 @@ public class DashboardController : Controller
     public async Task<IActionResult> ProfileDetails()
     {
 
-        var token = Request.Cookies["SuperSecretAuthToken"];
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         var email = _userDetailService.Email(token);
-        var userName = _userDetailService.UserName(token);
-        var imgUrl = _userDetailService.ImgUrl(token);
 
         ProfileDataViewModel model = await _userDetailService.GetProfileData(email);
-
-        ViewData["UserName"] = userName;
-        ViewData["ImgUrl"] = imgUrl;
         return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> ProfileDetails(ProfileDataViewModel model)
     {
-        var token = Request.Cookies["SuperSecretAuthToken"];
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         var email = _userDetailService.Email(token);
 
-        if (ModelState.IsValid)
-        {
-            var result = await _userDetailService.UpdateUserProfileData(model, email);
-
-            if (result)
-            {
-                return RedirectToAction("ProfileDetails");
-            }
+        if(!ModelState.IsValid){
+            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "Profile");
+            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
+        bool result = await _userDetailService.UpdateUserProfileData(model, email);
+
+        if (result)
+        {
+            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "Profile");
+            TempData["NotificationType"] = NotificationType.Success.ToString();
+            return RedirectToAction("ProfileDetails");
+        }
+        TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "Profile");
+        TempData["NotificationType"] = NotificationType.Error.ToString();
         return View(model);
     }
 
@@ -100,30 +91,25 @@ public class DashboardController : Controller
     [HttpGet]
     public IActionResult ChangePassword()
     {
-        var token = Request.Cookies["SuperSecretAuthToken"];
-
-        var userName = _userDetailService.UserName(token);
-        var imgUrl = _userDetailService.ImgUrl(token);
-
-        ViewData["UserName"] = userName;
-        ViewData["ImgUrl"] = imgUrl;
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePassViewModel model)
     {
-        var token = Request.Cookies["SuperSecretAuthToken"];
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
 
         var email = _userDetailService.Email(token);
 
         var result = await _changePasswordService.ChangePassword(model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword, email);
         if (result)
         {
-            TempData["SuccessMessage"] = "Password updated successfully!";
+            TempData["NotificationMessage"] = NotificationMessages.PasswordChanged;
+            TempData["NotificationType"] = NotificationType.Success.ToString(); 
             return RedirectToAction("ChangePassword");
         }
-        TempData["ErrorMessage"] = "Current password is incorrect.";
+        TempData["NotificationMessage"] = NotificationMessages.PasswordChangeFailed;
+        TempData["NotificationType"] = NotificationType.Error.ToString(); 
         return RedirectToAction("ChangePassword");
     }
 
