@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataLogicLayer.ViewModels;
 
 public class CategoryViewModel

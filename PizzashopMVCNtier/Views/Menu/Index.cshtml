@@ -58,8 +58,8 @@
                       data-bs-toggle="modal" data-bs-target="#categoryModal">
                       <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <a class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn" data-id="@category.Id"
-                      data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
+                    <a class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn"
+                      data-id="@category.Id" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
                       <img src="/images/icons/delete-trash-icon.svg" alt="" />
                     </a>
                   </div>
@@ -511,7 +511,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex flex-column align-items-center">
-        <form class="w-75" asp-action="Categories" asp-controller="Menu" method="post">
+        <form class="w-75" asp-action="SaveCategory" asp-controller="Menu" method="post" id="CategorySaveForm">
           <input type="hidden" asp-for="@Model.Category.Id" id="ModalCategoryId" value="-1">
           <div class="mb-3">
             <input asp-for="@Model.Category.CategoryName" type="text" class="form-control" id="ModalCategoryName"
@@ -591,6 +591,39 @@
 
 @section Scripts {
   <script>
+    $("#CategorySaveForm").submit(function () {
+      event.preventDefault();
+      let isValid = true;
+
+
+      //Required Field Validation
+      $("#CategorySaveForm input[type='text']").each(function () {
+        let inputValue = $(this).val().trim();
+
+        if (!inputValue || inputValue === "") {
+          $(this).addClass("is-invalid"); // Add error styling
+          $(this).next(".invalid-feedback").remove(); // Remove old message
+          $(this).after('<div class="invalid-feedback">This Field is required</div>');
+          isValid = false;
+        }
+        else {
+          $(this).removeClass("is-invalid");
+          $(this).next(".invalid-feedback").remove();
+        }
+      });
+
+      if (isValid) {
+        $('#CategorySaveForm').off("submit").submit();
+      }
+
+      $("#CategorySaveForm input[type='text']").on("input change", function() {
+        $(this).removeClass("is-invalid");
+        $(this).next(".invalid-feedback").remove();
+      })
+    });
+
+  </script>
+  <script>
     $('.list-items').mouseover(function () {
       $(this).children("div.editDeleteBtn").css("visibility", "visible");
     })
@@ -629,7 +662,7 @@
             url: "/Menu/DeleteCategory",
             type: "POST",
             data: { id: categoryId }, // Send data as form data
-            @* headers: {
+                @* headers: {
               "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // CSRF Token
             }, *@
             success: function (response) {
@@ -638,7 +671,7 @@
                 toastr.success(response.message);
                 setTimeout(function () {
                   location.reload(); // Refresh Category list
-                }, 2000);
+                }, 3000);
               } else {
                 toastr.error(response.message);
               }
@@ -646,9 +679,9 @@
             error: function (xhr, status, error) {
               console.log(xhr.responseText);
             }
+              });
+    }
           });
-        }
-      });
-    });
+        });
   </script>
 }

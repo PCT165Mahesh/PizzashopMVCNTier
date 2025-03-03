@@ -34,11 +34,11 @@ public class MenuController : Controller
 
     #region Save Categories
     [HttpPost]
-    public async Task<IActionResult> Categories(MenuViewModel model)
+    public async Task<IActionResult> SaveCategory(MenuViewModel model)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return RedirectToAction("Index", "Menu");
         }
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
@@ -75,7 +75,6 @@ public class MenuController : Controller
     #endregion
 
     #region Delete Category
-
     [HttpPost]
     public async Task<IActionResult> DeleteCategory(long id){
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -89,7 +88,6 @@ public class MenuController : Controller
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Category") });
         }
     }
-
     #endregion
 
     public IActionResult GetCategoryById(long id)
