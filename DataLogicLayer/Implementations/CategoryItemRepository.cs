@@ -1,7 +1,6 @@
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLogicLayer.Implementations;
@@ -19,7 +18,7 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     public List<Category> GetAllCategories()
     {
-        return _context.Categories.ToList();
+        return _context.Categories.Where(c => !c.Isdeleted).ToList();
     }
     public async Task<bool> AddCategoryAsync(CategoryViewModel model, long userId)
     {
@@ -45,7 +44,7 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     public CategoryViewModel GetCategoryId(long id)
     {
-        return _context.Categories.Where(c => c.CategoryId == id).Select(c => new CategoryViewModel
+        return _context.Categories.Where(c => c.CategoryId == id && !c.Isdeleted).Select(c => new CategoryViewModel
         {
             Id = c.CategoryId,
             CategoryName = c.Name,
@@ -62,7 +61,7 @@ public class CategoryItemRepository : ICategoryItemRepository
                 return false;
             }
 
-            Category category = await _context.Categories.Where(c => c.CategoryId == model.Id).FirstOrDefaultAsync();
+            Category category = await _context.Categories.Where(c => c.CategoryId == model.Id && !c.Isdeleted).FirstOrDefaultAsync();
 
             if (category == null) return false;
 
@@ -82,4 +81,26 @@ public class CategoryItemRepository : ICategoryItemRepository
         }
     }
 
+    public async Task<bool> DeleteCategoryAsync(long categoryId, long userId)
+    {
+        Category category = _context.Categories.Where(c => c.CategoryId == categoryId && !c.Isdeleted).FirstOrDefault();
+        if(category == null)
+        {
+            return false;
+        }
+        try
+        {
+            category.Isdeleted = true;
+            category.UpdatedBy = userId;
+            category.UpdatedAt = DateTime.Now;
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error Deleting User", ex.Message);
+            return false;
+        }
+    }
 }

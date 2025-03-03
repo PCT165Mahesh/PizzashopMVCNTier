@@ -58,8 +58,8 @@
                       data-bs-toggle="modal" data-bs-target="#categoryModal">
                       <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <a class="btn user_action user_action_delete deleteUserBtn p-0 me-1" id="deleteBtn"
-                      data-bs-toggle="modal" data-bs-target="#myModal">
+                    <a class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn" data-id="@category.Id"
+                      data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
                       <img src="/images/icons/delete-trash-icon.svg" alt="" />
                     </a>
                   </div>
@@ -518,8 +518,8 @@
               aria-describedby="emailHelp" placeholder="Name">
           </div>
           <div class="mb-3">
-            <textarea asp-for="@Model.Category.Description" type="text" class="form-control" id="ModalCategoryDescription"
-              placeholder="Description"></textarea>
+            <textarea asp-for="@Model.Category.Description" type="text" class="form-control"
+              id="ModalCategoryDescription" placeholder="Description"></textarea>
           </div>
           <div class="d-flex flex-row justify-content-end">
             <button type="submit" id="saveCategoryModalBtn" class="btn btn-primary mx-3">Save</button>
@@ -564,6 +564,31 @@
 </div>
 
 
+<!-- Delete Categoty Modal -->
+<div class="modal fade" tabindex="-1" id="deleteCategoryModal" aria-labelledby="modal-title">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Category?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @section Scripts {
   <script>
     $('.list-items').mouseover(function () {
@@ -582,17 +607,48 @@
       $.ajax({
         url: "/Menu/GetCategoryById",
         type: "GET",
-        data:{id: categoryId},
-        success: function(response)
-        {
+        data: { id: categoryId },
+        success: function (response) {
           $('#ModalCategoryName').val(response.categoryName);
           $('#ModalCategoryDescription').val(response.description);
           $('#ModalCategoryId').val(categoryId);
         },
-        error:function(){
+        error: function () {
           toastr.error("Failed To Edit Category");
         }
       });
-    })
+    });
+
+
+    // Handle Delete Confirmation Click
+    $('.deleteCategoryBtn').on("click", function () {
+      categoryId = $(this).data("id");
+      $("#confirmDeleteBtn").on("click", function () {
+        if (categoryId) {
+          $.ajax({
+            url: "/Menu/DeleteCategory",
+            type: "POST",
+            data: { id: categoryId }, // Send data as form data
+            @* headers: {
+              "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // CSRF Token
+            }, *@
+            success: function (response) {
+              if (response.success) {
+                $("#deleteCategoryModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 2000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
+    });
   </script>
 }

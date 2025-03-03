@@ -18,6 +18,8 @@ public class MenuController : Controller
         _categoryItemService = categoryItemService;
         _userDetailService = userDetailService;
     }
+
+    #region Menu Home Page
     [HttpGet]
     public IActionResult Index()
     {
@@ -28,7 +30,9 @@ public class MenuController : Controller
         ViewData["ActiveLink"] = "Menu";
         return View(model);
     }
+    #endregion
 
+    #region Save Categories
     [HttpPost]
     public async Task<IActionResult> Categories(MenuViewModel model)
     {
@@ -68,7 +72,25 @@ public class MenuController : Controller
         return RedirectToAction("Index", "Menu");
     }
 
+    #endregion
 
+    #region Delete Category
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteCategory(long id){
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        var userName = _userDetailService.UserName(token);
+
+        var result = await _categoryItemService.DeleteCategory(id, userName);
+        if(result){
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Category") });
+        }
+        else{
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Category") });
+        }
+    }
+
+    #endregion
 
     public IActionResult GetCategoryById(long id)
     {

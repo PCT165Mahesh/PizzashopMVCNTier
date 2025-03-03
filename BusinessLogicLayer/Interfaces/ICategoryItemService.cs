@@ -10,5 +10,6 @@ public interface ICategoryItemService
 
     public Task<bool> AddCategory(CategoryViewModel model, string userName);
     public Task<bool> EditCategory(CategoryViewModel model, string userName);
+    public Task<bool> DeleteCategory(long categoryId, string userName);
     
 }

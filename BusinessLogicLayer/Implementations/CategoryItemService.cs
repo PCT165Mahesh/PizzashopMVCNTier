@@ -68,4 +68,20 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.EditCategoryAsync(model, user.Id);
     }
 
+    public async Task<bool> DeleteCategory(long categoryId, string userName)
+    {
+        if(categoryId == -1 || categoryId == null)
+        {
+            return false;
+        }
+
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        return await _categoryItemRepository.DeleteCategoryAsync(categoryId, user.Id);
+
+    }
 }
