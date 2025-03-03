@@ -34,22 +34,16 @@
           <div class="mb-3 position-relative">
             <input type="email" asp-for="@Model.Email" class="form-control p-2" id="LoginEmail"
               aria-describedby="emailHelp" placeholder="Email*" />
-            <span class="text-danger email-error"></span>
             <img class="placeholder_icon" src="~/images/icons/customer.svg" />
-
-            @* <span asp-validation-for="@Model.Email" class="text-danger"></span> *@
-            @* <p class="validation_msg">Email is Required</p> *@
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
           </div>
 
           <!-- Password Field -->
           <div class="mb-3 position-relative">
             <input type="password" asp-for="@Model.Password" class="form-control p-2" id="password"
               placeholder="Password*" />
-            <span class="text-danger password-error"></span>
-
             <img class="placeholder_icon" src="~/images/icons/eye-close.svg" width="20px" id="togglePassword" />
-            @* <span asp-validation-for="@Model.Password" class="text-danger"></span> *@
-            @* <p class="validation_msg">Password is Required</p> *@
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
           </div>
 
           <!-- Form Footer -->
@@ -61,8 +55,6 @@
             </div>
             <!-- Forgot Password Link -->
             <a id="forgotPasswordLink" class="text-decoration-none">Forgot Password?</a>
-            @* Validation Summary For A Incorrect Credentials *@
-            @* @Html.ValidationSummary(true) *@
           </div>
           <!-- Submit Button -->
           <button type="submit" class="mt-2 btn submit_btn w-100">
@@ -77,50 +69,8 @@
 
 @section Scripts
 {
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    $(document).ready(function () {
-
-      $("#loginForm").submit(function (e) {
-        e.preventDefault(); // Prevent default form submission
-
-        let isValid = true;
-        let emailInput = document.getElementById("LoginEmail");
-        let password = $("#password").val().trim();
-
-        //  Email Validation (Using Built-in Validity API)
-        if (emailInput.value.trim() === "") {
-          $("#LoginEmail").next(".email-error").text("Email is required.");
-          isValid = false;
-        }
-        else if (!emailInput.checkValidity()) {
-          $("#LoginEmail").next(".email-error").text("Enter a valid email address.");
-          isValid = false;
-        }
-        else {
-          $("#LoginEmail").next(".email-error").text("");
-        }
-
-        @* Password Validation (Without Special Character List) *@
-                
-                
-
-          if (password === "") {
-          $(".password-error").text("Password is required.");
-          isValid = false;
-        }
-        // ✅ If validation passes, submit form using AJAX
-        if (isValid) {
-          $("#loginForm").off("submit").submit();
-        }
-      });
-
-      // ✅ Clear validation messages on input change
-      $("input").on("input", function () {
-        $(this).next(".text-danger").text("");
-      });
-
-      $("#togglePassword").click(function () {
+    $("#togglePassword").click(function () {
         let passwordField = $("#password");
         let fieldType = passwordField.attr("type");
 
@@ -133,7 +83,6 @@
           $(this).attr("src", "/images/icons/eye-close.svg"); // Change to closed eye
         }
       });
-    });
   </script>
 
   <script>

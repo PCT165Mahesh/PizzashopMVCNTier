@@ -27,9 +27,6 @@ public class HomeController : Controller
     }
 
 
-    /* ------------------------------------------------------------------------------------------------------Login Action-------------
-    -------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Login
     [HttpGet]
     public async Task<IActionResult> Login()
@@ -47,8 +44,6 @@ public class HomeController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = NotificationMessages.InvalidCredentials;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
 
@@ -67,9 +62,6 @@ public class HomeController : Controller
     #endregion
 
 
-    /* -------------------------------------------------------------------------------------------------------Logout Action---------------
-    --------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Logout
     [Authorize]
     public IActionResult Logout()
@@ -79,8 +71,6 @@ public class HomeController : Controller
     }
     #endregion
 
-    /* ------------------------------------------------------------------------------------------------------Forgot Password Action-------------
-    ---------------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Forgot Password
     [HttpGet]
@@ -94,37 +84,31 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> ForgotPassword(ForgotPassViewModel model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            string emailToken = Guid.NewGuid().ToString();
-            string resetPasswordLink = Url.Action("ResetPassword", "Home", new { model.Email, emailToken }, Request.Scheme);
-
-            bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink);
-
-            // If Email is send then Toast Message Display
-            if (result)
-            {
-                TempData["NotificationMessage"] = NotificationMessages.EmailSentSuccessfully;
-                TempData["NotificationType"] = NotificationType.Success.ToString();
-            }
-            else
-            {
-                TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
-                TempData["NotificationType"] = NotificationType.Error.ToString();
-            }
-            return View();
+            return View(model);
         }
-        return View(model);
+        string emailToken = Guid.NewGuid().ToString();
+        string resetPasswordLink = Url.Action("ResetPassword", "Home", new { model.Email, emailToken }, Request.Scheme);
+
+        bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink);
+
+        // If Email is send then Toast Message Display
+        if (result)
+        {
+            TempData["NotificationMessage"] = NotificationMessages.EmailSentSuccessfully;
+            TempData["NotificationType"] = NotificationType.Success.ToString();
+        }
+        TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
+        TempData["NotificationType"] = NotificationType.Error.ToString();
+        return View();
     }
 
     #endregion
 
 
-    /* ------------------------------------------------------------------------------------------------------Reset Password Action-------------
-    ---------------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Reset Password
-    
+
     [HttpGet]
     public IActionResult ResetPassword(string email)
     {
@@ -137,8 +121,6 @@ public class HomeController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = NotificationMessages.PasswordChangeFailed;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
 

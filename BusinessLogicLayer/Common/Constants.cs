@@ -19,7 +19,4 @@ public static class NotificationMessages
     public const string EmailSendingFailed = "Failed to send the email. Please try again.";
     public const string PasswordChangeFailed = "Failed to change the password. Please try again.";
 
-    // Warning Messages
-    public const string SessionExpired = "Your session has expired. Please log in again.";
-    public const string AccountLocked = "Your account has been locked due to multiple failed login attempts.";
 }
