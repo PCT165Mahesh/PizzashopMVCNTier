@@ -157,7 +157,6 @@
             @* Cities *@
             $("#state").change(function () {
                 var stateId = $(this).val();
-                console.log("State ID Selected:", stateId); // Debugging Log
 
                 if (stateId) {
                     $.ajax({
@@ -165,7 +164,6 @@
                         type: "GET",
                         data: { id: stateId },
                         success: function (cities) {
-                            console.log("Cities Received:", cities); // Debugging Log
                             $("#city").empty().append('<option value="">Select City</option>');
 
                             if (cities.length > 0) {

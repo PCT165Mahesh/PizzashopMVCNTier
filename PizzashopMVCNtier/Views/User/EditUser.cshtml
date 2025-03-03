@@ -174,33 +174,6 @@
 
 @section Scripts{
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @* <script>
-        $(document).ready(function () {
-
-            toastr.options = {
-                "closeButton": true,  // Adds a close button
-                "progressBar": true,  // Shows a progress bar
-                "positionClass": "toast-top-right",  // Position of toast
-                "timeOut": "5000",  // Auto-close after 5 seconds
-                "extendedTimeOut": "2000",  // Extra time if hovered
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut",
-                "iconClass": ""  // Removes the icon class
-            };
-            var successMessage = '@(TempData["SuccessMessage"])';
-            var errorMessage = '@(TempData["ErrorMessage"])';
-
-            console.log("success message :-",successMessage);
-
-            if (successMessage && successMessage.trim() !== "") {
-                toastr.success(successMessage);
-            }
-
-            if (errorMessage && errorMessage.trim() !== "") {
-                toastr.error(errorMessage);
-            }
-        });
-    </script> *@
     <script>
       $(document).ready(function (){
         // Country -> State Dropdown Update
@@ -227,7 +200,6 @@
             @* Cities *@
             $("#state").change(function () {
                 var stateId = $(this).val();
-                console.log("State ID Selected:", stateId); // Debugging Log
 
                 if (stateId) {
                     $.ajax({
@@ -235,7 +207,6 @@
                         type: "GET",
                         data: { id: stateId },
                         success: function (cities) {
-                            console.log("Cities Received:", cities); // Debugging Log
                             $("#city").empty().append('<option value="">Select City</option>');
 
                             if (cities.length > 0) {
@@ -267,7 +238,6 @@
                 //Required Field Validation (Except Image)
                 $("#editUserForm input[type='text'], #editUserForm select").each(function () {
                     let inputValue = $(this).val().trim();
-                    @* console.log(inputValue); *@
 
                     if (!inputValue || inputValue === "0") {
                         $(this).addClass("is-invalid"); // Add error styling

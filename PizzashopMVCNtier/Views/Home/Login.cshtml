@@ -91,12 +91,10 @@
         //  Email Validation (Using Built-in Validity API)
         if (emailInput.value.trim() === "") {
           $("#LoginEmail").next(".email-error").text("Email is required.");
-          console.log("Email Error");
           isValid = false;
         }
         else if (!emailInput.checkValidity()) {
           $("#LoginEmail").next(".email-error").text("Enter a valid email address.");
-          console.log("Email Error");
           isValid = false;
         }
         else {
@@ -109,7 +107,6 @@
 
           if (password === "") {
           $(".password-error").text("Password is required.");
-          console.log("Password is required.");
           isValid = false;
         }
         // ✅ If validation passes, submit form using AJAX
