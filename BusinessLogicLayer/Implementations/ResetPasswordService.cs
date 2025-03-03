@@ -1,5 +1,6 @@
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -23,13 +24,11 @@ public class ResetPasswordService : IResetPasswordService
         {
 
             // Fetch user from the database
-            var user = await _userRepository.GetUserByEmail(email);
-
+            User user = await _userRepository.GetUserByEmail(email);
             if (user == null)
             {
                 return false;
             }
-
             // Encrypted Password Saving
             string HashedPassword = _encryptionService.EncryptPassword(password);
             return await _userRepository.UpdateUserPassword(user, HashedPassword);

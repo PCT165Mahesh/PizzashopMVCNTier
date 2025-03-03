@@ -1,9 +1,7 @@
-using System.Net.Http.Headers;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -18,9 +16,10 @@ public class CategoryItemService : ICategoryItemService
         _userRepository = userRepository;
     }
 
+    #region Add Category
     public async Task<bool> AddCategory(CategoryViewModel model, string userName)
     {
-        var user = await _userRepository.GetUserByUserName(userName);
+        User user = await _userRepository.GetUserByUserName(userName);
         if(user == null)
         {
             return false;
@@ -34,8 +33,9 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.AddCategoryAsync(model, user.Id);
     }
 
-    
+    #endregion
 
+    #region Get Categories
     public List<CategoryViewModel> GetCategories()
     {
         List<Category> categories = _categoryItemRepository.GetAllCategories();
@@ -52,10 +52,13 @@ public class CategoryItemService : ICategoryItemService
         return _categoryItemRepository.GetCategoryId(id);
     }
 
+    #endregion
+
+    #region Edit Categories
     public async Task<bool> EditCategory(CategoryViewModel model, string userName)
     {
 
-        var user = await _userRepository.GetUserByUserName(userName);
+        User user = await _userRepository.GetUserByUserName(userName);
         if(user == null)
         {
             return false;
@@ -68,6 +71,9 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.EditCategoryAsync(model, user.Id);
     }
 
+    #endregion
+
+    #region Delete Category
     public async Task<bool> DeleteCategory(long categoryId, string userName)
     {
         if(categoryId == -1 || categoryId == null)
@@ -82,6 +88,6 @@ public class CategoryItemService : ICategoryItemService
         }
 
         return await _categoryItemRepository.DeleteCategoryAsync(categoryId, user.Id);
-
     }
+    #endregion
 }

@@ -23,7 +23,7 @@ public interface IUserRepository
     -------------------------------------------------------------------------------------------------------*/
     public Task<bool> UpdateUserPassword(User user, string password);
     public Task<bool> UpdateUserProfileData(User user, ProfileDataViewModel model);
-    public Task<bool> EditUserAsync(EditUserViewModel model, User user);
+    public Task<bool> EditUserAsync(EditUserViewModel model, User user, long adminId);
 
     /*---------------------------------------------------------------------------Delete/Soft Delete User Method Definations
     -------------------------------------------------------------------------------------------------------*/

@@ -1,11 +1,10 @@
-using System.Threading.Tasks;
 using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Iana;
 
 namespace PizzashopMVCNtier.Controllers;
 
@@ -30,8 +29,6 @@ public class DashboardController : Controller
     }
 
 
-    /* ------------------------------------------------------------------------------------------------------Dashboard Action-------------
--------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Dashboard
     public IActionResult Index()
@@ -41,17 +38,12 @@ public class DashboardController : Controller
     }
     #endregion
 
-
-    /* ----------------------------------------------------------------------------------------------Profile Details Action----------
--------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Profile Data
     [HttpGet]
     public async Task<IActionResult> ProfileDetails()
     {
-
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var email = _userDetailService.Email(token);
+        string email = _userDetailService.Email(token);
 
         ProfileDataViewModel model = await _userDetailService.GetProfileData(email);
         return View(model);
@@ -61,7 +53,7 @@ public class DashboardController : Controller
     public async Task<IActionResult> ProfileDetails(ProfileDataViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var email = _userDetailService.Email(token);
+        string email = _userDetailService.Email(token);
 
         if(!ModelState.IsValid){
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "Profile");
@@ -83,10 +75,6 @@ public class DashboardController : Controller
 
     #endregion
 
-
-    /* ----------------------------------------------------------------------------------------------Change Password Action----------
--------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Change Password
     [HttpGet]
     public IActionResult ChangePassword()
@@ -98,10 +86,15 @@ public class DashboardController : Controller
     public async Task<IActionResult> ChangePassword(ChangePassViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string email = _userDetailService.Email(token);
 
-        var email = _userDetailService.Email(token);
+        if(!ModelState.IsValid){
+            TempData["NotificationMessage"] = NotificationMessages.PasswordChangeFailed;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return View(model);
+        }
 
-        var result = await _changePasswordService.ChangePassword(model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword, email);
+        bool result = await _changePasswordService.ChangePassword(model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword, email);
         if (result)
         {
             TempData["NotificationMessage"] = NotificationMessages.PasswordChanged;
@@ -114,15 +107,13 @@ public class DashboardController : Controller
     }
 
     #endregion
-    /* ----------------------------------------------------------------------------------------------Country State city Details Action----------
--------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Coutry, City, States, Roles
 
     [HttpGet]
     public JsonResult GetCountries()
     {
-        var countries = _countryService.GetCountries();
+        List<Country> countries = _countryService.GetCountries();
         return Json(countries);
     }
 
@@ -130,8 +121,7 @@ public class DashboardController : Controller
     [HttpGet]
     public JsonResult GetStatesByCountry(long countryId)
     {
-        var states = _countryService.GetStates(countryId);
-
+        List<State> states = _countryService.GetStates(countryId);
         return Json(states);
     }
 
@@ -139,18 +129,16 @@ public class DashboardController : Controller
     [HttpGet]
     public JsonResult GetCitiesByState(long id)
     {
-        Console.WriteLine($"State ID received: {id}");
-
-        var cities = _countryService.GetCities(id);
-
+        List<City> cities = _countryService.GetCities(id);
         return Json(cities);
     }
 
     [HttpGet]
     public async Task<JsonResult> GetRoles()
     {
-        var roles = await _roleService.GetRolesAsync();
+        List<Role> roles = await _roleService.GetRolesAsync();
         return Json(roles);
     }
     #endregion
+
 }

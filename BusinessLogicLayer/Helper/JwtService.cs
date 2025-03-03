@@ -22,12 +22,12 @@ public class JwtService
     #region Generate Token
     public string GenerateJwtToken(string email, string role, string userName, string imgUrl)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_key); // Secret Code (Salt)
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = Encoding.UTF8.GetBytes(_key); // Secret Code (Salt)
 
         imgUrl = !string.IsNullOrEmpty(imgUrl) ? imgUrl : "/uploads/Default_pfp.svg.png";
 
-        var tokenDescriptor = new SecurityTokenDescriptor
+        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
@@ -43,7 +43,7 @@ public class JwtService
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
         };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+        SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
 
@@ -58,8 +58,8 @@ public class JwtService
         if (string.IsNullOrEmpty(token))
             return false;
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Convert.FromBase64String(_key); // Convert key to byte array
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = Convert.FromBase64String(_key); // Convert key to byte array
 
         try
         {
@@ -90,18 +90,18 @@ public class JwtService
     #region Get Claim Value
     public ClaimsPrincipal? GetClaimsFromToken(string token)
     {
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(token);
-        var claims = new ClaimsIdentity(jwtToken.Claims);
+        JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+        JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+        ClaimsIdentity claims = new ClaimsIdentity(jwtToken.Claims);
         return new ClaimsPrincipal(claims);
     }
 
     // Retrieves a specific claim value from a JWT token.
     public string? GetClaimValue(string token, string claimType)
     {
-        var claimsPrincipal = GetClaimsFromToken(token);
+        ClaimsPrincipal? claimsPrincipal = GetClaimsFromToken(token);
         // return claimsPrincipal?.FindFirst(claimType)?.Value;
-        var value = claimsPrincipal?.FindFirst(claimType)?.Value;
+        string? value = claimsPrincipal?.FindFirst(claimType)?.Value;
         return value;
     }
     #endregion

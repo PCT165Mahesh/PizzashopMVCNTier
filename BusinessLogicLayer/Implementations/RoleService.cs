@@ -21,9 +21,6 @@ public class RoleService : IRoleService
         return await _roleRepository.GetRoleById(id);
     }
 
-    /*-------------------------------------------------------------------------------------------------------------Get ROle Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     public async Task<List<Role>> GetRolesAsync()
     {
         return await _roleRepository.GetRoles();

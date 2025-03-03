@@ -25,12 +25,11 @@ public class UserService : IUserService
         _roleRepository = roleRepository;
     }
 
-    /*-------------------------------------------------------------------------------------------------------------Get User ViewModel By Id Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
     #region Get User By Id Service
     public async Task<EditUserViewModel> GetUserByIdAsync(long id)
     {
-        var user = await _userRepository.GetUserById(id);
+        User user = await _userRepository.GetUserById(id);
         if(user == null){
             return new EditUserViewModel();
         }
@@ -60,18 +59,15 @@ public class UserService : IUserService
     #endregion
 
 
-    /*-------------------------------------------------------------------------------------------------------------Add User Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Add User Service
     public async Task<bool> AddUserAsync(AddUserViewModel model, string userName)
     {
         string _password = model.Password;
         model.Password = _encryptionService.EncryptPassword(model.Password);
 
-        var adminUser  = await _userRepository.GetUserByUserName(userName);
+        User adminUser  = await _userRepository.GetUserByUserName(userName);
 
-        var user = await _userRepository.AddUserAsync(model, adminUser.Id);
+        User user = await _userRepository.AddUserAsync(model, adminUser.Id);
         
         if(user != null){
             // Prepare Email Content
@@ -93,34 +89,27 @@ public class UserService : IUserService
     #endregion
 
 
-    /*-------------------------------------------------------------------------------------------------------------Update User Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Update User Service
     public async Task<bool> UpdateUserAsync(EditUserViewModel model, string userName)
     {
-        var admin = await _userRepository.GetUserByUserName(userName);
-        var user = await _userRepository.GetUserById(model.UserId);
+        User admin = await _userRepository.GetUserByUserName(userName);
+        User user = await _userRepository.GetUserById(model.UserId);
         if(user == null){
             return false;
         }
-
-        return await _userRepository.EditUserAsync(model, user);
+        return await _userRepository.EditUserAsync(model, user, admin.Id);
     }
     #endregion
 
-    /*------------------------------------------------------------------------------------------------------------Delete User Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Delete User Service
     public async Task<bool> DeleteUserAsync(long id, string adminName)
     {
-        var admin = await _userRepository.GetUserByUserName(adminName);
-        var user = await _userRepository.GetUserById(id);
+        User admin = await _userRepository.GetUserByUserName(adminName);
+        User user = await _userRepository.GetUserById(id);
         if(user == null){
             return false;
         }
-
         return await _userRepository.SoftDeleteUserAsync(user, admin.Id);
     }
     #endregion

@@ -2,6 +2,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,18 +33,12 @@ public class UserDetailService : IUserDetailService
         _countryDetailRepository = countryDetailRepository;
     }
 
-    /*-------------------------------------------------------------------------------------------------------------Get User Detials Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
+
 
     #region Loged In User Details Service
     public string Email(string token)
     {
         return _jwtService.GetClaimValue(token, "email");
-    }
-
-    public string ImgUrl(string token)
-    {
-        return _jwtService.GetClaimValue(token, "imgUrl");
     }
 
     public string UserName(string token)
@@ -53,30 +48,24 @@ public class UserDetailService : IUserDetailService
 
     public JsonResult UserDetails(string token)
     {
-        var email = _jwtService.GetClaimValue(token, "email");
-        var userName = _jwtService.GetClaimValue(token, "userName");
-        var imgUrl = _jwtService.GetClaimValue(token, "imgUrl");
-
-        return new JsonResult(new { Email = email, UserName = userName, ImgUrl = imgUrl });
+        string email = _jwtService.GetClaimValue(token, "email");
+        string userName = _jwtService.GetClaimValue(token, "userName");
+        return new JsonResult(new { Email = email, UserName = userName });
     }
 
     #endregion
 
 
-
-    /*-------------------------------------------------------------------------------------------------------------Get User Profile Data Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Profile Data Service
     public async Task<ProfileDataViewModel> GetProfileData(string email)
     {
-        var user = await _userRepository.GetUserByEmail(email);
+        User user = await _userRepository.GetUserByEmail(email);
         if (user == null)
         {
             return new ProfileDataViewModel();
         }
 
-        var roleObj = await _roleRepository.GetRoleById(user.Roleid);
+        Role roleObj = await _roleRepository.GetRoleById(user.Roleid);
 
         return new ProfileDataViewModel()
         {
@@ -106,7 +95,7 @@ public class UserDetailService : IUserDetailService
 
     public async Task<long> GetUserIdByUserNameAsync(string userName)
     {
-        var user = await _userRepository.GetUserByUserName(userName);
+        User user = await _userRepository.GetUserByUserName(userName);
         if(user != null){
             return user.Id;
         }
@@ -115,18 +104,15 @@ public class UserDetailService : IUserDetailService
     #endregion
 
 
-    /*-------------------------------------------------------------------------------------------------------------Update User Profile Service Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Update Profile Data Service
     public async Task<bool> UpdateUserProfileData(ProfileDataViewModel model, string email)
     {
-        var user = await _userRepository.GetUserByEmail(email);
+        User user = await _userRepository.GetUserByEmail(email);
         if(user == null)
         {
             return false;
         }
-        var result = await _userRepository.UpdateUserProfileData(user, model);
+        bool result = await _userRepository.UpdateUserProfileData(user, model);
         if(!result)
         {
             return false;

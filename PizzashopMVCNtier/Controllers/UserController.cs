@@ -19,9 +19,7 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    /* ------------------------------------------------------------------------------------------------------User List Action-------------
--------------------------------------------------------------------------------------------------------------------------------------*/
-    
+
     #region User List
     [Authorize]
     public IActionResult Index()
@@ -34,13 +32,12 @@ public class UserController : Controller
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = ""){
+    public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "")
+    {
         return await _userDetailService.GetUserDetails(pageNo, pageSize, search);
     }
 
     #endregion
-    /* ------------------------------------------------------------------------------------------------------Add User Action-------------
--------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region Add User
     [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
@@ -55,36 +52,35 @@ public class UserController : Controller
     [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
     public async Task<IActionResult> AddUser(AddUserViewModel model)
     {
-        if(!ModelState.IsValid){
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        if (!ModelState.IsValid)
+        {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
-            TempData["NotificationType"] = NotificationType.Error.ToString(); 
+            TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
-        
-        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var userName = _userDetailService.UserName(token);
- 
         bool result = await _userService.AddUserAsync(model, userName);
-        if(result){
+        if (result)
+        {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreated, "User");
-            TempData["NotificationType"] = NotificationType.Success.ToString(); 
+            TempData["NotificationType"] = NotificationType.Success.ToString();
             return RedirectToAction("Index");
         }
 
         TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
-        TempData["NotificationType"] = NotificationType.Error.ToString(); 
+        TempData["NotificationType"] = NotificationType.Error.ToString();
         return RedirectToAction("AddUser", "User");
     }
     #endregion
 
-    /* ------------------------------------------------------------------------------------------------------Edit User Action-------------
--------------------------------------------------------------------------------------------------------------------------------------*/
     #region Edit User
     [HttpGet]
     [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
     public async Task<IActionResult> EditUser(int id)
     {
-        var model = await _userService.GetUserByIdAsync(id);
+        EditUserViewModel model = await _userService.GetUserByIdAsync(id);
         return View(model);
     }
 
@@ -93,27 +89,27 @@ public class UserController : Controller
     public async Task<IActionResult> EditUser(EditUserViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var userName = _userDetailService.UserName(token);
+        string userName = _userDetailService.UserName(token);
 
-        if(ModelState.IsValid){
-            var result = await _userService.UpdateUserAsync(model, userName);
-            if(result){
-                TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "User");;
-                TempData["NotificationType"] = NotificationType.Success.ToString(); 
-                return RedirectToAction("Index", "User");
-            }
-            else{
-                TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User");;
-                TempData["NotificationType"] = NotificationType.Error.ToString(); 
-                return RedirectToAction("Index", "User");
-            }
+        if (!ModelState.IsValid)
+        {
+            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User"); ;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return RedirectToAction("Index", "User");
         }
-        return View(model);
+        bool result = await _userService.UpdateUserAsync(model, userName);
+        if (result)
+        {
+            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "User"); ;
+            TempData["NotificationType"] = NotificationType.Success.ToString();
+            return RedirectToAction("Index", "User");
+        }
+        TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User"); ;
+        TempData["NotificationType"] = NotificationType.Error.ToString();
+        return RedirectToAction("Index", "User");
     }
     #endregion
 
-    /* ------------------------------------------------------------------------------------------------------Delete User Action-------------
--------------------------------------------------------------------------------------------------------------------------------------*/
     #region Delete User
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -121,17 +117,19 @@ public class UserController : Controller
 
     public async Task<IActionResult> DeleteUser(long id)
     {
-
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var userName = _userDetailService.UserName(token);
+        string userName = _userDetailService.UserName(token);
 
-        var result = await _userService.DeleteUserAsync(id, userName);
-        if(result){
+        bool result = await _userService.DeleteUserAsync(id, userName);
+        if (result)
+        {
             return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "User") });
         }
-        else{
+        else
+        {
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "User") });
         }
     }
     #endregion
+
 }

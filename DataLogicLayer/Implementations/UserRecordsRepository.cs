@@ -20,7 +20,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
     #region  Get User Records for Pagination
    public async Task<UserViewModel> GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
     {
-        var query = from u in _context.Users
+        IQueryable<UserListViewModel> query = from u in _context.Users
                     join r in _context.Roles on u.Roleid equals r.RoleId
                     where u.Isdeleted == false &&
                         (string.IsNullOrEmpty(search) ||
@@ -41,8 +41,8 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                         ImgUrl = u.Imgurl
                     };
 
-        var totalRecords = await query.CountAsync();
-        var users = await query.OrderBy(u => u.FirstName)
+        int totalRecords = await query.CountAsync();
+        List<UserListViewModel> users = await query.OrderBy(u => u.FirstName)
                     .Skip((pageNo - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();

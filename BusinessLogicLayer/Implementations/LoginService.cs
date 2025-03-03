@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -39,15 +40,15 @@ public class LoginService : ILoginService
         if(string.IsNullOrEmpty(token) && context.Request.Cookies["UserEmail"] != null){
             string? userEmail = context.Request.Cookies["UserEmail"];
 
-            var user = await _userRepository.GetUserByEmail(userEmail);
+            User user = await _userRepository.GetUserByEmail(userEmail);
             if(user == null){
                 return false;
             }
 
             //Fetch the role 
-            var roleObj =await _roleRepository.GetRoleById(user.Roleid);
+            Role roleObj =await _roleRepository.GetRoleById(user.Roleid);
             // Generate a new JWT token
-            var newToken = _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username, user.Imgurl);
+            string newToken = _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username, user.Imgurl);
 
             // Update the JWT token in the session
             if(newToken != null)
@@ -67,20 +68,20 @@ public class LoginService : ILoginService
     public async Task<bool> LoginUser(string email, string password, bool rememberMe)
     {
         //Get the user from ther user repository
-        var user = await _userRepository.GetUserByEmail(email);
+        User user = await _userRepository.GetUserByEmail(email);
         if(user == null){
             return false;
         }
         
 
         //Fetch the role 
-        var roleObj = await _roleRepository.GetRoleById(user.Roleid);
+        Role roleObj = await _roleRepository.GetRoleById(user.Roleid);
         // Check for the Hashed Password
 
         if(user.Password == _encryptSercive.EncryptPassword(password)){
 
             // generate the Jwt token
-            var token = _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username, user.Imgurl);
+            string token = _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username, user.Imgurl);
             if(token != null){
                 // Store JWT Token in Session
                 _httpContextAccessor?.HttpContext?.Session.SetString("SuperSecretAuthToken", token);

@@ -34,7 +34,6 @@ public class RolePermissionController :Controller
 
     #endregion
 
-    
     #region  Permissions Get and Post
     [HttpGet]
     public async Task<IActionResult> Permission(long id)
@@ -49,15 +48,15 @@ public class RolePermissionController :Controller
     [HttpPost]
     public async Task<IActionResult> Permission(long roleId, List<PermissionsViewModel> model){
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var userName = _userDetailService.UserName(token);
+        string userName = _userDetailService.UserName(token);
 
-        var userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
+        long userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
 
         if(model == null){
             ModelState.AddModelError("", "Permission List is Empty");
             return View(model);
         }
-        var result = await _rolePermissionService.EditRolepermissions(roleId ,model, userId);
+        bool result = await _rolePermissionService.EditRolepermissions(roleId ,model, userId);
 
         if(result){
             return RedirectToAction("Permission", "RolePermission");
@@ -66,4 +65,5 @@ public class RolePermissionController :Controller
         return View(model);
     }
     #endregion
+    
 }

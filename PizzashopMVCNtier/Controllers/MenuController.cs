@@ -57,8 +57,7 @@ public class MenuController : Controller
             result = await _categoryItemService.EditCategory(model.Category, userName);
             isCreated = false;
         }
-
-
+        // Checking for Add or Update
         if (result)
         {
             TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Category");
@@ -78,9 +77,9 @@ public class MenuController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteCategory(long id){
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        var userName = _userDetailService.UserName(token);
+        string userName = _userDetailService.UserName(token);
 
-        var result = await _categoryItemService.DeleteCategory(id, userName);
+        bool result = await _categoryItemService.DeleteCategory(id, userName);
         if(result){
             return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Category") });
         }
@@ -90,8 +89,10 @@ public class MenuController : Controller
     }
     #endregion
 
+    #region All Categories In JSON
     public IActionResult GetCategoryById(long id)
     {
         return Json(_categoryItemService.GetCategoryById(id));
     }
+    #endregion
 }

@@ -1,6 +1,7 @@
 using System;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,7 +53,7 @@ public class ForgotPasswordService : IForgotPasswordService
         </div>
             ";
 
-        var user = await _userRepository.GetUserByEmail(email);
+        User user = await _userRepository.GetUserByEmail(email);
         if(user == null){
             return false;
         }

@@ -16,9 +16,6 @@ public class UserRepository : IUserRepository
 
     }
 
-    /*-------------------------------------------------------------------------------------------------------------Get User Method Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Get User Implementations
     public async Task<User> GetUserByEmail(string email)
     {
@@ -37,13 +34,10 @@ public class UserRepository : IUserRepository
     }
     #endregion
 
-    /*-------------------------------------------------------------------------------------------------------------Add User Method Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
-
     #region Add User Implementation
     public async Task<User> AddUserAsync(AddUserViewModel model, long adminId)
     {
-        var user = new User
+        User user = new User
         {
             Firstname = model.FirstName,
             Lastname = model.LastName,
@@ -72,7 +66,7 @@ public class UserRepository : IUserRepository
             string fileName = $"{Guid.NewGuid()}_{model.ProfileImage.FileName}";
             string filePath = Path.Combine(uploadsFolder, fileName);
 
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
                 await model.ProfileImage.CopyToAsync(fileStream);
             }
@@ -85,9 +79,6 @@ public class UserRepository : IUserRepository
         return user;
     }
     #endregion
-
-    /*-------------------------------------------------------------------------------------------------------------Update User Method Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region  Update User Implementation
     public async Task<bool> UpdateUserPassword(User user, string password)
@@ -137,7 +128,7 @@ public class UserRepository : IUserRepository
                 string fileName = $"{Guid.NewGuid()}_{model.ProfileImage.FileName}";
                 string filePath = Path.Combine(uploadsFolder, fileName);
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ProfileImage.CopyToAsync(fileStream);
                 }
@@ -156,7 +147,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<bool> EditUserAsync(EditUserViewModel model, User user)
+    public async Task<bool> EditUserAsync(EditUserViewModel model, User user, long adminId)
     {
         try
         {
@@ -172,7 +163,7 @@ public class UserRepository : IUserRepository
             user.Phone = model.Phone;
             user.Address = model.Address;
             user.Zipcode = model.Zipcode;
-            user.UpdatedBy = model.UserId; // Update the user who updated the record
+            user.UpdatedBy = adminId; // Update the user who updated the record
             user.UpdatedAt = DateTime.Now; // Update the date when the record was updated
 
 
@@ -188,7 +179,7 @@ public class UserRepository : IUserRepository
                 string fileName = $"{Guid.NewGuid()}_{model.ProfileImage.FileName}";
                 string filePath = Path.Combine(uploadsFolder, fileName);
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ProfileImage.CopyToAsync(fileStream);
                 }
@@ -207,9 +198,6 @@ public class UserRepository : IUserRepository
         }
     }
     #endregion
-
-    /*-------------------------------------------------------------------------------------------------------------Soft Delete Method Implementation
-    -----------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region  Delete User Implementation
     public async Task<bool> SoftDeleteUserAsync(User user, long adminId)

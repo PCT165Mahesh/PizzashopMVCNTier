@@ -9,7 +9,6 @@ public interface IUserDetailService
     public JsonResult UserDetails(string token);
 
     public string UserName(string token);
-    public string ImgUrl(string token);
     public string Email(string token);
 
     /*-------------------------------------------------------------------------------------------------------------Get User Details Method Implementation

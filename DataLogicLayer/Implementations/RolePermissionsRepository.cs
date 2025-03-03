@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
@@ -25,8 +23,8 @@ public class RolePermissionsRepository : IRolePermissionsRepository
         return false;
        }
 
-       foreach(var permission in PermissionList){
-        var rolePermission = _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId && rp.Permissionid == permission.PermissionId).FirstOrDefault();
+       foreach(PermissionsViewModel permission in PermissionList){
+        Rolesandpermission rolePermission = _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId && rp.Permissionid == permission.PermissionId).FirstOrDefault();
 
         if(rolePermission == null){
             return false;
@@ -47,10 +45,10 @@ public class RolePermissionsRepository : IRolePermissionsRepository
 
     public List<PermissionsViewModel> GetRoleAndPermissions(long roleId)
     {
-        var permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
+        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
         List<PermissionsViewModel> model = new List<PermissionsViewModel>();
         
-        foreach(var perm in permissions){
+        foreach(Rolesandpermission perm in permissions){
             model.Add(
                 new PermissionsViewModel(){
                     PermissionId = perm.Permissionid,

@@ -15,13 +15,13 @@ public class EmailSender : IEmailSender
 
     public async Task SendEmailAsync(string email, string subject, string message)
     {
-        var emailTosend = new MimeMessage();
+        MimeMessage emailTosend = new MimeMessage();
         emailTosend.From.Add(new MailboxAddress(_emailSettings.FromEmail, _emailSettings.FromEmail));
         emailTosend.To.Add(new MailboxAddress(email, email));
         emailTosend.Subject = subject;
         emailTosend.Body = new TextPart("html"){Text = message};
 
-        using var smtp = new SmtpClient();
+        using SmtpClient smtp = new SmtpClient();
         try{
             await smtp.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.Port, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
