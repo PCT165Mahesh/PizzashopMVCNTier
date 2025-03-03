@@ -7020,11 +7020,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+      "projectUniqueName": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
       "projectName": "BusinessLogicLayer",
-      "projectPath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+      "projectPath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
       "packagesPath": "C:\\Users\\pct165\\.nuget\\packages\\",
-      "outputPath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\obj\\",
+      "outputPath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pct165\\AppData\\Roaming\\NuGet\\NuGet.Config"

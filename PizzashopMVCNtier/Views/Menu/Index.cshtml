@@ -1,5 +1,6 @@
+@model DataLogicLayer.ViewModels.MenuViewModel
 @{
-  ViewData["Title"] = "Add User Page";
+  ViewData["Title"] = "Menu Page";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -45,58 +46,25 @@
           <!-- Category List Starts -->
           <div class="category_list">
             <ul class="p-0">
-              <li class="category_active list-items pb-3 d-flex align-items-center justify-content-between">
-                <div>
-                  <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid"/>
-                <span>Sandwich</span>
-                </div>
-                <div class="editDeleteBtn d-flex">
-                  <a class="btn user_action p-0 me-1"  id="editButton">
-                    <img src="/images/icons/edit-pen.svg" alt="" />
-                  </a>
-                  <a class="btn user_action user_action_delete deleteUserBtn p-0 me-1" data-id="${user.userId}" id="deleteBtn"
-                    data-bs-toggle="modal" data-bs-target="#myModal">
-                    <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                  </a>
-                </div>
-                
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Pasta
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Sides and Appetizers
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Salads
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Dips and Sauces
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Pizza
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Deserts
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Burger
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Waffle
-              </li>
-              <li class="pb-3">
-                <img src="~/images/icons/grid-3x2.svg" alt="" />
-                Sandwich
-              </li>
+              @foreach (var category in Model.CategoryList)
+              {
+                <li class="category_active list-items pb-3 d-flex align-items-center justify-content-between">
+                  <div>
+                    <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
+                    <span>@category.CategoryName</span>
+                  </div>
+                  <div class="editDeleteBtn d-flex">
+                    <a class="btn user_action p-0 me-1 editCategoryBtn" id="editButton" data-id="@category.Id"
+                      data-bs-toggle="modal" data-bs-target="#categoryModal">
+                      <img src="/images/icons/edit-pen.svg" alt="" />
+                    </a>
+                    <a class="btn user_action user_action_delete deleteUserBtn p-0 me-1" id="deleteBtn"
+                      data-bs-toggle="modal" data-bs-target="#myModal">
+                      <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                    </a>
+                  </div>
+                </li>
+              }
             </ul>
           </div>
         </div>
@@ -310,6 +278,7 @@
 
     </div>
 
+    <!-- #region Modifier Tab-->
     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
       <div class="container-fluid d-flex flex-column flex-lg-row">
         <div class="fs-5 category_part">
@@ -528,10 +497,12 @@
         </div>
       </div>
     </div>
+    <!-- #endregion -->
   </div>
 </div>
 
-<!-- Add Category Modal -->
+
+<!-- Save Category Modal -->
 <div class="modal fade" tabindex="-1" id="categoryModal" aria-labelleby="modal-title">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -540,21 +511,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex flex-column align-items-center">
-        <form class="w-75">
+        <form class="w-75" asp-action="Categories" asp-controller="Menu" method="post">
+          <input type="hidden" asp-for="@Model.Category.Id" id="ModalCategoryId" value="-1">
           <div class="mb-3">
-            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-              placeholder="Name">
+            <input asp-for="@Model.Category.CategoryName" type="text" class="form-control" id="ModalCategoryName"
+              aria-describedby="emailHelp" placeholder="Name">
           </div>
           <div class="mb-3">
-            <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Description"></textarea>
+            <textarea asp-for="@Model.Category.Description" type="text" class="form-control" id="ModalCategoryDescription"
+              placeholder="Description"></textarea>
+          </div>
+          <div class="d-flex flex-row justify-content-end">
+            <button type="submit" id="saveCategoryModalBtn" class="btn btn-primary mx-3">Save</button>
+            <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+              Cancel
+            </button>
           </div>
         </form>
-      </div>
-      <div class="modal-footer border-0 d-flex flex-row justify-content-end">
-        <button type="button" class="btn btn-primary">Save</button>
-        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
-          Cancel
-        </button>
       </div>
     </div>
   </div>
@@ -591,13 +564,35 @@
 </div>
 
 
-@section Scripts{
+@section Scripts {
   <script>
-    $('.list-items').mouseover(function() {
-      $(this).children("div.editDeleteBtn").css("visibility","visible");
+    $('.list-items').mouseover(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "visible");
     })
-    $('.list-items').mouseout(function() {
-      $(this).children("div.editDeleteBtn").css("visibility","hidden");
+    $('.list-items').mouseout(function () {
+      $(this).children("div.editDeleteBtn").css("visibility", "hidden");
+    })
+
+    var categoryId = -1;
+
+    $('.editCategoryBtn').on("click", function () {
+      categoryId = $(this).data("id");
+      $('#saveCategoryModalBtn').data("id", categoryId);
+
+      $.ajax({
+        url: "/Menu/GetCategoryById",
+        type: "GET",
+        data:{id: categoryId},
+        success: function(response)
+        {
+          $('#ModalCategoryName').val(response.categoryName);
+          $('#ModalCategoryDescription').val(response.description);
+          $('#ModalCategoryId').val(categoryId);
+        },
+        error:function(){
+          toastr.error("Failed To Edit Category");
+        }
+      });
     })
   </script>
 }

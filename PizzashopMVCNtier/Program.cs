@@ -33,6 +33,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IGetUserRecordsRepository, UserRecordsRepository>();
 builder.Services.AddScoped<ICountryDetailRepository, CountryDetailRepository>();
 builder.Services.AddScoped<IRolePermissionsRepository, RolePermissionsRepository>();
+builder.Services.AddScoped<ICategoryItemRepository, CategoryItemRepository>();
 
 
 
@@ -46,6 +47,8 @@ builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+builder.Services.AddScoped<ICategoryItemService, CategoryItemService>();
+
 
 builder.Services.AddSession(options =>
 {

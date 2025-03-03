@@ -352,7 +352,7 @@ input[type="file"] {
 
 /* Edit Delete Button in Menu */
 .editDeleteBtn{
-  visibility: visible;
+  visibility: hidden;
 }
 
 /* Profile Data CSS part */
