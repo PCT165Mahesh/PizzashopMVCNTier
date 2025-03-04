@@ -13,6 +13,6 @@ public interface ICategoryItemService
     public Task<bool> EditCategory(CategoryViewModel model, string userName);
     public Task<bool> DeleteCategory(long categoryId, string userName);
 
-    public Task<JsonResult> GetItemList(int categoryId,int pageNo, int pageSize, string search);
+    public Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search);
     
 }

@@ -26,6 +26,7 @@ public class MenuController : Controller
         MenuViewModel model = new()
         {
             CategoryList = _categoryItemService.GetCategories(),
+            ItemModel = new ItemListViewModel() {ItemList = {}, Page = new()}
         };
         ViewData["ActiveLink"] = "Menu";
         return View(model);
@@ -90,9 +91,9 @@ public class MenuController : Controller
     #endregion
 
     #region Items By Category
-    public async Task<IActionResult> GetItemList(int categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
     {
-        return await _categoryItemService.GetItemList(categoryId,pageNo, pageSize, search);
+        return PartialView("_itemsPartialView", await _categoryItemService.GetItemList(categoryId, pageNo, pageSize, search));
     }
     #endregion
 

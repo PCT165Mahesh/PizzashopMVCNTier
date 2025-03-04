@@ -1,3 +1,4 @@
+using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
@@ -93,11 +94,13 @@ public class CategoryItemService : ICategoryItemService
     #endregion
 
 
-    public async Task<JsonResult> GetItemList(int categoryId,int pageNo, int pageSize, string search)
+    public async Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search)
     {
-        ItemListViewModel model = await _categoryItemRepository.GetItemList(categoryId,pageNo, pageSize, search);
+        ItemListViewModel model = new() {Page = new ()};
+        var itemData = await _categoryItemRepository.GetItemList(categoryId, pageNo, pageSize, search);
 
-        return new JsonResult(new { model.ItemList, model.TotalRecords });
+        model.ItemList = itemData.items;
+        model.Page.SetPagination(itemData.totalRecords, pageSize, pageNo);
     }
 
 }

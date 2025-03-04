@@ -91,57 +91,6 @@
 
           <!-- Table For Items Data -->
           <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th id="itemName" scope="col">
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="selectAll" onclick="toggleCheckBoxes(this)" />
-                      <label class="form-check-label" for="selectAll">Name</label>
-                    </div>
-                  </th>
-                  <th scope="col">Item Type</th>
-                  <th scope="col">Rate</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Available</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody id="itemListBody">
-
-
-              </tbody>
-            </table>
-
-            <!-- Paggination Frontend Start -->
-            <div class="d-flex flex-sm-row flex-column align-items-center justify-content-end pagination_container">
-              <div class="d-flex flex-row align-items-center">
-                <span>Items per page:</span>
-
-                <!-- Page  Numbers Drop Down -->
-                <select class="form-select w-auto" aria-label="Default select example" id="selectPageSize">
-                  <option selected>3</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                </select>
-              </div>
-
-              <span style="margin-left: 8px" class="pagination_details">
-                @* Showing @((Model.PageNo - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageNo * Model.PageSize,
-                Model.TotalRecords)) of @Model.TotalRecords *@
-              </span>
-
-              <div>
-                <button type="button" class="btn border border-black prev_page" id="prevPageIcon">
-                  <img src="~/images/icons/chevron-left.svg" alt="" />
-                </button>
-                <button type="button" class="btn border border-black" id="nextPageIcon">
-                  <img src="~/images/icons/chevron-right.svg" alt="" />
-                </button>
-              </div>
-            </div>
-            <!-- Pagination Frontend Ends -->
           </div>
 
         </div>
@@ -499,45 +448,45 @@
           } else {
             $.each(items, function (index, item) {
               $("#itemListBody").append(`
-                                <tr>
-                                    <td>
-                                      <div class='d-flex'>
-                                      <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                      </div>
-                                      <img src="${item.itemImg ? item.itemImg : '/images/Default_pfp.svg.png'}" 
-                                            class="rounded-circle me-2" width="25px" height="25px">
-                                        ${item.itemName}</div>
-                                    </td>
-                                    <td>
-                                      <img src="${item.itemType ? item.itemType : '/images/Default_pfp.svg.png'}" 
-                                            class="rounded-circle" width="25px" height="25px">
-                                    </td>
-                                    <td>${item.rate}</td>
-                                    <td>${item.quantity}</td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                              <input
-                                                class="form-check-input view_switch"
-                                                data-id="${item.itemId}"
-                                                type="checkbox"
-                                                role="switch"
-                                                id="flexSwitchCheckDefault"
-                                                ${item.isAvailable ? "checked" : ""}
-                                                disabled
-                                              /> 
-                                              </div>
-                                    </td>
-                                    <td>
-                                        <a class="btn user_action" href="">
-                                            <img src="/images/icons/edit-pen.svg" alt="" />
-                                        </a>
-                                        <a class="btn user_action user_action_delete deleteUserBtn" data-id="${item.itemId}" data-bs-toggle="modal" data-bs-target="#myModal">
-                                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                                        </a>
-                                    </td>
-                                </tr>
-                            `);
+                                  <tr>
+                                      <td>
+                                        <div class='d-flex'>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        </div>
+                                        <img src="${item.itemImg ? item.itemImg : '/images/Default_pfp.svg.png'}" 
+                                              class="rounded-circle me-2" width="25px" height="25px">
+                                          ${item.itemName}</div>
+                                      </td>
+                                      <td>
+                                        <img src="${item.itemType ? item.itemType : '/images/Default_pfp.svg.png'}" 
+                                              class="rounded-circle" width="25px" height="25px">
+                                      </td>
+                                      <td>${item.rate}</td>
+                                      <td>${item.quantity}</td>
+                                      <td>
+                                          <div class="form-check form-switch">
+                                                <input
+                                                  class="form-check-input view_switch"
+                                                  data-id="${item.itemId}"
+                                                  type="checkbox"
+                                                  role="switch"
+                                                  id="flexSwitchCheckDefault"
+                                                  ${item.isAvailable ? "checked" : ""}
+                                                  disabled
+                                                /> 
+                                                </div>
+                                      </td>
+                                      <td>
+                                          <a class="btn user_action" href="">
+                                              <img src="/images/icons/edit-pen.svg" alt="" />
+                                          </a>
+                                          <a class="btn user_action user_action_delete deleteUserBtn" data-id="${item.itemId}" data-bs-toggle="modal" data-bs-target="#myModal">
+                                              <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                                          </a>
+                                      </td>
+                                  </tr>
+                              `);
             });
           }
 
@@ -665,7 +614,7 @@
             url: "/Menu/DeleteCategory",
             type: "POST",
             data: { id: categoryId }, // Send data as form data
-                    @* headers: {
+                      @* headers: {
               "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // CSRF Token
             }, *@
             success: function (response) {
@@ -682,9 +631,9 @@
             error: function (xhr, status, error) {
               console.log(xhr.responseText);
             }
-                  });
+                    });
     }
+                });
               });
-            });
   </script>
 }

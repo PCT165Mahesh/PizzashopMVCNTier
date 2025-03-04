@@ -104,7 +104,7 @@ public class CategoryItemRepository : ICategoryItemRepository
         }
     }
 
-    public async Task<ItemListViewModel> GetItemList(long categoryId, int pageNo, int pageSize, string search)
+    public async Task<(List<ItemsViewModel> items, int totalRecords)> GetItemList(long categoryId, int pageNo, int pageSize, string search)
     {
         IQueryable<ItemsViewModel> query = _context.Items
                             .Include(i => i.Itemtype)
@@ -136,7 +136,7 @@ public class CategoryItemRepository : ICategoryItemRepository
                     .Take(pageSize)
                     .ToListAsync();
 
-        return new ItemListViewModel { ItemList = items, TotalRecords = totalRecords };
+        return (items, totalRecords);
     }
 
 }

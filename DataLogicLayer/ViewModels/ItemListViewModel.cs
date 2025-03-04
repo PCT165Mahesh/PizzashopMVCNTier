@@ -2,7 +2,7 @@ namespace DataLogicLayer.ViewModels;
 
 public class ItemListViewModel
 {
-    public List<ItemsViewModel> ItemList { get; set; } = new List<ItemsViewModel>();
+    public IEnumerable<ItemsViewModel>? ItemList { get; set; }
 
-    public int TotalRecords { get; set; }
+    public PaginationViewModel? Page { get; set; }
 }
