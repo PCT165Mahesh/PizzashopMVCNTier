@@ -89,6 +89,13 @@ public class MenuController : Controller
     }
     #endregion
 
+    #region Items By Category
+    public async Task<IActionResult> GetItemList(int categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return await _categoryItemService.GetItemList(categoryId,pageNo, pageSize, search);
+    }
+    #endregion
+
     #region All Categories In JSON
     public IActionResult GetCategoryById(long id)
     {

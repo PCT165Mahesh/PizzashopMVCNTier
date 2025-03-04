@@ -11,4 +11,6 @@ public interface ICategoryItemRepository
     public Task<bool> AddCategoryAsync(CategoryViewModel model, long userId);
     public Task<bool> EditCategoryAsync(CategoryViewModel model, long userId);
     public Task<bool> DeleteCategoryAsync(long categoryId, long userId);
+
+    public Task<ItemListViewModel> GetItemList(long categoryId, int pageNo, int pageSize, string search);
 }

@@ -340,14 +340,21 @@ input[type="file"] {
 
 .category_list ul li {
   list-style: none;
+  cursor: pointer;
 }
 
 .item-grid {
   transform: rotate(90deg);
 }
 
+a{
+  text-decoration: none;
+  color: black;
+}
+
 .category_active {
   color: #0066a7;
+  text-decoration: none;
 }
 
 /* Edit Delete Button in Menu */

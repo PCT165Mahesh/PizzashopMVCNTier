@@ -2,6 +2,7 @@ using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -90,4 +91,13 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.DeleteCategoryAsync(categoryId, user.Id);
     }
     #endregion
+
+
+    public async Task<JsonResult> GetItemList(int categoryId,int pageNo, int pageSize, string search)
+    {
+        ItemListViewModel model = await _categoryItemRepository.GetItemList(categoryId,pageNo, pageSize, search);
+
+        return new JsonResult(new { model.ItemList, model.TotalRecords });
+    }
+
 }

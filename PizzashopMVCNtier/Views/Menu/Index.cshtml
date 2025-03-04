@@ -45,23 +45,23 @@
 
           <!-- Category List Starts -->
           <div class="category_list">
-            <ul class="p-0">
+            <ul class="p-0" id="category_listUl">
               @foreach (var category in Model.CategoryList)
               {
-                <li class="category_active list-items pb-3 d-flex align-items-center justify-content-between">
+                <li class="list-items pb-3 d-flex align-items-center justify-content-between">
                   <div>
                     <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
-                    <span>@category.CategoryName</span>
+                    <a data-id="@category.Id">@category.CategoryName</a>
                   </div>
                   <div class="editDeleteBtn d-flex">
-                    <a class="btn user_action p-0 me-1 editCategoryBtn" id="editButton" data-id="@category.Id"
+                    <button class="btn user_action p-0 me-1 editCategoryBtn" id="editButton" data-id="@category.Id"
                       data-bs-toggle="modal" data-bs-target="#categoryModal">
                       <img src="/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <a class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn"
+                    </button>
+                    <button class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn"
                       data-id="@category.Id" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
                       <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                    </a>
+                    </button>
                   </div>
                 </li>
               }
@@ -107,168 +107,39 @@
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody>
-              <tbody>
-                <tr>
-                  <td class="user_profile">
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="checkbox" class="form-check-input" />
-                      <img src="~/images/dining-menu.png" alt="" class="rounded-circle" />
-                      <label class="form-check-label">Panjabi Tadka Sandwich</label>
-                    </div>
-                  </td>
-                  <td>
-                    <img src="~/images/icons/non-veg-icon.svg" alt="" width="20px" />
-                  </td>
-                  <td>200</td>
-                  <td>1</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                  </td>
-                  <td>
-                    <a class="btn user_action" href="">
-                      <img src="~/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <button class="btn user_action" type="button">
-                      <img src="~/images/icons/delete-trash-icon.svg" alt="" />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="user_profile">
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="checkbox" class="form-check-input" />
-                      <img src="~/images/dining-menu.png" alt="" class="rounded-circle" />
-                      <label class="form-check-label">Chicken Sandwich</label>
-                    </div>
-                  </td>
-                  <td>
-                    <img src="~/images/icons/non-veg-icon.svg" alt="" width="20px" />
-                  </td>
-                  <td>200</td>
-                  <td>1</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                  </td>
-                  <td>
-                    <a class="btn user_action" href="">
-                      <img src="~/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <button class="btn user_action" type="button">
-                      <img src="~/images/icons/delete-trash-icon.svg" alt="" />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="user_profile">
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="checkbox" class="form-check-input" />
-                      <img src="~/images/dining-menu.png" alt="" class="rounded-circle" />
-                      <label class="form-check-label">Cheese Sandwich</label>
-                    </div>
-                  </td>
-                  <td>
-                    <img src="~/images/icons/veg-icon.svg" alt="" width="20px" />
-                  </td>
-                  <td>150</td>
-                  <td>1</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                  </td>
-                  <td>
-                    <a class="btn user_action" href="">
-                      <img src="~/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <button class="btn user_action" type="button">
-                      <img src="~/images/icons/delete-trash-icon.svg" alt="" />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="user_profile">
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="checkbox" class="form-check-input" />
-                      <img src="~/images/dining-menu.png" alt="" class="rounded-circle" />
-                      <label class="form-check-label">Aloo Sandwich</label>
-                    </div>
-                  </td>
-                  <td>
-                    <img src="~/images/icons/veg-icon.svg" alt="" width="20px" />
-                  </td>
-                  <td>120</td>
-                  <td>1</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                  </td>
-                  <td>
-                    <a class="btn user_action" href="">
-                      <img src="~/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <button class="btn user_action" type="button">
-                      <img src="~/images/icons/delete-trash-icon.svg" alt="" />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="user_profile">
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="checkbox" class="form-check-input" />
-                      <img src="~/images/dining-menu.png" alt="" class="rounded-circle" />
-                      <label class="form-check-label">Black Bean Sandwich</label>
-                    </div>
-                  </td>
-                  <td>
-                    <img src="~/images/icons/veg-icon.svg" alt="" width="20px" />
-                  </td>
-                  <td>100</td>
-                  <td>1</td>
-                  <td>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" />
-                    </div>
-                  </td>
-                  <td>
-                    <a class="btn user_action" href="">
-                      <img src="~/images/icons/edit-pen.svg" alt="" />
-                    </a>
-                    <button class="btn user_action" type="button">
-                      <img src="~/images/icons/delete-trash-icon.svg" alt="" />
-                    </button>
-                  </td>
-                </tr>
-                <!-- More rows here -->
-              </tbody>
+              <tbody id="itemListBody">
+
+
               </tbody>
             </table>
 
             <!-- Paggination Frontend Start -->
-            <div class="d-flex flex-row align-items-center justify-content-end pagination_container">
-              <span>Items per page:</span>
+            <div class="d-flex flex-sm-row flex-column align-items-center justify-content-end pagination_container">
+              <div class="d-flex flex-row align-items-center">
+                <span>Items per page:</span>
 
-              <!-- Page  Numbers Drop Down -->
-              <select class="form-select w-auto" aria-label="Default select example">
-                <option selected>5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
+                <!-- Page  Numbers Drop Down -->
+                <select class="form-select w-auto" aria-label="Default select example" id="selectPageSize">
+                  <option selected>3</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                </select>
+              </div>
 
-              <span style="margin-left: 8px;">Showing 1-5 of 11</span>
+              <span style="margin-left: 8px" class="pagination_details">
+                @* Showing @((Model.PageNo - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageNo * Model.PageSize,
+                Model.TotalRecords)) of @Model.TotalRecords *@
+              </span>
 
-              <button class="btn border border-black prev_page">
-                <img src="~/images/icons/chevron-left.svg" alt="">
-              </button>
-              <button class="btn border border-black">
-                <img src="~/images/icons/chevron-right.svg" alt="">
-              </button>
+              <div>
+                <button type="button" class="btn border border-black prev_page" id="prevPageIcon">
+                  <img src="~/images/icons/chevron-left.svg" alt="" />
+                </button>
+                <button type="button" class="btn border border-black" id="nextPageIcon">
+                  <img src="~/images/icons/chevron-right.svg" alt="" />
+                </button>
+              </div>
             </div>
             <!-- Pagination Frontend Ends -->
           </div>
@@ -591,6 +462,136 @@
 
 @section Scripts {
   <script>
+    var debounceTimer; // Timer for debounce
+    var categoryId = 1;
+    var pageNo = 1; // Current page number
+    var pageSize = $("#selectPageSize").val(); // Default page size
+    var totalRecords = 0; // Total records placeholder
+
+    $(document).ready(function () {
+
+      categoryId = $('#category_listUl li:first>div>a').data("id");
+      $('#category_listUl li:first>div>a').addClass("category_active");
+      loadItems(categoryId, pageNo, pageSize, search);
+    });
+
+    $('.list-items>div>a').on("click", function () {
+      $('.list-items').each(function () {
+        $('.list-items>div>a').removeClass("category_active");
+      });
+      categoryId = $(this).data("id");
+      $(this).addClass("category_active");
+      loadItems(categoryId, pageNo, pageSize, search);
+    })
+
+    function loadItems(categoryId, pageNo, pageSize, searchQuery = "") {
+      $.ajax({
+        url: '@Url.Action("GetItemList", "Menu")',
+        type: "GET",
+        data: { categoryId: categoryId, pageNo: pageNo, pageSize: pageSize, search: searchQuery },
+        success: function (response) {
+          var items = response.itemList;;
+          totalRecords = response.totalRecords;
+          $("#itemListBody").empty();
+
+          if (items.length === 0) {
+            $("#itemListBody").append('<tr><td colspan="6" class="text-center">No Items found</td></tr>');
+          } else {
+            $.each(items, function (index, item) {
+              $("#itemListBody").append(`
+                                <tr>
+                                    <td>
+                                      <div class='d-flex'>
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                      </div>
+                                      <img src="${item.itemImg ? item.itemImg : '/images/Default_pfp.svg.png'}" 
+                                            class="rounded-circle me-2" width="25px" height="25px">
+                                        ${item.itemName}</div>
+                                    </td>
+                                    <td>
+                                      <img src="${item.itemType ? item.itemType : '/images/Default_pfp.svg.png'}" 
+                                            class="rounded-circle" width="25px" height="25px">
+                                    </td>
+                                    <td>${item.rate}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                              <input
+                                                class="form-check-input view_switch"
+                                                data-id="${item.itemId}"
+                                                type="checkbox"
+                                                role="switch"
+                                                id="flexSwitchCheckDefault"
+                                                ${item.isAvailable ? "checked" : ""}
+                                                disabled
+                                              /> 
+                                              </div>
+                                    </td>
+                                    <td>
+                                        <a class="btn user_action" href="">
+                                            <img src="/images/icons/edit-pen.svg" alt="" />
+                                        </a>
+                                        <a class="btn user_action user_action_delete deleteUserBtn" data-id="${item.itemId}" data-bs-toggle="modal" data-bs-target="#myModal">
+                                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            `);
+            });
+          }
+
+          // Update pagination info
+          $(".pagination_details").text(
+            `Showing ${(pageNo - 1) * pageSize + 1} - ${Math.min(pageNo * pageSize, totalRecords)} of ${totalRecords}`
+          );
+
+          // Disable pagination buttons when needed
+          $("#prevPageIcon").prop("disabled", pageNo === 1);
+          $("#nextPageIcon").prop("disabled", pageNo * pageSize >= totalRecords);
+        },
+        error: function () {
+          @* alert("Error loading users"); *@
+            toastr.error("error Loading Items");
+        }
+      });
+    }
+
+    // Search with debounce to prevent too many API calls
+    $("#search").on("input", function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () {
+        pageNo = 1; // Reset to first page on search
+        loadItems(categoryId, pageNo, $("#selectPageSize").val(), $("#search").val());
+      }, 300); // 300ms delay for debounce
+    });
+
+    // Page size change event
+    $("#selectPageSize").change(function () {
+      pageSize = $(this).val();
+      pageNo = 1; // Reset to first page when changing page size
+      loadItems(categoryId, pageNo, pageSize, $("#search").val());
+    });
+
+    // Next page event
+    $("#nextPageIcon").click(function () {
+      if (pageNo * pageSize < totalRecords) {
+        pageNo++;
+        loadItems(categoryId, pageNo, pageSize, $("#search").val());
+      }
+    });
+
+    // Previous page event
+    $("#prevPageIcon").click(function () {
+      if (pageNo > 1) {
+        pageNo--;
+        loadItems(categoryId, pageNo, pageSize, $("#search").val());
+      }
+    });
+
+  </script>
+
+  <script>
     $("#CategorySaveForm").submit(function () {
       event.preventDefault();
       let isValid = true;
@@ -616,13 +617,15 @@
         $('#CategorySaveForm').off("submit").submit();
       }
 
-      $("#CategorySaveForm input[type='text']").on("input change", function() {
+      $("#CategorySaveForm input[type='text']").on("input change", function () {
         $(this).removeClass("is-invalid");
         $(this).next(".invalid-feedback").remove();
       })
     });
 
   </script>
+
+
   <script>
     $('.list-items').mouseover(function () {
       $(this).children("div.editDeleteBtn").css("visibility", "visible");
@@ -662,7 +665,7 @@
             url: "/Menu/DeleteCategory",
             type: "POST",
             data: { id: categoryId }, // Send data as form data
-                @* headers: {
+                    @* headers: {
               "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // CSRF Token
             }, *@
             success: function (response) {
@@ -679,9 +682,9 @@
             error: function (xhr, status, error) {
               console.log(xhr.responseText);
             }
-              });
+                  });
     }
-          });
-        });
+              });
+            });
   </script>
 }

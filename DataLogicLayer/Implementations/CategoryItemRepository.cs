@@ -103,4 +103,40 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+
+    public async Task<ItemListViewModel> GetItemList(long categoryId, int pageNo, int pageSize, string search)
+    {
+        IQueryable<ItemsViewModel> query = _context.Items
+                            .Include(i => i.Itemtype)
+                            .Where(i => i.Categoryid == categoryId && !i.Isdeleted)
+                            .Select(i => new ItemsViewModel
+                            {
+                                ItemId = i.ItemId,
+                                ItemName = i.Name,
+                                ItemType = i.Itemtype.Imgurl,
+                                Rate = i.Rate,
+                                Quantity = i.Quantity,
+                                ItemImg = i.Imgurl,
+                                IsAvailable = i.Isavailable
+                            });
+
+
+       if(!string.IsNullOrEmpty(search))
+       {
+        search = search.ToLower();
+        query = query.Where(i => i.ItemName.ToLower().Contains(search)||
+                            i.Rate.ToString().Contains(search) ||
+                            i.Quantity.ToString().Contains(search));
+       }                     
+
+       int totalRecords = await query.CountAsync();
+
+       List<ItemsViewModel> items = await query
+                    .Skip((pageNo - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+        return new ItemListViewModel { ItemList = items, TotalRecords = totalRecords };
+    }
+
 }

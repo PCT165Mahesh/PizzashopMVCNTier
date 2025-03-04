@@ -1,5 +1,6 @@
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessLogicLayer.Interfaces;
 
@@ -11,5 +12,7 @@ public interface ICategoryItemService
     public Task<bool> AddCategory(CategoryViewModel model, string userName);
     public Task<bool> EditCategory(CategoryViewModel model, string userName);
     public Task<bool> DeleteCategory(long categoryId, string userName);
+
+    public Task<JsonResult> GetItemList(int categoryId,int pageNo, int pageSize, string search);
     
 }
