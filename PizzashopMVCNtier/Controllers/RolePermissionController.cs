@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BusinessLogicLayer.Constants;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PizzashopMVCNtier.Controllers;
 
 
-[Authorize]
+[Authorize(Roles = nameof(UserRoles.SuperAdmin))]
 public class RolePermissionController :Controller
 {
     private readonly IRoleService _roleService;

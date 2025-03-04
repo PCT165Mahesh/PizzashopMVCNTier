@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Constants;
 using BusinessLogicLayer.Interfaces;
@@ -25,7 +26,7 @@ public class UserController : Controller
     public IActionResult Index()
     {
         ViewData["ActiveLink"] = "User";
-        return View();
+        return View(new UserViewModel() { UserList = {}, Page = new() });
     }
 
 
@@ -34,7 +35,7 @@ public class UserController : Controller
     [Authorize]
     public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "")
     {
-        return await _userDetailService.GetUserDetails(pageNo, pageSize, search);
+        return PartialView("_userListPartialView",await _userDetailService.GetUserDetails(pageNo, pageSize, search));
     }
 
     #endregion

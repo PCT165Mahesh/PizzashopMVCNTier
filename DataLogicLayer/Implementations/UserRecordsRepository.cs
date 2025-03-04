@@ -18,28 +18,31 @@ public class UserRecordsRepository : IGetUserRecordsRepository
     --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
     #region  Get User Records for Pagination
-   public async Task<UserViewModel> GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
-    {
-        IQueryable<UserListViewModel> query = from u in _context.Users
-                    join r in _context.Roles on u.Roleid equals r.RoleId
-                    where u.Isdeleted == false &&
-                        (string.IsNullOrEmpty(search) ||
-                        u.Firstname.Contains(search) ||
-                        u.Lastname.Contains(search) ||
-                        u.Email.Contains(search) ||
-                        r.Rolename.Contains(search)
-                        )
-                    select new UserListViewModel
-                    {
-                        UserId = u.Id,
-                        FirstName = u.Firstname,
-                        LastName = u.Lastname,
-                        Email = u.Email,
-                        Phone = u.Phone,
-                        Status = u.Status,
-                        RoleName = r.Rolename,
-                        ImgUrl = u.Imgurl
-                    };
+   public async Task<(List<UserListViewModel> users, int totalRecords)>  GetAllUserRecordsAsync(int pageNo, int pageSize, string search)
+    {    
+
+        IQueryable<UserListViewModel> query = _context.Users
+                                            .Include(u => u.Role)
+                                            .Where(u => !u.Isdeleted)
+                                            .Select(u => new UserListViewModel{
+                                                UserId = u.Id,
+                                                FirstName = u.Firstname,
+                                                LastName = u.Lastname,
+                                                Email = u.Email,
+                                                Phone = u.Phone,
+                                                Status = u.Status,
+                                                RoleName = u.Role.Rolename,
+                                                ImgUrl = u.Imgurl
+                                            });
+
+        if(!string.IsNullOrEmpty(search))
+        {
+            search = search.ToLower();
+            query = query.Where(u => u.FirstName.ToLower().Contains(search)||
+                                u.LastName.ToLower().Contains(search) ||
+                                u.RoleName.ToLower().Contains(search) ||
+                                u.Email.ToLower().Contains(search));
+        }   
 
         int totalRecords = await query.CountAsync();
         List<UserListViewModel> users = await query.OrderBy(u => u.FirstName)
@@ -47,7 +50,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                     .Take(pageSize)
                     .ToListAsync();
 
-        return new UserViewModel { UserList = users, TotalRecords = totalRecords };
+        return (users, totalRecords);
     }
     #endregion
 

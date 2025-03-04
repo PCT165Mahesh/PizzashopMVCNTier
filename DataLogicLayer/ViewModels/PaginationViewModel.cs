@@ -4,10 +4,13 @@ namespace DataLogicLayer.ViewModels;
 
 public class PaginationViewModel
 {
-     public int PageNo { get; set; }
+    public int TotalPages { get; set; }
     public int PageSize { get; set; }
     public int TotalRecords { get; set; }
-    public string ActionName { get; set; }
-    public string ControllerName { get; set; }
+
+    public int CurrentPage { get; set; }
+
+    public int FromRec { get; set; }
+    public int ToRec { get; set; }
 }
 

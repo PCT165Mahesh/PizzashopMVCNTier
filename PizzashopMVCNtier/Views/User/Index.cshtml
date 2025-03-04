@@ -1,4 +1,4 @@
-﻿@* @model PizzashopMVCProject.ViewModels.PaginationViewModel *@
+﻿@model DataLogicLayer.ViewModels.UserViewModel
 @{
     ViewData["Title"] = "User List Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,8 +14,7 @@
         <!-- Search box and button starts-->
         <div class="d-flex flex-row">
             <form class="d-flex position-relative" role="search">
-                <input class="form-control me-2" type="search"
-                    placeholder="Search" id="search" aria-label="Search" />
+                <input class="form-control me-2" type="search" placeholder="Search" id="search" aria-label="Search" />
                 <label for="search" class="search_icon"><img src="~/images/icons/search.svg" alt="" /></label>
             </form>
             <button type="button" class="btn add_user_btn">
@@ -31,68 +30,8 @@
 
     <!-- User List table Starts -->
 
-    <div class="table_container table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">
-                        Name
-                        <button class="btn p-0">
-                            <img src="~/images/icons/arrow-up.svg" alt="" width="20px" />
-                        </button>
-                        <button class="btn p-0">
-                            <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
-                        </button>
-                    </th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">
-                        Role
-                        <button class="btn p-0">
-                            <img src="~/images/icons/arrow-up.svg" alt="" width="20px" />
-                        </button>
-                        <button class="btn p-0">
-                            <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
-                        </button>
-                    </th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody id="userListBody">
+    <div class="table_container table-responsive" id="tableContent">
 
-
-            </tbody>
-        </table>
-        <!-- Paggination Frontend Start -->
-        <div class="d-flex flex-sm-row flex-column align-items-center justify-content-end pagination_container">
-            <div class="d-flex flex-row align-items-center">
-                <span>Items per page:</span>
-
-            <!-- Page  Numbers Drop Down -->
-            <select class="form-select w-auto" aria-label="Default select example" id="selectPageSize">
-                <option selected>3</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-            </select>
-            </div>
-
-            <span style="margin-left: 8px" class="pagination_details">
-                @* Showing @((Model.PageNo - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageNo * Model.PageSize,
-                Model.TotalRecords)) of @Model.TotalRecords *@
-            </span>
-
-            <div>
-                <button type="button" class="btn border border-black prev_page" id="prevPageIcon">
-                <img src="~/images/icons/chevron-left.svg" alt="" />
-            </button>
-            <button type="button" class="btn border border-black" id="nextPageIcon">
-                <img src="~/images/icons/chevron-right.svg" alt="" />
-            </button>
-            </div>
-        </div>
-        <!-- Pagination Frontend Ends -->
     </div>
 
     <!-- Delete user Modal -->
@@ -122,108 +61,38 @@
 
 
 @section Scripts {
-   
-   <script>
-    $(document).ready(function () {
-    var pageNo = 1; // Current page number
-    var pageSize = $("#selectPageSize").val(); // Default page size
-    var totalRecords = 0; // Total records placeholder
-    var debounceTimer; // Timer for debounce
 
-    function loadUsers(pageNo, pageSize, searchQuery = "") {
-        $.ajax({
-            url: '@Url.Action("GetUserList", "User")',
-            type: "GET",
-            data: { pageNo: pageNo, pageSize: pageSize, search: searchQuery },
-            success: function (response) {
-                var users = response.userList;;
-                totalRecords = response.totalRecords;
-                $("#userListBody").empty();
-
-                if (users.length === 0) {
-                    $("#userListBody").append('<tr><td colspan="6" class="text-center">No users found</td></tr>');
-                } else {
-                    $.each(users, function (index, user) {
-                        $("#userListBody").append(`
-                            <tr>
-                                <td>
-                                    <img src="${user.imgUrl ? user.imgUrl : '/images/Default_pfp.svg.png'}" 
-                                        class="rounded-circle" width="25px" height="25px">
-                                    ${user.firstName} ${user.lastName}
-                                </td>
-                                <td>${user.email}</td>
-                                <td>${user.phone}</td>
-                                <td>${user.roleName}</td>
-                                <td>
-                                    ${user.status ? '<div class="status active_status">Active</div>' : '<div class="status inactive_status">Inactive</div>'}
-                                </td>
-                                <td>
-                                    <a class="btn user_action" href="@Url.Action("EditUser", "User")?id=${user.userId}">
-                                        <img src="/images/icons/edit-pen.svg" alt="" />
-                                    </a>
-                                    <a class="btn user_action user_action_delete deleteUserBtn" data-id="${user.userId}" data-bs-toggle="modal" data-bs-target="#myModal">
-                                        <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                                    </a>
-                                </td>
-                            </tr>
-                        `);
-                    });
+    <script>
+        function paginationAjax(currentPage) {
+            let pageSize = $('#selectPageSize').val();
+            let searchQuery = $('#search').val();
+            if (pageSize == 0 || pageSize == null) pageSize = 3;
+            if(searchQuery == null) searchQuery="";
+            $.ajax({
+                url: '@Url.Action("GetUserList", "User")',
+                type: "GET",
+                data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+                dataType: "html",
+                success: function (data) {
+                    $("#tableContent").html(data);
+                },
+                error: function () {
+                    console.log("No Projects Found");
+                    $("#tableContent").html('No User Fetched');
                 }
+            })
+        }
 
-                // Update pagination info
-                $(".pagination_details").text(
-                    `Showing ${(pageNo - 1) * pageSize + 1} - ${Math.min(pageNo * pageSize, totalRecords)} of ${totalRecords}`
-                );
-
-                // Disable pagination buttons when needed
-                $("#prevPageIcon").prop("disabled", pageNo === 1);
-                $("#nextPageIcon").prop("disabled", pageNo * pageSize >= totalRecords);
-            },
-            error: function () {
-                alert("Error loading users");
-            }
+        
+        $("#search").on("input", function () {
+            currentPage = 1;
+            paginationAjax(currentPage);
         });
-    }
-
-    // Search with debounce to prevent too many API calls
-    $("#search").on("input", function () {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(function () {
-            pageNo = 1; // Reset to first page on search
-            loadUsers(pageNo, $("#selectPageSize").val(), $("#search").val());
-        }, 300); // 300ms delay for debounce
-    });
-
-    // Page size change event
-    $("#selectPageSize").change(function () {
-        pageSize = $(this).val();
-        pageNo = 1; // Reset to first page when changing page size
-        loadUsers(pageNo, pageSize, $("#search").val());
-    });
-
-    // Next page event
-    $("#nextPageIcon").click(function () {
-        if (pageNo * pageSize < totalRecords) {
-            pageNo++;
-            loadUsers(pageNo, pageSize, $("#search").val());
-        }
-    });
-
-    // Previous page event
-    $("#prevPageIcon").click(function () {
-        if (pageNo > 1) {
-            pageNo--;
-            loadUsers(pageNo, pageSize, $("#search").val());
-        }
-    });
-
-    // Load users initially
-    loadUsers(pageNo, pageSize);
-});
-
-   </script>
-   <script>
+    </script>
+    <script>
         $(document).ready(function () {
+
+            paginationAjax(1);
             var userIdToDelete = null;
 
             // Capture the User ID when Delete button is clicked
@@ -261,5 +130,5 @@
             });
         });
 
-</script>
+    </script>
 }

@@ -4,7 +4,6 @@ namespace BusinessLogicLayer.Constants
     {
         SuperAdmin,
         Manager,
-        User,
-        Guest
+        User
     }
 }

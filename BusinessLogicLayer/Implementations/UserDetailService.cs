@@ -1,5 +1,7 @@
+using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
@@ -86,11 +88,15 @@ public class UserDetailService : IUserDetailService
         };
     }
 
-    public async Task<JsonResult> GetUserDetails(int pageNo, int pageSize, string search)
+    public async Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search)
     {
-        UserViewModel model = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search);
+        UserViewModel model = new() { Page = new()};
+        var userData = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search);
 
-        return new JsonResult(new { model.UserList, model.TotalRecords });
+        model.UserList = userData.users;
+        model.Page.SetPagination(userData.totalRecords, pageSize, pageNo);
+        
+        return model;
     }
 
     public async Task<long> GetUserIdByUserNameAsync(string userName)

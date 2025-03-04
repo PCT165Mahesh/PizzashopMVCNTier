@@ -21,12 +21,36 @@
       "PackagePath": "staticwebassets\\images\\Default_pfp.svg.png"
     },
     {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\american_waffle.jfif",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\american_waffle.jfif"
+    },
+    {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\belgian_waffle.jfif",
       "PackagePath": "staticwebassets\\images\\Item_Images\\belgian_waffle.jfif"
     },
     {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\brussels_waffle.jfif",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\brussels_waffle.jfif"
+    },
+    {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\choclate_waffle.jfif",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\choclate_waffle.jfif"
+    },
+    {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\ditalini_pasta.webp",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\ditalini_pasta.webp"
+    },
+    {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\fusilli_pasta.webp",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\fusilli_pasta.webp"
+    },
+    {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\grilled_chicken_sandwich.jpg",
       "PackagePath": "staticwebassets\\images\\Item_Images\\grilled_chicken_sandwich.jpg"
+    },
+    {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\pinwheel_sandwich.jfif",
+      "PackagePath": "staticwebassets\\images\\Item_Images\\pinwheel_sandwich.jfif"
     },
     {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\images\\Item_Images\\potato_sandwich.jfif",
@@ -523,6 +547,10 @@
     {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png",
       "PackagePath": "staticwebassets\\uploads\\80dff7fa-9f11-4c08-9cbc-e18342b5f3fa_dining-menu.png"
+    },
+    {
+      "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\8329d0f2-feb0-4128-b198-cd068d49adbf_transperent-pizza.png",
+      "PackagePath": "staticwebassets\\uploads\\8329d0f2-feb0-4128-b198-cd068d49adbf_transperent-pizza.png"
     },
     {
       "Id": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\wwwroot\\uploads\\885c02d1-9380-4a1d-bcc2-5cb278bc17c6_toppng.com-warning-icon-2400x2400.png",
