@@ -413,126 +413,7 @@
 <!-- Add Item  Modal -->
 <div class="modal fade" tabindex="-1" id="addItemModal" aria-labelledby="modal-title">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title fs-4 fw-bold txt-color">Add New Menu Item</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <form id="menuItemForm" asp-action="SaveItem" asp-controller="Menu" enctype="multipart/form-data">
-        <div class="modal-body">
-          <input type="hidden" asp-for="@Model.AddItems.ItemId" value="-1">
-          <div class="row gy-10">
-            <div class="row col-lg-8 col-12">
-
-              <!-- Category & Name -->
-              <div class=" form-floating col-lg-6 col-12 mb-3">
-                <select asp-for="@Model.AddItems.CategoryId" class="form-select" id="categorySelect">
-                  <option value="">Select Category</option>
-                  @foreach (var category in Model.AddItems.CategoryList)
-                  {
-                    <option value="@category.Id">@category.CategoryName</option>
-                  }
-                </select>
-                <label class="form-label">Category*</label>
-              </div>
-              <div class="form-floating col-lg-6 col-12 mb-3">
-                <input asp-for="@Model.AddItems.Name" type="text" class="form-control" placeholder="Enter name"
-                  required>
-                <label class="form-label txt-color">Name*</label>
-              </div>
-
-              <!-- Item Type & Rate -->
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <select asp-for="@Model.AddItems.ItemTypeId" class="form-select" id="categorySelect">
-                  <option value="">Select a Type</option>
-                  @foreach (var itemType in Model.AddItems.ItemTypeList)
-                  {
-                    <option value="@itemType.Id">@itemType.Name</option>
-                  }
-                </select>
-                <label class="form-label">Item Type*</label>
-              </div>
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <input asp-for="@Model.AddItems.Rate" type="number" class="form-control" value="0" required>
-                <label class="form-label">Rate*</label>
-              </div>
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <input asp-for="@Model.AddItems.Quantity" type="number" class="form-control" value="0">
-                <label class="form-label">Quantity*</label>
-              </div>
-
-              <!-- Unit Selection -->
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <select asp-for="@Model.AddItems.UnitId" class="form-select" id="categorySelect">
-                  <option value="">Select a Unit</option>
-                  @foreach (var unit in Model.AddItems.UnitList)
-                  {
-                    <option value="@unit.UnitId">@unit.Name</option>
-                  }
-                </select>
-                <label class="form-label">Unit*</label>
-              </div>
-
-              <!-- Toggle Switches -->
-              <div class="col-xl-3 col-lg-6 col-6 d-flex align-items-center justify-content-center mb-3">
-                <div class="form-check form-switch addItemCheckBox">
-                  <input class="form-check-input" type="checkbox" checked>
-                </div>
-                <label class="form-label txt-color me-2">Available</label>
-              </div>
-              <div class="col-xl-3 col-lg-6 col-6 d-flex align-items-center justify-content-center mb-3">
-                <div class="form-check form-switch addItemCheckBox">
-                  <input class="form-check-input" type="checkbox">
-                </div>
-                <label class="form-label txt-color me-2">Default Tax</label>
-              </div>
-
-              <!-- Tax Percentage & Short Code -->
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <input asp-for="@Model.AddItems.TaxPercentage" type="number" class="form-control">
-                <label class="form-label">Tax Percentage</label>
-              </div>
-              <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                <input asp-for="@Model.AddItems.ShortCode" type="text" class="form-control">
-                <label class="form-label">Short Code</label>
-              </div>
-
-              <!-- Description -->
-              <div class="col-12 mb-3">
-                <textarea asp-for="@Model.AddItems.Description" class="form-control" rows="4"
-                  placeholder="Description"></textarea>
-              </div>
-
-              <!-- Upload Image -->
-              <div class="col-12">
-                <label class="form-label">Upload Image</label>
-                <div class="p-3 text-center" style="border-radius: 10px; border :1px grey dashed; height: 90px;">
-                  <input asp-for="@Model.AddItems.ItemImage" type="file" class="form-control" style="display: none;"
-                    id="uploadFile">
-                  <label for="uploadFile" class="d-block">
-                    <img src="~/images/icons/cloud-arrow-up.svg" alt="" width="20px">
-                    Drag and Drop or Browse files</label>
-                </div>
-              </div>
-            </div>
-            <!-- Modifier Groups -->
-            <div class="col-lg-4 col-12 border itemModifierModal">
-              <select class="form-select">
-                <option>Select Modifier Group(s)</option>
-                <option>Extra Cheese</option>
-                <option>Spicy</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer border-0">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">Cancel</button>
-        </div>
-      </form>
-    </div>
+    <div class="modal-content" id="addItemModalContent"></div>
   </div>
 </div>
 
@@ -542,7 +423,7 @@
   <!-- Category selection Javascript-->
   <script>
     $(document).ready(function () {
-      categoryId = $('#category_listUl li:first>div>a').data("id");
+      var categoryId = $('#category_listUl li:first>div>a').data("id");
       $('#category_listUl li:first>div>a').addClass("category_active");
       paginationAjax(1);
     });
@@ -562,7 +443,7 @@
     function paginationAjax(currentPage) {
       let pageSize = $('#selectPageSize').val();
       let searchQuery = $('#search').val();
-      let categoryId = $('.category_active').data("id");
+      categoryId = $('.category_active').data("id");
       if (pageSize == 0 || pageSize == null) pageSize = 3;
       if (searchQuery == null) searchQuery = "";
       $.ajax({
@@ -683,21 +564,28 @@
     });
   </script>
 
+  <!-- Add Items Modal Partial View  -->
+   
   <script>
-    $('#newItemBtn').on("click", function () {
-      // Populate Role into select when page Loads
+    function loadItemModal(id) {
       $.ajax({
-        url: '@Url.Action("GetRoles", "Dashboard")',
+        url: '@Url.Action("SaveItem", "Menu")',
         type: "GET",
-        success: function (roles) {
-          $.each(roles, function (index, role) {
-            $("#role").append('<option value="' + role.roleId + '">' + role.rolename + '</option>');
-          });
+        data: { id:id },
+        dataType: "html",
+        success: function (data) {
+          $("#addItemModalContent").html(data);
+          $('#categorySelect').val(categoryId);
         },
         error: function () {
-          console("Error loading Roles");
+          console.log("No Projects Found");
+          $("#tableContent").html('No User Fetched');
         }
-      });
+      })
+    }
+
+    $('#newItemBtn').on("click",function(){
+      loadItemModal(0);
     })
   </script>
 }

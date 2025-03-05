@@ -3,6 +3,7 @@ using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Org.BouncyCastle.Crypto.Digests;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -100,6 +101,7 @@ public class CategoryItemService : ICategoryItemService
 
         model.ItemList = itemData.items;
         model.Page.SetPagination(itemData.totalRecords, pageSize, pageNo);
+        model.CategoryId = categoryId;
         return model;
     }
 
@@ -111,6 +113,23 @@ public class CategoryItemService : ICategoryItemService
     public List<Unit> GetUnits()
     {
         return _categoryItemRepository.GetAllUnit();
+    }
+
+    #endregion
+
+    #region Items CRUD
+    public async Task<string> AddItem(AdditemViewModel model, long userId)
+    {
+        if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _categoryItemRepository.AddItemAsync(model, userId);
+    }
+
+    public async Task<string> EditItem(AdditemViewModel model, long userId)
+    {
+        return "true";
     }
     #endregion
 

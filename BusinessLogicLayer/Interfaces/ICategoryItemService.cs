@@ -8,14 +8,15 @@ public interface ICategoryItemService
 {
     public List<CategoryViewModel> GetCategories();
     public CategoryViewModel GetCategoryById(long id);
-
+    public Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search);
     public List<Itemtype> GetItemtypes();
     public List<Unit> GetUnits();
-
     public Task<bool> AddCategory(CategoryViewModel model, string userName);
     public Task<bool> EditCategory(CategoryViewModel model, string userName);
     public Task<bool> DeleteCategory(long categoryId, string userName);
 
-    public Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search);
-    
+    #region CRUD For Items
+    public Task<string> AddItem(AdditemViewModel model, long userId);
+    public Task<string> EditItem(AdditemViewModel model, long userId);
+    #endregion
 }

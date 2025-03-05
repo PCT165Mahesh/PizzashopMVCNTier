@@ -18,5 +18,6 @@ public static class NotificationMessages
     public const string EntityDeletedFailed = "Failed Deleting {0}";
     public const string EmailSendingFailed = "Failed to send the email. Please try again.";
     public const string PasswordChangeFailed = "Failed to change the password. Please try again.";
+    public const string InvalidModelState = "Model State Is Invalid!";
 
 }

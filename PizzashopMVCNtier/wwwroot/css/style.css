@@ -79,6 +79,7 @@ body {
   width: 260px !important;
   /* height: 100vh; */
   background-color: #ffffff;
+  padding-left: 12px;
 }
 
 /* Offcanvas Logo Image */

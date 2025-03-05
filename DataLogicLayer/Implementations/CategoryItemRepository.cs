@@ -16,10 +16,73 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     }
 
+    #region Data Fetch for Category
     public List<Category> GetAllCategories()
     {
         return _context.Categories.Where(c => !c.Isdeleted).ToList();
     }
+
+    public async Task<(List<ItemsViewModel> items, int totalRecords)> GetItemList(long categoryId, int pageNo, int pageSize, string search)
+    {
+        IQueryable<ItemsViewModel> query = _context.Items
+                            .Include(i => i.Itemtype)
+                            .Where(i => i.Categoryid == categoryId && !i.Isdeleted)
+                            .Select(i => new ItemsViewModel
+                            {
+                                ItemId = i.ItemId,
+                                ItemName = i.Name,
+                                ItemType = i.Itemtype.Imgurl,
+                                Rate = i.Rate,
+                                Quantity = i.Quantity,
+                                ItemImg = i.Imgurl,
+                                IsAvailable = i.Isavailable
+                            });
+
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            search = search.ToLower();
+            query = query.Where(i => i.ItemName.ToLower().Contains(search) ||
+                                i.Rate.ToString().Contains(search) ||
+                                i.Quantity.ToString().Contains(search));
+        }
+
+        int totalRecords = await query.CountAsync();
+
+        List<ItemsViewModel> items = await query
+                     .Skip((pageNo - 1) * pageSize)
+                     .Take(pageSize)
+                     .ToListAsync();
+
+        return (items, totalRecords);
+    }
+
+    public CategoryViewModel GetCategoryId(long id)
+    {
+        return _context.Categories.Where(c => c.CategoryId == id && !c.Isdeleted).Select(c => new CategoryViewModel
+        {
+            Id = c.CategoryId,
+            CategoryName = c.Name,
+            Description = c.Description
+        }).FirstOrDefault();
+    }
+    #endregion
+
+    #region Data fetch for Item, Unit and Item Type
+    public List<Itemtype> GetAllItemType()
+    {
+        return _context.Itemtypes.ToList();
+    }
+
+    public List<Unit> GetAllUnit()
+    {
+        return _context.Units.ToList();
+    }
+
+    #endregion
+
+    #region CRUD For Category
+
     public async Task<bool> AddCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -41,17 +104,6 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
-
-    public CategoryViewModel GetCategoryId(long id)
-    {
-        return _context.Categories.Where(c => c.CategoryId == id && !c.Isdeleted).Select(c => new CategoryViewModel
-        {
-            Id = c.CategoryId,
-            CategoryName = c.Name,
-            Description = c.Description
-        }).FirstOrDefault();
-    }
-
     public async Task<bool> EditCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -84,12 +136,25 @@ public class CategoryItemRepository : ICategoryItemRepository
     public async Task<bool> DeleteCategoryAsync(long categoryId, long userId)
     {
         Category category = _context.Categories.Where(c => c.CategoryId == categoryId && !c.Isdeleted).FirstOrDefault();
-        if(category == null)
+        List<Item> items = _context.Items.Where(i => i.Categoryid == categoryId).ToList();
+        if (category == null)
         {
             return false;
         }
         try
         {
+            //For Cascade Soft Deleting the Items with Category
+            if(items != null)
+            {
+                foreach(var item in items)
+                {
+                    item.Isdeleted = true;
+                    item.UpdatedAt = DateTime.Now;
+                    item.UpdatedBy = userId;
+                    _context.Items.Update(item);
+                    await _context.SaveChangesAsync();
+                }
+            }
             category.Isdeleted = true;
             category.UpdatedBy = userId;
             category.UpdatedAt = DateTime.Now;
@@ -103,49 +168,70 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+    #endregion
 
-    public async Task<(List<ItemsViewModel> items, int totalRecords)> GetItemList(long categoryId, int pageNo, int pageSize, string search)
+    #region CRUD For Items
+    public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
-        IQueryable<ItemsViewModel> query = _context.Items
-                            .Include(i => i.Itemtype)
-                            .Where(i => i.Categoryid == categoryId && !i.Isdeleted)
-                            .Select(i => new ItemsViewModel
-                            {
-                                ItemId = i.ItemId,
-                                ItemName = i.Name,
-                                ItemType = i.Itemtype.Imgurl,
-                                Rate = i.Rate,
-                                Quantity = i.Quantity,
-                                ItemImg = i.Imgurl,
-                                IsAvailable = i.Isavailable
-                            });
+        Item oldItem = await _context.Items.Where(i => i.Name == model.Name).FirstOrDefaultAsync();
+        // Taxis tax = new
+        if(oldItem != null)
+        {
+            return $"{model.Name} Item already exist! ";
+        }
+        if(oldItem != null && oldItem.Isdeleted == true)
+        {
+            oldItem.Name = string.Concat(oldItem.Name, DateTime.Now);
+        }
 
+        try
+        {
+            Item item = new Item
+            {
+                Name = model.Name,
+                Description = model.Description,
+                ItemtypeId = model.ItemTypeId,
+                Rate = model.Rate,
+                Unitid = model.UnitId,
+                Quantity = model.Quantity,
+                Isavailable = model.IsAvailable,
+                DefaultTax = model.DefaultTax,
+                Shortcode = model.ShortCode,
+                Categoryid = model.CategoryId,
+                CreatedAt = DateTime.Now,
+                CreatedBy = userId,
+                Taxid = 1,
+            };
 
-       if(!string.IsNullOrEmpty(search))
-       {
-        search = search.ToLower();
-        query = query.Where(i => i.ItemName.ToLower().Contains(search)||
-                            i.Rate.ToString().Contains(search) ||
-                            i.Quantity.ToString().Contains(search));
-       }                     
+            // Handle Image Upload
+            if (model.ItemImage != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
 
-       int totalRecords = await query.CountAsync();
+                string fileName = $"{Guid.NewGuid()}_{model.ItemImage.FileName}";
+                string filePath = Path.Combine(uploadsFolder, fileName);
 
-       List<ItemsViewModel> items = await query
-                    .Skip((pageNo - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ItemImage.CopyToAsync(fileStream);
+                }
 
-        return (items, totalRecords);
+                item.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
+            }
+
+            await _context.Items.AddAsync(item);
+            await _context.SaveChangesAsync();
+            return "true";
+        }
+        catch(Exception ex)
+        {   
+            Console.WriteLine("Error In Category Repository :", ex.Message);
+            return "Error Adding Item";
+        }
     }
-
-    public List<Itemtype> GetAllItemType()
-    {
-        return _context.Itemtypes.ToList();
-    }
-
-    public List<Unit> GetAllUnit()
-    {
-        return _context.Units.ToList();
-    }
+    #endregion
 }
