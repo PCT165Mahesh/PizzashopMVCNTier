@@ -19,6 +19,11 @@ body {
   color: #0066a7;
 }
 
+.txt-color
+{
+  color: #776d6d;
+}
+
 .main_container {
   width: 100%;
 }
@@ -357,6 +362,23 @@ a{
   text-decoration: none;
 }
 
+
+
+/* Items And Modifiers Modal */
+.itemModifierModal
+{
+  background-color: #fdf5e6;
+   border-radius: 10px; 
+   padding-top: 10px;
+   overflow-y: scroll;
+   min-height: 400px;
+}
+
+.addItemCheckBox{
+  transform: scale(2);
+  margin-right: 12px;
+}
+
 /* Edit Delete Button in Menu */
 .editDeleteBtn{
   visibility: hidden;
@@ -439,6 +461,9 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   color: rgb(110, 107, 107);
 }
 
+
+ 
+
 /* Media Query */
 
 @media (max-width: 767px) {
@@ -452,6 +477,13 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
   .role_selected {
     width: 100% !important;
+  }
+}
+
+@media (max-width:1200px) {
+  .addItemCheckBox{
+    margin: 0;
+    transform: scale(1);
   }
 }
 

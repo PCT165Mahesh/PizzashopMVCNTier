@@ -7,4 +7,6 @@ public class MenuViewModel
     public CategoryViewModel? Category { get; set; }
 
     public ItemListViewModel? ItemModel {get; set; }
+
+    public AdditemViewModel? AddItems { get; set; }
 }

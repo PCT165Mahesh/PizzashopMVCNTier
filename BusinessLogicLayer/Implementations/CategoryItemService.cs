@@ -102,6 +102,17 @@ public class CategoryItemService : ICategoryItemService
         model.Page.SetPagination(itemData.totalRecords, pageSize, pageNo);
         return model;
     }
+
+    public List<Itemtype> GetItemtypes()
+    {
+        return _categoryItemRepository.GetAllItemType();
+    }
+
+    public List<Unit> GetUnits()
+    {
+        return _categoryItemRepository.GetAllUnit();
+    }
     #endregion
+
 
 }

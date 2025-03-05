@@ -139,4 +139,13 @@ public class CategoryItemRepository : ICategoryItemRepository
         return (items, totalRecords);
     }
 
+    public List<Itemtype> GetAllItemType()
+    {
+        return _context.Itemtypes.ToList();
+    }
+
+    public List<Unit> GetAllUnit()
+    {
+        return _context.Units.ToList();
+    }
 }

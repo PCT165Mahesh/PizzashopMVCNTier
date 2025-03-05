@@ -26,7 +26,12 @@ public class MenuController : Controller
         MenuViewModel model = new()
         {
             CategoryList = _categoryItemService.GetCategories(),
-            ItemModel = new ItemListViewModel() {ItemList = {}, Page = new()}
+            ItemModel = new ItemListViewModel() {ItemList = {}, Page = new()},
+            AddItems = new AdditemViewModel() {
+                CategoryList = _categoryItemService.GetCategories(),
+                ItemTypeList = _categoryItemService.GetItemtypes(),
+                UnitList = _categoryItemService.GetUnits()
+            }
         };
         ViewData["ActiveLink"] = "Menu";
         return View(model);
@@ -89,6 +94,15 @@ public class MenuController : Controller
         }
     }
     #endregion
+
+    #region Add Item
+    [HttpPost]
+    public IActionResult SaveItem(MenuViewModel model)
+    {
+        return RedirectToAction("Index");
+    }
+    #endregion
+
 
     #region Items By Category
     public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")

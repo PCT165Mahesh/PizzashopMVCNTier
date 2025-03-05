@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "g3JYDMIVxjyTl/seZzOY0jmDHRzkwC161MDL8Z0/c9izwQVjJg1HVdxcbIsd8/9yHkn5aMA78QnWVDy5BAL/SQ==",
+  "dgSpecHash": "PtVvfWBu4bOMEcmvDm5MKCbjnZRP7MGbxYbuevFjE8hl/3Z462G3QU2wUuFHqS1oMztIGdMxHTirB65XBgGdMQ==",
   "success": true,
-  "projectFilePath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+  "projectFilePath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pct165\\.nuget\\packages\\bouncycastle.cryptography\\2.5.0\\bouncycastle.cryptography.2.5.0.nupkg.sha512",
     "C:\\Users\\pct165\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
