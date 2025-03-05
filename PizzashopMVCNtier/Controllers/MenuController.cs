@@ -96,9 +96,17 @@ public class MenuController : Controller
     #region Crud Item
 
     [HttpGet]
-    public IActionResult SaveItem(long? id)
+    public async Task<IActionResult> SaveItem(long id)
     {
+        //Fetch the data by the Id
+        
+
+        //for the Add Item Model
         AdditemViewModel model = new AdditemViewModel();
+        if(id > 0)
+        {
+            model =  await _categoryItemService.GetItemByID(id);
+        }
         model.CategoryList = _categoryItemService.GetCategories();
         model.ItemTypeList =  _categoryItemService.GetItemtypes();
         model.UnitList = _categoryItemService.GetUnits();

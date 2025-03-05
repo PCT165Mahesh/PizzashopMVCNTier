@@ -16,6 +16,8 @@ public interface ICategoryItemService
     public Task<bool> DeleteCategory(long categoryId, string userName);
 
     #region CRUD For Items
+
+    public Task<AdditemViewModel> GetItemByID(long id);
     public Task<string> AddItem(AdditemViewModel model, long userId);
     public Task<string> EditItem(AdditemViewModel model, long userId);
     #endregion

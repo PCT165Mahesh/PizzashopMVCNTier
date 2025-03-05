@@ -586,6 +586,10 @@
 
     $('#newItemBtn').on("click",function(){
       loadItemModal(0);
+    });
+
+    $(document).on("click",".editItemBtn",function(){
+      loadItemModal($(this).data("id"));
     })
   </script>
 }

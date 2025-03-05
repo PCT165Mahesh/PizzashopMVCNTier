@@ -171,6 +171,12 @@ public class CategoryItemRepository : ICategoryItemRepository
     #endregion
 
     #region CRUD For Items
+
+    public async Task<Item> GetItemByIdAsync(long id)
+    {
+        Item item = await _context.Items.Where(i => i.ItemId == id && !i.Isdeleted).FirstOrDefaultAsync();
+        return item;
+    }
     public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
         Item oldItem = await _context.Items.Where(i => i.Name == model.Name).FirstOrDefaultAsync();
@@ -196,6 +202,7 @@ public class CategoryItemRepository : ICategoryItemRepository
                 Quantity = model.Quantity,
                 Isavailable = model.IsAvailable,
                 DefaultTax = model.DefaultTax,
+                AdditionalTax = model.TaxPercentage,
                 Shortcode = model.ShortCode,
                 Categoryid = model.CategoryId,
                 CreatedAt = DateTime.Now,

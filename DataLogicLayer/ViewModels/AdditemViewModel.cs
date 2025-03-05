@@ -15,7 +15,7 @@ public class AdditemViewModel
     public bool IsAvailable { get; set; } = false;
     public bool DefaultTax { get; set; } = false;
 
-    public decimal? TaxPercentage { get; set; }
+    public decimal TaxPercentage { get; set; }
     public string? ShortCode { get; set; }
 
     public string? Description { get; set; }

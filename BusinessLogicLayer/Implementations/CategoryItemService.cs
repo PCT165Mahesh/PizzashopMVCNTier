@@ -118,6 +118,30 @@ public class CategoryItemService : ICategoryItemService
     #endregion
 
     #region Items CRUD
+
+    public async Task<AdditemViewModel> GetItemByID(long id)
+    {
+        Item item = await _categoryItemRepository.GetItemByIdAsync(id);
+
+        AdditemViewModel model = new AdditemViewModel();
+        if(item != null)
+        {
+            model.Name = item.Name;
+            model.Description = item.Description;
+            model.ItemTypeId = item.ItemtypeId;
+            model.Rate = item.Rate;
+            model.UnitId = item.Unitid;
+            model.Quantity = item.Quantity;
+            model.IsAvailable = item.Isavailable;
+            model.TaxPercentage = item.AdditionalTax;
+            model.DefaultTax = item.DefaultTax;
+            model.ShortCode = item.Shortcode;
+            model.CategoryId = item.Categoryid;
+            model.ImgUrl = item.Imgurl;
+        }
+
+        return model;
+    }
     public async Task<string> AddItem(AdditemViewModel model, long userId)
     {
         if(model == null)

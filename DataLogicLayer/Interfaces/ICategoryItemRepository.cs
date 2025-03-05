@@ -23,5 +23,7 @@ public interface ICategoryItemRepository
 
     #region CRUD for Items
     public Task<string> AddItemAsync(AdditemViewModel model, long userId);
+
+    public Task<Item> GetItemByIdAsync(long id);
     #endregion
 }
