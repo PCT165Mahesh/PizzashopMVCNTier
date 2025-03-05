@@ -3,7 +3,6 @@ using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -93,7 +92,7 @@ public class CategoryItemService : ICategoryItemService
     }
     #endregion
 
-
+    #region Get Items List
     public async Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search)
     {
         ItemListViewModel model = new() {Page = new ()};
@@ -101,6 +100,8 @@ public class CategoryItemService : ICategoryItemService
 
         model.ItemList = itemData.items;
         model.Page.SetPagination(itemData.totalRecords, pageSize, pageNo);
+        return model;
     }
+    #endregion
 
 }

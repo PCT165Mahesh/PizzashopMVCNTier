@@ -90,7 +90,7 @@
 
 
           <!-- Table For Items Data -->
-          <div class="table-responsive">
+          <div class="table-responsive" id="tableContent">
           </div>
 
         </div>
@@ -410,18 +410,13 @@
 
 
 @section Scripts {
+
+  <!-- Category selection Javascript-->
   <script>
-    var debounceTimer; // Timer for debounce
-    var categoryId = 1;
-    var pageNo = 1; // Current page number
-    var pageSize = $("#selectPageSize").val(); // Default page size
-    var totalRecords = 0; // Total records placeholder
-
     $(document).ready(function () {
-
       categoryId = $('#category_listUl li:first>div>a').data("id");
       $('#category_listUl li:first>div>a').addClass("category_active");
-      loadItems(categoryId, pageNo, pageSize, search);
+      paginationAjax(1);
     });
 
     $('.list-items>div>a').on("click", function () {
@@ -430,116 +425,42 @@
       });
       categoryId = $(this).data("id");
       $(this).addClass("category_active");
-      loadItems(categoryId, pageNo, pageSize, search);
+      paginationAjax(1);
     })
+  </script>
 
-    function loadItems(categoryId, pageNo, pageSize, searchQuery = "") {
+  <!-- Items  Display With Pagination Javascript-->
+  <script>
+    function paginationAjax(currentPage) {
+      let pageSize = $('#selectPageSize').val();
+      let searchQuery = $('#search').val();
+      let categoryId = $('.category_active').data("id");
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
       $.ajax({
         url: '@Url.Action("GetItemList", "Menu")',
         type: "GET",
-        data: { categoryId: categoryId, pageNo: pageNo, pageSize: pageSize, search: searchQuery },
-        success: function (response) {
-          var items = response.itemList;;
-          totalRecords = response.totalRecords;
-          $("#itemListBody").empty();
-
-          if (items.length === 0) {
-            $("#itemListBody").append('<tr><td colspan="6" class="text-center">No Items found</td></tr>');
-          } else {
-            $.each(items, function (index, item) {
-              $("#itemListBody").append(`
-                                  <tr>
-                                      <td>
-                                        <div class='d-flex'>
-                                        <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        </div>
-                                        <img src="${item.itemImg ? item.itemImg : '/images/Default_pfp.svg.png'}" 
-                                              class="rounded-circle me-2" width="25px" height="25px">
-                                          ${item.itemName}</div>
-                                      </td>
-                                      <td>
-                                        <img src="${item.itemType ? item.itemType : '/images/Default_pfp.svg.png'}" 
-                                              class="rounded-circle" width="25px" height="25px">
-                                      </td>
-                                      <td>${item.rate}</td>
-                                      <td>${item.quantity}</td>
-                                      <td>
-                                          <div class="form-check form-switch">
-                                                <input
-                                                  class="form-check-input view_switch"
-                                                  data-id="${item.itemId}"
-                                                  type="checkbox"
-                                                  role="switch"
-                                                  id="flexSwitchCheckDefault"
-                                                  ${item.isAvailable ? "checked" : ""}
-                                                  disabled
-                                                /> 
-                                                </div>
-                                      </td>
-                                      <td>
-                                          <a class="btn user_action" href="">
-                                              <img src="/images/icons/edit-pen.svg" alt="" />
-                                          </a>
-                                          <a class="btn user_action user_action_delete deleteUserBtn" data-id="${item.itemId}" data-bs-toggle="modal" data-bs-target="#myModal">
-                                              <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                                          </a>
-                                      </td>
-                                  </tr>
-                              `);
-            });
-          }
-
-          // Update pagination info
-          $(".pagination_details").text(
-            `Showing ${(pageNo - 1) * pageSize + 1} - ${Math.min(pageNo * pageSize, totalRecords)} of ${totalRecords}`
-          );
-
-          // Disable pagination buttons when needed
-          $("#prevPageIcon").prop("disabled", pageNo === 1);
-          $("#nextPageIcon").prop("disabled", pageNo * pageSize >= totalRecords);
+        data: {categoryId:categoryId, pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#tableContent").html(data);
         },
         error: function () {
-          @* alert("Error loading users"); *@
-            toastr.error("error Loading Items");
+          console.log("No Projects Found");
+          $("#tableContent").html('No User Fetched');
         }
-      });
+      })
     }
 
-    // Search with debounce to prevent too many API calls
+  //Items Display With Search Javascript
+
     $("#search").on("input", function () {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(function () {
-        pageNo = 1; // Reset to first page on search
-        loadItems(categoryId, pageNo, $("#selectPageSize").val(), $("#search").val());
-      }, 300); // 300ms delay for debounce
+      currentPage = 1;
+      paginationAjax(currentPage);
     });
-
-    // Page size change event
-    $("#selectPageSize").change(function () {
-      pageSize = $(this).val();
-      pageNo = 1; // Reset to first page when changing page size
-      loadItems(categoryId, pageNo, pageSize, $("#search").val());
-    });
-
-    // Next page event
-    $("#nextPageIcon").click(function () {
-      if (pageNo * pageSize < totalRecords) {
-        pageNo++;
-        loadItems(categoryId, pageNo, pageSize, $("#search").val());
-      }
-    });
-
-    // Previous page event
-    $("#prevPageIcon").click(function () {
-      if (pageNo > 1) {
-        pageNo--;
-        loadItems(categoryId, pageNo, pageSize, $("#search").val());
-      }
-    });
-
   </script>
 
+  <!-- Category Modal Validationns -->
   <script>
     $("#CategorySaveForm").submit(function () {
       event.preventDefault();
@@ -574,7 +495,7 @@
 
   </script>
 
-
+  <!-- Edit and Delete button visibility on hover  -->
   <script>
     $('.list-items').mouseover(function () {
       $(this).children("div.editDeleteBtn").css("visibility", "visible");
@@ -613,10 +534,7 @@
           $.ajax({
             url: "/Menu/DeleteCategory",
             type: "POST",
-            data: { id: categoryId }, // Send data as form data
-                      @* headers: {
-              "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() // CSRF Token
-            }, *@
+            data: { id: categoryId },
             success: function (response) {
               if (response.success) {
                 $("#deleteCategoryModal").modal("hide");
@@ -631,9 +549,9 @@
             error: function (xhr, status, error) {
               console.log(xhr.responseText);
             }
-                    });
-    }
-                });
-              });
+          });
+        }
+      });
+    });
   </script>
 }

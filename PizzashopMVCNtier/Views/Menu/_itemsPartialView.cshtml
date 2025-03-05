@@ -1,4 +1,4 @@
-@model DataLogicLayer.ViewModels.MenuViewModel
+@model DataLogicLayer.ViewModels.ItemListViewModel
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody id="itemListBody">
-        @foreach (var items in Model.ItemModel.ItemList)
+        @foreach (var items in Model.ItemList)
         {
             <tr>
                 <td>
@@ -62,26 +62,38 @@
         <span>Items per page:</span>
 
         <!-- Page  Numbers Drop Down -->
-        <select class="form-select w-auto" aria-label="Default select example" id="selectPageSize">
-            <option selected>3</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
+        <select class="form-select w-auto" onchange="paginationAjax(@Model.Page.CurrentPage)" aria-label="Default select example" id="selectPageSize">
+            @if (Model.Page.PageSize != null)
+            {
+                <option value="3" selected="@(Model.Page.PageSize == 3 ? true : false)">3</option>
+                <option value="5" selected="@(Model.Page.PageSize == 5 ? true : false)">5</option>
+                <option value="10" selected="@(Model.Page.PageSize == 10 ? true : false)">10</option>
+                <option value="15" selected="@(Model.Page.PageSize == 15 ? true : false)">15</option>
+            }
         </select>
     </div>
 
     <span style="margin-left: 8px" class="pagination_details">
-        @* Showing @((Model.PageNo - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageNo * Model.PageSize,
-    Model.TotalRecords)) of @Model.TotalRecords *@
+        Showing @Model.Page.FromRec - @Model.Page.ToRec of @Model.Page.TotalRecords
+
     </span>
 
-    <div>
-        <button type="button" class="btn border border-black prev_page" id="prevPageIcon">
-            <img src="~/images/icons/chevron-left.svg" alt="" />
-        </button>
-        <button type="button" class="btn border border-black" id="nextPageIcon">
+    @if (Model.Page.TotalPages >= 1)
+    {
+        <div>
+            <!-- Previous Page button-->
+
+            <button type="button" class="btn border border-black prev_page" id="prevPageIcon" @(Model.Page.CurrentPage > 1 ?
+                " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage-1)">
+                <img src="~/images/icons/chevron-left.svg" alt="" />
+            </button>
+
+            <!-- Next Page button-->
+            <button type="button" class="btn border border-black" id="nextPageIcon" @(Model.Page.CurrentPage <
+                Model.Page.TotalPages ? " " : "disabled") onclick="paginationAjax(@Model.Page.CurrentPage+1)">
             <img src="~/images/icons/chevron-right.svg" alt="" />
         </button>
     </div>
+        }
 </div>
 <!-- Pagination Frontend Ends -->
