@@ -1,5 +1,6 @@
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DataLogicLayer.Interfaces;
 
@@ -24,6 +25,9 @@ public interface ICategoryItemRepository
     #region CRUD for Items
     public Task<string> AddItemAsync(AdditemViewModel model, long userId);
 
+    public Task<string> EditItemAsync(AdditemViewModel model, long userId);
     public Task<Item> GetItemByIdAsync(long id);
+
+    public Task<bool> DeleteItemAsync(long id, long userId);
     #endregion
 }

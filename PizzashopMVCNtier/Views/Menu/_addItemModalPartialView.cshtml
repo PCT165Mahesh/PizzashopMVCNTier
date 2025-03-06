@@ -6,7 +6,7 @@
 
 <form id="menuItemForm" asp-action="SaveItem" asp-controller="Menu" enctype="multipart/form-data">
     <div class="modal-body">
-        <input type="hidden" asp-for="@Model.ItemId" value="-1">
+        <input type="hidden" asp-for="@Model.ItemId" id="ModalAddItemID">
         <div class="row gy-10">
             <div class="row col-lg-8 col-12">
 

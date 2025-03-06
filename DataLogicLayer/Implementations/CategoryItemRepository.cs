@@ -1,6 +1,7 @@
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLogicLayer.Implementations;
@@ -144,9 +145,9 @@ public class CategoryItemRepository : ICategoryItemRepository
         try
         {
             //For Cascade Soft Deleting the Items with Category
-            if(items != null)
+            if (items != null)
             {
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     item.Isdeleted = true;
                     item.UpdatedAt = DateTime.Now;
@@ -181,13 +182,15 @@ public class CategoryItemRepository : ICategoryItemRepository
     {
         Item oldItem = await _context.Items.Where(i => i.Name == model.Name).FirstOrDefaultAsync();
         // Taxis tax = new
-        if(oldItem != null)
+        if (oldItem != null)
         {
             return $"{model.Name} Item already exist! ";
         }
-        if(oldItem != null && oldItem.Isdeleted == true)
+        if (oldItem != null && oldItem.Isdeleted == true)
         {
             oldItem.Name = string.Concat(oldItem.Name, DateTime.Now);
+            _context.Items.Update(oldItem);
+            await _context.SaveChangesAsync();
         }
 
         try
@@ -234,11 +237,104 @@ public class CategoryItemRepository : ICategoryItemRepository
             await _context.SaveChangesAsync();
             return "true";
         }
-        catch(Exception ex)
-        {   
+        catch (Exception ex)
+        {
             Console.WriteLine("Error In Category Repository :", ex.Message);
             return "Error Adding Item";
         }
     }
+
+    public async Task<string> EditItemAsync(AdditemViewModel model, long userId)
+    {
+        Item? item = await _context.Items.Where(i => i.ItemId == model.ItemId).FirstOrDefaultAsync();
+        Item? oldItem = await _context.Items.Where(i => i.Name == model.Name && i.ItemId != model.ItemId).FirstOrDefaultAsync();
+
+        if (item == null)
+        {
+            return "Item Doest not Exist";
+        }
+
+        if (oldItem != null)
+        {
+            return $"{model.Name} Item already exist! ";
+        }
+
+        if (oldItem != null && oldItem.Isdeleted == true)
+        {
+            oldItem.Name = string.Concat(oldItem.Name, DateTime.Now);
+            _context.Items.Update(oldItem);
+            await _context.SaveChangesAsync();
+        }
+
+        try
+        {
+            item.Name = model.Name;
+            item.Description = model.Description;
+            item.ItemtypeId = model.ItemTypeId;
+            item.Rate = model.Rate;
+            item.Unitid = model.UnitId;
+            item.Quantity = model.Quantity;
+            item.Isavailable = model.IsAvailable;
+            item.DefaultTax = model.DefaultTax;
+            item.AdditionalTax = model.TaxPercentage;
+            item.Shortcode = model.ShortCode;
+            item.Categoryid = model.CategoryId;
+            item.UpdatedBy = userId;
+            item.UpdatedAt = DateTime.Now;
+
+            // Handle Image Upload
+            if (model.ItemImage != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string fileName = $"{Guid.NewGuid()}_{model.ItemImage.FileName}";
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ItemImage.CopyToAsync(fileStream);
+                }
+
+                item.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
+            }
+
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+            return "true";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error In Category Repository :", ex.Message);
+            return "Error Updating Item";
+        }
+    }
+
+    public async Task<bool> DeleteItemAsync(long id, long userId)
+    {
+        Item item = await _context.Items.Where(i => i.ItemId == id).FirstOrDefaultAsync();
+        if(item == null) return false;
+
+        try
+        {
+            item.Isdeleted = true;
+            item.UpdatedAt = DateTime.Now;
+            item.UpdatedBy = userId;
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine("Error In Delete item Repository: ", ex.Message);
+            return false;
+        }
+
+    }
+
+
     #endregion
 }

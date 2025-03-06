@@ -126,6 +126,7 @@ public class CategoryItemService : ICategoryItemService
         AdditemViewModel model = new AdditemViewModel();
         if(item != null)
         {
+            model.ItemId = id;
             model.Name = item.Name;
             model.Description = item.Description;
             model.ItemTypeId = item.ItemtypeId;
@@ -153,9 +154,30 @@ public class CategoryItemService : ICategoryItemService
 
     public async Task<string> EditItem(AdditemViewModel model, long userId)
     {
-        return "true";
+        if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _categoryItemRepository.EditItemAsync(model, userId);
+    }
+
+    public async Task<bool> DeleteItem(long id, string userName)
+    {
+        if(id == 0)
+        {
+            return false;
+        }
+
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        return await _categoryItemRepository.DeleteItemAsync(id, user.Id);
     }
     #endregion
+
 
 
 }

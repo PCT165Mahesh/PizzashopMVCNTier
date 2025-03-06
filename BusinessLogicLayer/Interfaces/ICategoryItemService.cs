@@ -20,5 +20,7 @@ public interface ICategoryItemService
     public Task<AdditemViewModel> GetItemByID(long id);
     public Task<string> AddItem(AdditemViewModel model, long userId);
     public Task<string> EditItem(AdditemViewModel model, long userId);
+
+    public Task<bool> DeleteItem(long id, string userName);
     #endregion
 }

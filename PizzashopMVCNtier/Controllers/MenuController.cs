@@ -132,7 +132,7 @@ public class MenuController : Controller
         bool isCreated = true;
 
         //For Adding New Item
-        if (model.ItemId == -1)
+        if (model.ItemId == 0)
         {
             result = await _categoryItemService.AddItem(model, userId);
         }
@@ -155,6 +155,22 @@ public class MenuController : Controller
         }
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteItem(long id){
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _categoryItemService.DeleteItem(id, userName);
+        if(result){
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Item") });
+        }
+        else{
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Item") });
+        }
+    }
+
+
     #endregion
 
     #region Items By Category
@@ -164,7 +180,7 @@ public class MenuController : Controller
     }
     #endregion
 
-    #region All Categories In JSON
+    #region Category By Id
     public IActionResult GetCategoryById(long id)
     {
         return Json(_categoryItemService.GetCategoryById(id));
