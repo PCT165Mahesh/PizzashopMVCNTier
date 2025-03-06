@@ -13,12 +13,14 @@ public class MenuController : Controller
 {
     private readonly ICategoryItemService _categoryItemService;
     private readonly IUserDetailService _userDetailService;
+    private readonly IModifiersService _modifiersService;
 
-
-    public MenuController(ICategoryItemService categoryItemService, IUserDetailService userDetailService)
+    public MenuController(ICategoryItemService categoryItemService, IUserDetailService userDetailService, IModifiersService modifiersService)
     {
         _categoryItemService = categoryItemService;
         _userDetailService = userDetailService;
+        _modifiersService = modifiersService;
+
     }
 
     #region Menu Home Page
@@ -98,11 +100,10 @@ public class MenuController : Controller
     [HttpGet]
     public async Task<IActionResult> SaveItem(long id)
     {
-        //Fetch the data by the Id
-        
-
         //for the Add Item Model
         AdditemViewModel model = new AdditemViewModel();
+
+        //Fetch the Item details for Edit Item Modal
         if(id > 0)
         {
             model =  await _categoryItemService.GetItemByID(id);
@@ -171,6 +172,21 @@ public class MenuController : Controller
     }
 
 
+    [HttpPost]
+    public async Task<IActionResult> DeleteSelectedItems(List<long> id){
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _categoryItemService.DeleteSelectedItems(id, userName);
+        if(result){
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Items") });
+        }
+        else{
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Items") });
+        }
+    }
+
+
     #endregion
 
     #region Items By Category
@@ -186,4 +202,18 @@ public class MenuController : Controller
         return Json(_categoryItemService.GetCategoryById(id));
     }
     #endregion
+
+    #region Modifier Group CRUD
+    public IActionResult ModifiersTab()
+    {
+        IEnumerable<ModifierGroupViewModel> model = _modifiersService.GetAllModifierGroup();
+        return PartialView("_modifiersTab", model);
+    }
+
+    public async Task<IActionResult> GetModifierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
+    }
+    #endregion
+
 }

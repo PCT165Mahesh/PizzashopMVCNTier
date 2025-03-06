@@ -3,6 +3,7 @@ using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Crypto.Digests;
 
 namespace BusinessLogicLayer.Implementations;
@@ -176,8 +177,29 @@ public class CategoryItemService : ICategoryItemService
 
         return await _categoryItemRepository.DeleteItemAsync(id, user.Id);
     }
+
+    public async Task<bool> DeleteSelectedItems(List<long> id, string userName)
+    {
+        if(id.IsNullOrEmpty())
+        {
+            return false;
+        }
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        bool result = true;
+
+        foreach(long ItemId in id)
+        {
+            result = await _categoryItemRepository.DeleteItemAsync(ItemId, user.Id);
+            if(result == false)
+                return result;
+        }
+        return result;
+    }
     #endregion
-
-
 
 }

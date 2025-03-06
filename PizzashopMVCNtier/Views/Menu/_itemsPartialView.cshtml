@@ -4,7 +4,7 @@
         <tr>
             <th id="itemName" scope="col">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="selectAll" onclick="toggleCheckBoxes(this)" />
+                    <input type="checkbox" class="form-check-input" id="itemSuperCheckbox"  />
                     <label class="form-check-label" for="selectAll">Name</label>
                 </div>
             </th>
@@ -22,7 +22,7 @@
                 <td>
                     <div class='d-flex'>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <input class="form-check-input itemCheckBox" type="checkbox" id="flexCheckDefault" data-id="@items.ItemId">
                         </div>
                         <img src="@(string.IsNullOrEmpty(items.ItemImg as string) ? "/uploads/Default_pfp.svg.png" : items.ItemImg)"
                             class="rounded-circle me-2" width="25px" height="25px">

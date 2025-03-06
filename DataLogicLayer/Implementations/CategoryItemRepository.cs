@@ -182,7 +182,7 @@ public class CategoryItemRepository : ICategoryItemRepository
     {
         Item oldItem = await _context.Items.Where(i => i.Name == model.Name).FirstOrDefaultAsync();
         // Taxis tax = new
-        if (oldItem != null)
+        if (oldItem != null && oldItem.Isdeleted == false)
         {
             return $"{model.Name} Item already exist! ";
         }
@@ -254,7 +254,7 @@ public class CategoryItemRepository : ICategoryItemRepository
             return "Item Doest not Exist";
         }
 
-        if (oldItem != null)
+        if (oldItem != null && oldItem.Isdeleted == false)
         {
             return $"{model.Name} Item already exist! ";
         }

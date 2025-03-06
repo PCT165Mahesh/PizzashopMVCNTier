@@ -22,5 +22,6 @@ public interface ICategoryItemService
     public Task<string> EditItem(AdditemViewModel model, long userId);
 
     public Task<bool> DeleteItem(long id, string userName);
+    public Task<bool> DeleteSelectedItems(List<long> id, string userName);
     #endregion
 }

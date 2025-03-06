@@ -358,7 +358,7 @@ a{
   color: black;
 }
 
-.category_active {
+.category_active, .modifier_active {
   color: #0066a7;
   text-decoration: none;
 }
