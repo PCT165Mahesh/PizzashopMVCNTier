@@ -12,9 +12,9 @@
             <span>Users</span>
         </div>
         <!-- Search box and button starts-->
-        <div class="d-flex flex-row">
+        <div class="d-flex flex-sm-row flex-column">
             <form class="d-flex position-relative" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" id="search" aria-label="Search" />
+                <input class="form-control me-2 search-user" type="search" placeholder="Search" id="search" aria-label="Search" />
                 <label for="search" class="search_icon"><img src="~/images/icons/search.svg" alt="" /></label>
             </form>
             <button type="button" class="btn add_user_btn">
@@ -63,6 +63,8 @@
 @section Scripts {
 
     <script>
+        let columnName = "";
+        let sortOrder = "";
         function paginationAjax(currentPage) {
             let pageSize = $('#selectPageSize').val();
             let searchQuery = $('#search').val();
@@ -71,13 +73,12 @@
             $.ajax({
                 url: '@Url.Action("GetUserList", "User")',
                 type: "GET",
-                data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+                data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery,columnName:columnName,sortOrder:sortOrder },
                 dataType: "html",
                 success: function (data) {
                     $("#tableContent").html(data);
                 },
                 error: function () {
-                    console.log("No Projects Found");
                     $("#tableContent").html('No User Fetched');
                 }
             })
@@ -88,6 +89,12 @@
             currentPage = 1;
             paginationAjax(currentPage);
         });
+
+        $(document).on("click",".sort-btn",function(){
+            columnName = $(this).data("name");
+            sortOrder = $(this).data("order");
+            paginationAjax(1);
+        })
     </script>
     <script>
         $(document).ready(function () {

@@ -12,6 +12,7 @@ body {
 
 body {
   background-color: #f2f2f2 !important;
+  height: 100vh;
 }
 
 /* Color For Logo and Header for Pizza shop */
@@ -462,6 +463,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   color: rgb(110, 107, 107);
 }
 
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+}
 
  
 
@@ -538,10 +543,31 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   .welcome_slogan {
     font-size: 1.2rem;
   }
+  
 }
 
 @media (max-width: 390px) {
   .search_icon {
     top: 17px;
+  }
+  .image_div{
+    display: flex;
+    flex-direction: column;
+  }
+  #profileImageContainer
+  {
+    width: fit-content;
+  }
+
+  #cameraImageContainer
+  {
+    top: -59px;
+    left: 113px;
+  }
+
+  .search-user
+  {
+    margin: 0 !important;
+    margin-bottom: 5px !important;
   }
 }

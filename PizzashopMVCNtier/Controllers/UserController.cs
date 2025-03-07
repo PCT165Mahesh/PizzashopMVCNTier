@@ -33,9 +33,9 @@ public class UserController : Controller
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "")
+    public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "",string columnName="", string sortOrder="")
     {
-        return PartialView("_userListPartialView",await _userDetailService.GetUserDetails(pageNo, pageSize, search));
+        return PartialView("_userListPartialView",await _userDetailService.GetUserDetails(pageNo, pageSize, search, columnName, sortOrder));
     }
 
     #endregion

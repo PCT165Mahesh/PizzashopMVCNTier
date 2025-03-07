@@ -17,7 +17,7 @@ public interface IUserDetailService
 
     public Task<ProfileDataViewModel> GetProfileData(string email);
 
-    public Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search);
+    public Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search,string columnName, string sortOrder);
 
     /*-------------------------------------------------------------------------------------------------------------Update Profile Data Method Implementation
     -----------------------------------------------------------------------------------------------------------------------------------------*/

@@ -88,10 +88,10 @@ public class UserDetailService : IUserDetailService
         };
     }
 
-    public async Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search)
+    public async Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search, string columnName, string sortOrder)
     {
         UserViewModel model = new() { Page = new()};
-        var userData = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search);
+        var userData = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search, columnName, sortOrder);
 
         model.UserList = userData.users;
         model.Page.SetPagination(userData.totalRecords, pageSize, pageNo);

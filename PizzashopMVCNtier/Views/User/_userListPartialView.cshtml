@@ -5,10 +5,10 @@
         <tr>
             <th scope="col">
                 Name
-                <button class="btn p-0">
-                    <img src="~/images/icons/arrow-up.svg" alt="" width="20px" />
+                <button class="btn p-0 sort-btn" data-name="name" data-order="asc">
+                    <img src="~/images/icons/arrow-up.svg" alt="" width="20px"  />
                 </button>
-                <button class="btn p-0">
+                <button class="btn p-0 sort-btn" data-name="name" data-order="desc">
                     <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
                 </button>
             </th>
@@ -16,10 +16,10 @@
             <th scope="col">Phone</th>
             <th scope="col">
                 Role
-                <button class="btn p-0">
+                <button class="btn p-0 sort-btn" data-order="asc"  data-name="role">
                     <img src="~/images/icons/arrow-up.svg" alt="" width="20px" />
                 </button>
-                <button class="btn p-0">
+                <button class="btn p-0 sort-btn" data-name="role" data-order="desc">
                     <img src="~/images/icons/arrow-down.svg" alt="" width="20px" />
                 </button>
             </th>
@@ -50,10 +50,10 @@
                         }
                 </td>
                 <td>
-                    <a class="btn user_action" href="@Url.Action("EditUser", "User")?id=@user.UserId">
+                    <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("EditUser", "User")?id=@user.UserId">
                         <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <a class="btn user_action user_action_delete deleteUserBtn" data-id="@user.UserId"
+                    <a class="btn user_action user_action_delete deleteUserBtn @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
                         data-bs-toggle="modal" data-bs-target="#myModal">
                         <img src="/images/icons/delete-trash-icon.svg" alt="" />
                     </a>
