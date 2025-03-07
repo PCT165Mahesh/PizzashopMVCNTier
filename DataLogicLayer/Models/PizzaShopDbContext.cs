@@ -57,6 +57,8 @@ public partial class PizzaShopDbContext : DbContext
 
     public virtual DbSet<Permission> Permissions { get; set; }
 
+    public virtual DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Rolesandpermission> Rolesandpermissions { get; set; }
@@ -759,6 +761,26 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<ResetPasswordToken>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("reset_password_token_pkey");
+
+            entity.ToTable("reset_password_token");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email)
+                .HasColumnType("character varying")
+                .HasColumnName("email");
+            entity.Property(e => e.Expirytime)
+                .HasDefaultValueSql("(CURRENT_TIMESTAMP + '24:00:00'::interval)")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("expirytime");
+            entity.Property(e => e.IsUsed).HasColumnName("is_used");
+            entity.Property(e => e.Token)
+                .HasColumnType("character varying")
+                .HasColumnName("token");
         });
 
         modelBuilder.Entity<Role>(entity =>

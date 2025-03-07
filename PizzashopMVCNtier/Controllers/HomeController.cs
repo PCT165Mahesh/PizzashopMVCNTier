@@ -89,15 +89,16 @@ public class HomeController : Controller
             return View(model);
         }
         string emailToken = Guid.NewGuid().ToString();
-        string resetPasswordLink = Url.Action("ResetPassword", "Home", new { model.Email, emailToken }, Request.Scheme);
+        string? resetPasswordLink = Url.Action("ResetPassword", "Home", new {emailToken }, Request.Scheme);
 
-        bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink);
+        bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink, emailToken);
 
         // If Email is send then Toast Message Display
         if (result)
         {
             TempData["NotificationMessage"] = NotificationMessages.EmailSentSuccessfully;
             TempData["NotificationType"] = NotificationType.Success.ToString();
+            return RedirectToAction("ResetPassword", "Home");
         }
         TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
         TempData["NotificationType"] = NotificationType.Error.ToString();
@@ -110,21 +111,21 @@ public class HomeController : Controller
     #region Reset Password
 
     [HttpGet]
-    public IActionResult ResetPassword(string email)
+    public async Task<IActionResult> ResetPassword(string token)
     {
-        ViewData["UserEmail"] = string.IsNullOrEmpty(email) ? "" : email;
+        ViewData["Token"] = token;
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> ResetPassword(ResetPassViewModel model, string email)
+    public async Task<IActionResult> ResetPassword(ResetPassViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return View(model);
         }
 
-        bool result = await _resetPasswordService.ResetPassword(model.Password, model.ConfirmPassword, email);
+        bool result = await _resetPasswordService.ResetPassword(model.Password, model.ConfirmPassword, model.Token);
         // If password Reset Successfully
         if (result)
         {

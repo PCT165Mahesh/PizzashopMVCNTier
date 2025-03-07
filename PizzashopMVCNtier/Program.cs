@@ -35,6 +35,8 @@ builder.Services.AddScoped<ICountryDetailRepository, CountryDetailRepository>();
 builder.Services.AddScoped<IRolePermissionsRepository, RolePermissionsRepository>();
 builder.Services.AddScoped<ICategoryItemRepository, CategoryItemRepository>();
 builder.Services.AddScoped<IModifiersRepository, ModifiersRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+
 
 
 

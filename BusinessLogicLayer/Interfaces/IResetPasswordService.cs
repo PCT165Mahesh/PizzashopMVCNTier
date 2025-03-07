@@ -4,5 +4,5 @@ namespace BusinessLogicLayer.Interfaces;
 
 public interface IResetPasswordService
 {
-    public Task<bool> ResetPassword(string password, string newPassword, string email);
+    public Task<bool> ResetPassword(string password, string newPassword, string token);
 }

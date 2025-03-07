@@ -11,13 +11,13 @@ public class ForgotPasswordService : IForgotPasswordService
 {
     private readonly IUserRepository _userRepository;
     private readonly IEmailSender _emailSender;
+    private readonly ILoginRepository _loginRepository;
 
-
-    public ForgotPasswordService(IUserRepository userRepository, IEmailSender emailSender)
+    public ForgotPasswordService(IUserRepository userRepository, IEmailSender emailSender, ILoginRepository loginRepository)
     {
         _userRepository = userRepository;
         _emailSender = emailSender;
-
+        _loginRepository = loginRepository;
     }
 
     /*-------------------------------------------------------------------------------------------------------------Forgot Password Service Implementation
@@ -25,7 +25,7 @@ public class ForgotPasswordService : IForgotPasswordService
 
 
     #region Forgot password Service
-    public async Task<bool> ForgotPassword(string email, string? resetPasswordLink)
+    public async Task<bool> ForgotPassword(string email, string? resetPasswordLink, string emailToken)
     {
         string subject = "Password Reset Link";
         string emailBody = $@"<div
@@ -53,13 +53,25 @@ public class ForgotPasswordService : IForgotPasswordService
         </div>
             ";
 
+
+
+
         User user = await _userRepository.GetUserByEmail(email);
-        if(user == null){
+        if (user == null)
+        {
             return false;
         }
-        await _emailSender.SendEmailAsync(email, subject, emailBody);
-        return true;
+
+        bool result = await _loginRepository.SaveToken(user, emailToken);
+
+        if (result)
+        {
+            await _emailSender.SendEmailAsync(email, subject, emailBody);
+            return true;
+        }
+        return false;
     }
+
 
     #endregion
 }
