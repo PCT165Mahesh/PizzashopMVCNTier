@@ -21,6 +21,6 @@ public interface IUserDetailService
 
     /*-------------------------------------------------------------------------------------------------------------Update Profile Data Method Implementation
     -----------------------------------------------------------------------------------------------------------------------------------------*/
-    public Task<bool> UpdateUserProfileData(ProfileDataViewModel model, string email);
+    public Task<(string message, bool result)> UpdateUserProfileData(ProfileDataViewModel model, string email);
 
 }

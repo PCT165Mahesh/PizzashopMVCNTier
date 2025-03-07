@@ -31,7 +31,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
                                                 LastName = u.Lastname,
                                                 Email = u.Email,
                                                 Phone = u.Phone,
-                                                Status = u.Status,
+                                                Status = u.Status,  
                                                 RoleName = u.Role.Rolename,
                                                 ImgUrl = u.Imgurl
                                             });

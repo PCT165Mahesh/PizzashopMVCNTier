@@ -60,14 +60,14 @@ public class UserService : IUserService
 
 
     #region Add User Service
-    public async Task<bool> AddUserAsync(AddUserViewModel model, string userName)
+    public async Task<(string message, bool result)> AddUserAsync(AddUserViewModel model, string userName)
     {
         string _password = model.Password;
         model.Password = _encryptionService.EncryptPassword(model.Password);
 
         User adminUser  = await _userRepository.GetUserByUserName(userName);
 
-        User user = await _userRepository.AddUserAsync(model, adminUser.Id);
+        (User user, string message) = await _userRepository.AddUserAsync(model, adminUser.Id);
         
         if(user != null){
             // Prepare Email Content
@@ -81,21 +81,21 @@ public class UserService : IUserService
 
             // Send Email
             await _emailSender.SendEmailAsync(user.Email, subject, body);
-            return true;
+            return (message, true);
         }
-        return false;
+        return (message, false);
     }
 
     #endregion
 
 
     #region Update User Service
-    public async Task<bool> UpdateUserAsync(EditUserViewModel model, string userName)
+    public async Task<(string message, bool result)> UpdateUserAsync(EditUserViewModel model, string userName)
     {
         User admin = await _userRepository.GetUserByUserName(userName);
         User user = await _userRepository.GetUserById(model.UserId);
         if(user == null){
-            return false;
+            return ("user doesn't Exist", false);
         }
         return await _userRepository.EditUserAsync(model, user, admin.Id);
     }

@@ -111,17 +111,17 @@ public class UserDetailService : IUserDetailService
 
 
     #region Update Profile Data Service
-    public async Task<bool> UpdateUserProfileData(ProfileDataViewModel model, string email)
+    public async Task<(string message, bool result)> UpdateUserProfileData(ProfileDataViewModel model, string email)
     {
         User user = await _userRepository.GetUserByEmail(email);
         if(user == null)
         {
-            return false;
+            return ("usre not found!", false);
         }
-        bool result = await _userRepository.UpdateUserProfileData(user, model);
+        (string message, bool result) = await _userRepository.UpdateUserProfileData(user, model);
         if(!result)
         {
-            return false;
+            return (message, false);
         }
         HttpContext? context = _httpContextAccessor.HttpContext;
         context.Session.Remove("UserName");
@@ -129,7 +129,7 @@ public class UserDetailService : IUserDetailService
 
         context.Session.SetString("UserName", user.Username);
         context.Session.SetString("ProfileImage", user.Imgurl ?? "/uploads/Default_pfp.svg.png");
-        return true;
+        return (message, true);
     }
 
     #endregion

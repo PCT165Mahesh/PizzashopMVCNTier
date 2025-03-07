@@ -60,17 +60,13 @@ public class DashboardController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
-        bool result = await _userDetailService.UpdateUserProfileData(model, email);
+        (string message, bool result) = await _userDetailService.UpdateUserProfileData(model, email);
 
         if (result)
         {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "Profile");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("ProfileDetails");
+            return Json(new {message = string.Format(NotificationMessages.EntityUpdated, "Profile"), success=true});
         }
-        TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "Profile");
-        TempData["NotificationType"] = NotificationType.Error.ToString();
-        return View(model);
+        return Json(new {message = message, success=false});
     }
 
     #endregion

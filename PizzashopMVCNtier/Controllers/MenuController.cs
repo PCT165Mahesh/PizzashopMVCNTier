@@ -4,11 +4,13 @@ using BusinessLogicLayer.Implementations;
 using BusinessLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PizzashopMVCNtier.Controllers;
 
+[Authorize]
 public class MenuController : Controller
 {
     private readonly ICategoryItemService _categoryItemService;

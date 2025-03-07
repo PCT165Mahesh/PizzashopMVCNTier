@@ -1,7 +1,10 @@
+using System.ComponentModel;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace DataLogicLayer.Implementations;
 
@@ -35,48 +38,78 @@ public class UserRepository : IUserRepository
     #endregion
 
     #region Add User Implementation
-    public async Task<User> AddUserAsync(AddUserViewModel model, long adminId)
+    public async Task<(User? user, string? message)> AddUserAsync(AddUserViewModel model, long adminId)
     {
-        User user = new User
+        try
         {
-            Firstname = model.FirstName,
-            Lastname = model.LastName,
-            Email = model.Email,
-            Username = model.UserName,
-            Password = model.Password,
-            Roleid = model.RoleId,
-            Countryid = model.CountryId,
-            Stateid = model.StateId,
-            Cityid = model.CityId,
-            Address = model.Address,
-            Zipcode = model.Zipcode,
-            Phone = model.Phone,
-            CreatedBy = adminId,
-        };
-
-        // Handle Image Upload
-        if (model.ProfileImage != null)
-        {
-            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-            if (!Directory.Exists(uploadsFolder))
+            User? existingUser = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
+            User? existingUserName = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
+            if (existingUser != null && existingUser.Isdeleted == false)
             {
-                Directory.CreateDirectory(uploadsFolder);
+                string message = "Email already exist!";
+                return (null, message);
+            }
+            if (existingUserName != null && existingUserName.Isdeleted == false)
+            {
+                string message = "UserName already exist!";
+                return (null, message);
             }
 
-            string fileName = $"{Guid.NewGuid()}_{model.ProfileImage.FileName}";
-            string filePath = Path.Combine(uploadsFolder, fileName);
-
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+            if (existingUser != null && existingUser.Isdeleted == true)
             {
-                await model.ProfileImage.CopyToAsync(fileStream);
+                existingUser.Email = string.Concat(existingUser.Email, DateTime.Now);
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync();
+            }
+            User user = new User
+            {
+                Firstname = model.FirstName,
+                Lastname = model.LastName,
+                Email = model.Email,
+                Username = model.UserName,
+                Password = model.Password,
+                Roleid = model.RoleId,
+                Countryid = model.CountryId,
+                Stateid = model.StateId,
+                Cityid = model.CityId,
+                Address = model.Address,
+                Zipcode = model.Zipcode,
+                Phone = model.Phone,
+                CreatedBy = adminId,
+            };
+
+            // Handle Image Upload
+            if (model.ProfileImage != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string fileName = $"{Guid.NewGuid()}_{model.ProfileImage.FileName}";
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ProfileImage.CopyToAsync(fileStream);
+                }
+
+                user.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
             }
 
-            user.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return (user, "");
         }
-
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return user;
+        catch(DbUpdateException ex)
+        {
+            if(ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+            {
+                return (null,"UserName already Exist!");
+            }
+            return(null, "Failed To Add User");
+        }
     }
     #endregion
 
@@ -99,10 +132,15 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<bool> UpdateUserProfileData(User user, ProfileDataViewModel model)
+    public async Task<(string message, bool result)> UpdateUserProfileData(User user, ProfileDataViewModel model)
     {
         try
         {
+            User? existingUser = await _context.Users.Where(u => u.Username == model.userName).FirstOrDefaultAsync();
+            if(existingUser != null && existingUser.Isdeleted == false)
+            {
+                return ("Username Already Exist!", false);
+            }
             user.Firstname = model.firstName;
             user.Lastname = model.lastName;
             user.Username = model.userName;
@@ -135,22 +173,32 @@ public class UserRepository : IUserRepository
 
                 user.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
             }
-            
+
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            return true;
+            return ("Success", true);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("error message from Reset Password: " + ex.Message);
-            return false;
+            if(ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+            {
+                return ("UserName already Exist!", false);
+            }
+            return("Failed To Add User", false);
         }
     }
 
-    public async Task<bool> EditUserAsync(EditUserViewModel model, User user, long adminId)
+    public async Task<(string message, bool result)> EditUserAsync(EditUserViewModel model, User user, long adminId)
     {
         try
         {
+            User? existingUser = await _context.Users.Where(u => u.Username == model.UserName).FirstOrDefaultAsync();
+            if(existingUser != null && existingUser.Isdeleted == false)
+            {
+                return("Username already Exist", false);
+            }
+
+
             user.Firstname = model.FirstName;
             user.Lastname = model.LastName;
             user.Username = model.UserName;
@@ -186,15 +234,18 @@ public class UserRepository : IUserRepository
 
                 user.Imgurl = $"/uploads/{fileName}"; // Store relative path in DB
             }
-            
+
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            return true;
+            return ("", true);
         }
-        catch (Exception ex)
+        catch (DbUpdateException ex)
         {
-            Console.WriteLine("error message from Reset Password: " + ex.Message);
-            return false;
+            if(ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+            {
+                return ("UserName already Exist!", false);
+            }
+            return("Failed To Edit User", false);
         }
     }
     #endregion
@@ -211,5 +262,5 @@ public class UserRepository : IUserRepository
         return true;
     }
     #endregion
-    
+
 }

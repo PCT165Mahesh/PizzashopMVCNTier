@@ -62,7 +62,7 @@ public class UserController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
             return View(model);
         }
-        bool result = await _userService.AddUserAsync(model, userName);
+        (string message, bool result) = await _userService.AddUserAsync(model, userName);
         if (result)
         {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreated, "User");
@@ -70,7 +70,8 @@ public class UserController : Controller
             return RedirectToAction("Index");
         }
 
-        TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
+        // TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
+        TempData["NotificationMessage"] = message;
         TempData["NotificationType"] = NotificationType.Error.ToString();
         return RedirectToAction("AddUser", "User");
     }
@@ -98,14 +99,14 @@ public class UserController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
             return RedirectToAction("Index", "User");
         }
-        bool result = await _userService.UpdateUserAsync(model, userName);
+        (string message, bool result) = await _userService.UpdateUserAsync(model, userName);
         if (result)
         {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "User"); ;
             TempData["NotificationType"] = NotificationType.Success.ToString();
             return RedirectToAction("Index", "User");
         }
-        TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User"); ;
+        TempData["NotificationMessage"] = message;
         TempData["NotificationType"] = NotificationType.Error.ToString();
         return RedirectToAction("Index", "User");
     }

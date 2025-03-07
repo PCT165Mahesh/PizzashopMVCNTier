@@ -236,11 +236,17 @@
                         data: formData,
                         contentType: false,
                         processData: false,
-                        success: function () {
-                            toastr.success("Profile updated successfully!");
-                            setTimeout(function () {
-                                location.reload(); // Refresh user list
-                            }, 5000);
+                        success: function (response) {
+                            if(response.success)
+                            {
+                                toastr.success(response.message);
+                                setTimeout(function () {
+                                    location.reload(); // Refresh user list
+                                }, 5000);
+                            }
+                            else{
+                                toastr.error(response.message)
+                            }
                         },
                         error: function () {
                             toastr.error("Error updating profile");

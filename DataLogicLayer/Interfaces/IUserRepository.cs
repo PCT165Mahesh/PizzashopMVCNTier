@@ -16,14 +16,14 @@ public interface IUserRepository
 
     /*---------------------------------------------------------------------------Add User Method Definations
     -------------------------------------------------------------------------------------------------------*/
-    public Task<User> AddUserAsync(AddUserViewModel model, long adminId);
+    public Task<(User user, string message)> AddUserAsync(AddUserViewModel model, long adminId);
 
 
     /*---------------------------------------------------------------------------Update/Edit User Method Definations
     -------------------------------------------------------------------------------------------------------*/
     public Task<bool> UpdateUserPassword(User user, string password);
-    public Task<bool> UpdateUserProfileData(User user, ProfileDataViewModel model);
-    public Task<bool> EditUserAsync(EditUserViewModel model, User user, long adminId);
+    public Task<(string message, bool result)> UpdateUserProfileData(User user, ProfileDataViewModel model);
+    public Task<(string message, bool result)> EditUserAsync(EditUserViewModel model, User user, long adminId);
 
     /*---------------------------------------------------------------------------Delete/Soft Delete User Method Definations
     -------------------------------------------------------------------------------------------------------*/
