@@ -543,13 +543,16 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   .welcome_slogan {
     font-size: 1.2rem;
   }
+  .search-user
+  {
+    margin: 0 !important;
+    margin-bottom: 5px !important;
+  }
   
 }
 
 @media (max-width: 390px) {
-  .search_icon {
-    top: 17px;
-  }
+
   .image_div{
     display: flex;
     flex-direction: column;
@@ -563,11 +566,5 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   {
     top: -59px;
     left: 113px;
-  }
-
-  .search-user
-  {
-    margin: 0 !important;
-    margin-bottom: 5px !important;
   }
 }

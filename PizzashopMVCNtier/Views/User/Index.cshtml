@@ -14,7 +14,8 @@
         <!-- Search box and button starts-->
         <div class="d-flex flex-sm-row flex-column">
             <form class="d-flex position-relative" role="search">
-                <input class="form-control me-2 search-user" type="search" placeholder="Search" id="search" aria-label="Search" />
+                <input class="form-control me-2 search-user" type="search" placeholder="Search" id="search"
+                    aria-label="Search" />
                 <label for="search" class="search_icon"><img src="~/images/icons/search.svg" alt="" /></label>
             </form>
             <button type="button" class="btn add_user_btn">
@@ -30,9 +31,10 @@
 
     <!-- User List table Starts -->
 
-    <div class="table_container table-responsive" id="tableContent">
+    <div id="tableContent" class="table_container">
 
     </div>
+
 
     <!-- Delete user Modal -->
     <div class="modal fade" tabindex="-1" id="myModal" aria-labelledby="modal-title">
@@ -69,11 +71,11 @@
             let pageSize = $('#selectPageSize').val();
             let searchQuery = $('#search').val();
             if (pageSize == 0 || pageSize == null) pageSize = 3;
-            if(searchQuery == null) searchQuery="";
+            if (searchQuery == null) searchQuery = "";
             $.ajax({
                 url: '@Url.Action("GetUserList", "User")',
                 type: "GET",
-                data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery,columnName:columnName,sortOrder:sortOrder },
+                data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery, columnName: columnName, sortOrder: sortOrder },
                 dataType: "html",
                 success: function (data) {
                     $("#tableContent").html(data);
@@ -84,13 +86,13 @@
             })
         }
 
-        
+
         $("#search").on("input", function () {
             currentPage = 1;
             paginationAjax(currentPage);
         });
 
-        $(document).on("click",".sort-btn",function(){
+        $(document).on("click", ".sort-btn", function () {
             columnName = $(this).data("name");
             sortOrder = $(this).data("order");
             paginationAjax(1);

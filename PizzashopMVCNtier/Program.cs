@@ -99,7 +99,7 @@ builder.Services.AddAuthentication(options =>
             // Redirect to login page when unauthorized instead of returning 401
             context.HandleResponse();
             context.Response.Redirect("/Home/Login");
-            return Task.CompletedTask;
+            return Task.CompletedTask; 
         }
     };
 });
@@ -116,11 +116,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession(); //Enable Session
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+    context.Response.Headers.Add("Pragma", "no-cache");
+    context.Response.Headers.Add("Expires", "0");
 
+    await next();
+});
+
+app.UseSession(); //Enable Session
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
