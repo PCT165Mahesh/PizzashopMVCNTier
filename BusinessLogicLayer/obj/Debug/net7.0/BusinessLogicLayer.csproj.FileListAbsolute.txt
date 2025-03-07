@@ -1,5 +1,5 @@
-d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.deps.json
-d:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.runtimeconfig.json
+D:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.deps.json
+D:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.runtimeconfig.json
 D:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.dll
 D:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\BusinessLogicLayer.pdb
 D:\Projects\PizzashopMVC\BusinessLogicLayer\bin\Debug\net7.0\DataLogicLayer.dll
@@ -9,9 +9,9 @@ D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.AssemblyInfoInputs.cache
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.AssemblyInfo.cs
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.CoreCompileInputs.cache
-d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.CopyComplete
+D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.csproj.CopyComplete
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.dll
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\refint\BusinessLogicLayer.dll
 D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.pdb
-d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.genruntimeconfig.cache
-d:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\ref\BusinessLogicLayer.dll
+D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\BusinessLogicLayer.genruntimeconfig.cache
+D:\Projects\PizzashopMVC\BusinessLogicLayer\obj\Debug\net7.0\ref\BusinessLogicLayer.dll
