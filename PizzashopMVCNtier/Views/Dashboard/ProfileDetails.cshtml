@@ -29,7 +29,7 @@
             <div class="d-flex flex-column w-100 px-3 py-3">
                 <div class="d-flex flex-column flex-sm-row justify-content-between">
                     <span class="fs-4" style="font-weight: 500;">@Model.firstName @Model.lastName</span>
-                    <span class="pt-2">@Model.email</span>
+                    <span class="pt-2">@Model.Email</span>
                 </div>
                 <span>@Model.Role</span>
             </div>
@@ -105,7 +105,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn create_user_btn me-2">Update</button>
-                <button type="button" class="btn cancel_btn">Cancel</button>
+                <a type="button" asp-action="Index" asp-controller="Dashboard" class="btn cancel_btn">Cancel</a>
             </div>
         </form>
     </div>
@@ -242,10 +242,13 @@
                                 toastr.success(response.message);
                                 setTimeout(function () {
                                     location.reload(); // Refresh user list
-                                }, 5000);
+                                }, 2000);
                             }
                             else{
-                                toastr.error(response.message)
+                                toastr.error(response.message);
+                                setTimeout(function () {
+                                    location.reload(); // Refresh user list
+                                }, 3000);
                             }
                         },
                         error: function () {

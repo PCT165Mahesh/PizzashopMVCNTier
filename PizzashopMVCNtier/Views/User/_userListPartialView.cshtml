@@ -55,10 +55,20 @@
                     <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("EditUser", "User")?id=@user.UserId">
                         <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <a class="btn user_action user_action_delete deleteUserBtn @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
-                        data-bs-toggle="modal" data-bs-target="#myModal">
-                        <img src="/images/icons/delete-trash-icon.svg" alt="" />
-                    </a>
+                    @if(User.IsInRole("SuperAdmin"))
+                    {
+                        <a class="btn user_action user_action_delete deleteUserBtn @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn user_action user_action_delete deleteUserBtn disabled-link @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                            <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                        </a>
+                    }
                 </td>
             </tr>
         }
@@ -72,7 +82,7 @@
         <span>Items per page:</span>
 
         <!-- Page  Numbers Drop Down -->
-        <select class="form-select w-auto" onchange="paginationAjax(@Model.Page.CurrentPage)" aria-label="Default select example" id="selectPageSize">
+        <select class="form-select w-auto" onchange="paginationAjax(1)" aria-label="Default select example" id="selectPageSize">
             @if (Model.Page.PageSize != null)
             {
                 <option value="3" selected="@(Model.Page.PageSize == 3 ? true : false)">3</option>

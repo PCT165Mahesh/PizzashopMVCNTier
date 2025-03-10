@@ -1,7 +1,10 @@
 using System.Threading.Tasks;
+using AspNetCoreGeneratedDocument;
 using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Constants;
 using BusinessLogicLayer.Interfaces;
+using DataLogicLayer.Interfaces;
+using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +16,15 @@ public class UserController : Controller
 {
     private readonly IUserDetailService _userDetailService;
     private readonly IUserService _userService;
+    private readonly IRoleService _roleService;
+    private readonly ICountryService _countryService;
 
-    public UserController(IUserDetailService userDetailService, IUserService userService)
+    public UserController(IUserDetailService userDetailService, IUserService userService, IRoleService roleService, ICountryService countryService)
     {
         _userDetailService = userDetailService;
         _userService = userService;
+        _roleService = roleService;
+        _countryService = countryService;
     }
 
 
@@ -67,7 +74,7 @@ public class UserController : Controller
         {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreated, "User");
             TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "User");
         }
 
         // TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
@@ -97,7 +104,8 @@ public class UserController : Controller
         {
             TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User"); ;
             TempData["NotificationType"] = NotificationType.Error.ToString();
-            return RedirectToAction("Index", "User");
+            await PopulateDropdownLists(model);
+            return View(model);
         }
         (string message, bool result) = await _userService.UpdateUserAsync(model, userName);
         if (result)
@@ -108,7 +116,8 @@ public class UserController : Controller
         }
         TempData["NotificationMessage"] = message;
         TempData["NotificationType"] = NotificationType.Error.ToString();
-        return RedirectToAction("Index", "User");
+        await PopulateDropdownLists(model);
+        return View(model);
     }
     #endregion
 
@@ -133,5 +142,13 @@ public class UserController : Controller
         }
     }
     #endregion
+
+    private async Task PopulateDropdownLists(EditUserViewModel model)
+    {
+        model.Roles = await _roleService.GetRolesAsync();
+        model.Countries = _countryService.GetCountries();
+        model.States = model.CountryId > 0 ? _countryService.GetStates(model.CountryId) : new List<State>();
+        model.Cities = model.StateId > 0 ?  _countryService.GetCities(model.StateId) : new List<City>();
+    }
 
 }

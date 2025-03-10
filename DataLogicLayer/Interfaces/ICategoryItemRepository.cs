@@ -24,6 +24,8 @@ public interface ICategoryItemRepository
 
     #region CRUD for Items
     public Task<string> AddItemAsync(AdditemViewModel model, long userId);
+    public Task<bool> AddItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId);
+    public Task<bool> EditItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId);
 
     public Task<string> EditItemAsync(AdditemViewModel model, long userId);
     public Task<Item> GetItemByIdAsync(long id);

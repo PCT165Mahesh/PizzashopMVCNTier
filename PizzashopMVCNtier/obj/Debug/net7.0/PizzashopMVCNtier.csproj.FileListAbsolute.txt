@@ -2,8 +2,8 @@ d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\appsettings.Developm
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\appsettings.json
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.staticwebassets.runtime.json
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.exe
-d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.deps.json
-d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.runtimeconfig.json
+D:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.deps.json
+D:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.runtimeconfig.json
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.dll
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\PizzashopMVCNtier.pdb
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
@@ -70,9 +70,9 @@ d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\staticwebassets.deve
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\scopedcss\bundle\PizzashopMVCNtier.styles.css
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\scopedcss\projectbundle\PizzashopMVCNtier.bundle.scp.css
-d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.csproj.CopyComplete
+D:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.csproj.CopyComplete
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.dll
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\refint\PizzashopMVCNtier.dll
 d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.pdb
-d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.genruntimeconfig.cache
-d:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\ref\PizzashopMVCNtier.dll
+D:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\PizzashopMVCNtier.genruntimeconfig.cache
+D:\Projects\PizzashopMVC\PizzashopMVCNtier\obj\Debug\net7.0\ref\PizzashopMVCNtier.dll

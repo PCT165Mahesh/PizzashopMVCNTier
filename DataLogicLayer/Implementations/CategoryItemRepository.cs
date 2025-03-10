@@ -3,6 +3,7 @@ using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DataLogicLayer.Implementations;
 
@@ -235,7 +236,12 @@ public class CategoryItemRepository : ICategoryItemRepository
 
             await _context.Items.AddAsync(item);
             await _context.SaveChangesAsync();
-            return "true";
+
+            if(await AddItemModifier(item.ItemId, model.ItemModifierList, userId))
+            {
+                return "true";
+            }
+            return "Failed To Add Item";
         }
         catch (Exception ex)
         {
@@ -304,7 +310,12 @@ public class CategoryItemRepository : ICategoryItemRepository
 
             _context.Items.Update(item);
             await _context.SaveChangesAsync();
-            return "true";
+
+            if(await EditItemModifier(item.ItemId, model.ItemModifierList, userId))
+            {
+                return "true";
+            }
+            return "Failed To Add Item";
         }
         catch (Exception ex)
         {
@@ -334,7 +345,76 @@ public class CategoryItemRepository : ICategoryItemRepository
         }
 
     }
-
-
     #endregion
+
+    public async Task<bool> AddItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId)
+    {
+
+        try
+        {
+            foreach(var item in itemModifierList)
+            {
+                Itemmodifiergroup? existingOne = await _context.Itemmodifiergroups.Where(i => i.Itemid == itemId && i.ModifierGroupId == item.ModifierGroupId && !i.Isdeleted)
+                .FirstOrDefaultAsync();
+
+                if(existingOne != null)
+                {
+                    existingOne.MinAllowed = item.MinAllowed;
+                    existingOne.MaxAllowed = item.MaxAllowed;
+                    existingOne.UpdatedAt = DateTime.Now;
+                    existingOne.UpdatedBy = userId;
+                    _context.Itemmodifiergroups.Update(existingOne);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    Itemmodifiergroup newItemModifer = new Itemmodifiergroup{
+                        Itemid = itemId,
+                        ModifierGroupId = item.ModifierGroupId,
+                        MinAllowed = item.MinAllowed,
+                        MaxAllowed = item.MaxAllowed,
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = userId,
+                    };
+
+                    await _context.Itemmodifiergroups.AddAsync(newItemModifer);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error in Modifier Item", ex.Message);
+            return false;
+        }
+    }
+    public async Task<bool> EditItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId)
+    {
+
+        try
+        {
+            foreach(var item in itemModifierList)
+            {
+                Itemmodifiergroup? existingOne = await _context.Itemmodifiergroups.Where(i => i.Itemid == itemId && i.ModifierGroupId == item.ModifierGroupId && !i.Isdeleted)
+                .FirstOrDefaultAsync();
+
+                if(existingOne != null)
+                {
+                    existingOne.MinAllowed = item.MinAllowed;
+                    existingOne.MaxAllowed = item.MaxAllowed;
+                    existingOne.UpdatedAt = DateTime.Now;
+                    existingOne.UpdatedBy = userId;
+                    _context.Itemmodifiergroups.Update(existingOne);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error in Modifier Item", ex.Message);
+            return false;
+        }
+    }
 }

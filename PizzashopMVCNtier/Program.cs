@@ -130,6 +130,9 @@ app.Use(async (context, next) =>
 app.UseSession(); //Enable Session
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseExceptionHandler("/Home/Error/500"); // Handles unhandled exceptions
+app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
 app.UseRouting();
 
 app.UseAuthentication();

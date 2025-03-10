@@ -373,7 +373,7 @@ a{
    border-radius: 10px; 
    padding-top: 10px;
    overflow-y: scroll;
-   min-height: 400px;
+   max-height: 470px;
 }
 
 .addItemCheckBox{

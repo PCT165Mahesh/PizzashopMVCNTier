@@ -51,4 +51,44 @@ public class ModifiersRepository : IModifiersRepository
 
         return (modifierItems, totalRecords);
     }
+
+    public async Task<ModifierGroupViewModel> GetModifierItemByIdAsync(long modifierId)
+    {
+        ModifierGroupViewModel? modifiergroup = await _context.Modifiergroups.Where(m => m.Id == modifierId).
+                                    Include(m => m.Modifieritems).
+                                    Select( m => new ModifierGroupViewModel {
+                                        ModifierId = m.Id,
+                                        Name = m.Name,
+                                        Description = m.Description,
+                                        ModifierItemList = m.Modifieritems.Select( i => new ModifierItemViewModel{
+                                            ModifierItemId = i.Id,
+                                            Name = i.Name,
+                                            Rate = i.Rate,
+                                            Quantity = i.Quantity,
+                                        }).ToList()
+                                    }).FirstOrDefaultAsync();
+
+        return modifiergroup;
+    }
+
+    public async Task<List<ItemModifierGroupListViewModel>> GetModifierItemByItemId(long itemId)
+    {
+       List<ItemModifierGroupListViewModel> model =await _context.Itemmodifiergroups.Include(i => i.ModifierGroup.Modifieritems).
+       Where(i => i.Itemid == itemId).Select(i => new ItemModifierGroupListViewModel{
+        ItemId = i.Itemid,
+        ModifierGroupId = i.ModifierGroupId,
+        Name = i.ModifierGroup.Name,
+        MinAllowed = i.MinAllowed,
+        MaxAllowed = i.MaxAllowed,
+        ModifierItemList = i.ModifierGroup.Modifieritems.Select( i => new ModifierItemViewModel{
+            ModifierItemId = i.Id,
+            Name = i.Name,
+            Rate = i.Rate,
+            Quantity = i.Quantity
+        }).ToList()
+       }).ToListAsync();
+
+
+       return model;
+    }
 }

@@ -33,4 +33,7 @@ public class AdditemViewModel
     public List<CategoryViewModel> CategoryList { get; set; } = new List<CategoryViewModel>();
     public List<Itemtype> ItemTypeList { get; set; } = new List<Itemtype>();
     public List<Unit> UnitList { get; set; } = new List<Unit>();
+    public IEnumerable<ModifierGroupViewModel>? ModifierGropList { get; set; }
+    public List<ItemModifierGroupListViewModel>? ItemModifierList { get; set; }
+ 
 }

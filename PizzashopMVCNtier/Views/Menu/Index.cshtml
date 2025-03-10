@@ -32,7 +32,8 @@
 
   <!-- Tab Content -->
   <div class="tab-content bg-white" id="pills-tabContent">
-    <div class="tab-pane fade show active p-0" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    <div class="tab-pane fade show active p-0" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+      tabindex="0">
       <div class="container-fluid d-flex flex-column flex-lg-row p-0">
         <div class="fs-5 category_part">
           <!-- Tab Content Part 1 -->
@@ -401,17 +402,19 @@
   </script>
 
   <!-- Add Items Modal Partial View  -->
-
   <script>
     function loadItemModal(id) {
+      
       $.ajax({
         url: '@Url.Action("SaveItem", "Menu")',
         type: "GET",
         data: { id: id },
         dataType: "html",
         success: function (data) {
-          $("#addItemModalContent").html(data);
-          $('#categorySelect').val(categoryId);
+            selectedModifiers = [];
+            $("#addItemModalContent").html(data);
+            $('#categorySelect').val(categoryId);
+            selectedModifiers.push({$(this).data("mgitemid")});
         },
         error: function () {
           console.log("No Projects Found");
@@ -426,6 +429,12 @@
 
     $(document).on("click", ".editItemBtn", function () {
       loadItemModal($(this).data("id"));
+    })
+
+    $(document).on("click", "#submitAddItemForm", function () {
+      SubmitAddItem();
+      console.log(selectedModifiers);
+      $("#menuItemForm").off('submit').submit();
     })
   </script>
 
@@ -562,7 +571,7 @@
       ModifierPaginationAjax(1);
     };
 
-    $(document).on("click",'.mg-list-items>div>a', function () {
+    $(document).on("click", '.mg-list-items>div>a', function () {
       $('.mg-list-items').each(function () {
         $('.mg-list-items>div>a').removeClass("modifier_active");
       });
@@ -573,16 +582,16 @@
   </script>
 
   <script>
-    $(document).on("mouseover",'.mg-list-items',function () {
+    $(document).on("mouseover", '.mg-list-items', function () {
       $(this).children("div.editDeleteBtn").css("visibility", "visible");
     })
-    $(document).on("mouseout",'.mg-list-items',function () {
+    $(document).on("mouseout", '.mg-list-items', function () {
       $(this).children("div.editDeleteBtn").css("visibility", "hidden");
     })
   </script>
 
 
-<!-- Modifier Items Pagination Javascript-->
+  <!-- Modifier Items Pagination Javascript-->
   <script>
     function ModifierPaginationAjax(currentPage) {
       let pageSize = $('#modifierPageSize').val();
@@ -606,9 +615,49 @@
 
     //Items Display With Search Javascript
 
-    $(document).on("input","#modifierSearch", function () {
+    $(document).on("input", "#modifierSearch", function () {
       currentPage = 1;
       ModifierPaginationAjax(currentPage);
+    });
+  </script>
+
+
+  <!-- Select Modifiers in Add Item Modal-->
+  <script>
+    let selectedModifiers = [];
+
+    $(document).on("change", "#selectModifiers", function () {
+      var modifierGroupId = $(this).val();
+
+      if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
+        selectedModifiers.push(Number(modifierGroupId));
+        getModifierItemAjax(modifierGroupId);
+      }
+
+      $("#selectModifiers").val("-2");
+    })
+
+    function getModifierItemAjax(modifierGroupId) {
+      $.ajax({
+        url: '@Url.Action("GetModifierItemById", "Menu")',
+        type: "GET",
+        data: { modifierId: modifierGroupId },
+        success: function (data) {
+          $("#mgItemList").append(data);
+        },
+        error: function () {
+          console.log("Error Appending Data");
+        }
+      })
+    }
+
+    // Remove Modifier Group
+    $(document).on("click", ".removeModifierGroup", function () {
+      let removeteModifierGroupID = $(this).data("mgitemid");
+      selectedModifiers = $.grep(selectedModifiers, function (value) {
+        return value != removeteModifierGroupID;
+      });
+      $("div").remove(".modifierGroup[data-mgitemid='" + removeteModifierGroupID + "']");
     });
   </script>
 }

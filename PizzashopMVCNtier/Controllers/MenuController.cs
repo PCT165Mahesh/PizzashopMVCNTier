@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Common;
 using BusinessLogicLayer.Implementations;
@@ -104,25 +106,32 @@ public class MenuController : Controller
     {
         //for the Add Item Model
         AdditemViewModel model = new AdditemViewModel();
+        model.ItemModifierList = new List<ItemModifierGroupListViewModel>();
 
         //Fetch the Item details for Edit Item Modal
         if(id > 0)
         {
             model =  await _categoryItemService.GetItemByID(id);
+            model.ItemModifierList = await _modifiersService.GetAllModifierItemById(id);
         }
         model.CategoryList = _categoryItemService.GetCategories();
         model.ItemTypeList =  _categoryItemService.GetItemtypes();
         model.UnitList = _categoryItemService.GetUnits();
+        model.ModifierGropList =_modifiersService.GetAllModifierGroup();
 
         return PartialView("_addItemModalPartialView", model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> SaveItem(AdditemViewModel model)
+    public async Task<IActionResult> SaveItem(AdditemViewModel model, string modifierItemList)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
         long userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
+        if(!string.IsNullOrEmpty(modifierItemList))
+        {
+            model.ItemModifierList = JsonSerializer.Deserialize<List<ItemModifierGroupListViewModel>>(modifierItemList);
+        }
 
         if(!ModelState.IsValid)
         {
@@ -130,6 +139,8 @@ public class MenuController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
             return PartialView("_addItemModalPartialView", model);
         }
+
+        
 
         string result = "";
         bool isCreated = true;
@@ -157,6 +168,13 @@ public class MenuController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
         }
         return RedirectToAction("Index");
+    }
+
+    // ---------------------------------------------------- Add Item Modifier Select Group --------------------------------------------------------------//
+    [HttpGet]
+    public async Task<IActionResult> GetModifierItemById(long modifierId)
+    {
+        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierId));
     }
 
     [HttpPost]
@@ -217,5 +235,7 @@ public class MenuController : Controller
         return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
     }
     #endregion
+
+
 
 }

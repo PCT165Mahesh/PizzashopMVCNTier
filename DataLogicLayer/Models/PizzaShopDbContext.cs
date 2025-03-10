@@ -33,6 +33,8 @@ public partial class PizzaShopDbContext : DbContext
 
     public virtual DbSet<Item> Items { get; set; }
 
+    public virtual DbSet<Itemmodifiergroup> Itemmodifiergroups { get; set; }
+
     public virtual DbSet<Itemtype> Itemtypes { get; set; }
 
     public virtual DbSet<Kot> Kots { get; set; }
@@ -427,6 +429,52 @@ public partial class PizzaShopDbContext : DbContext
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ItemUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
                 .HasConstraintName("items_updated_by_fkey");
+        });
+
+        modelBuilder.Entity<Itemmodifiergroup>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("itemmodifiergroup_pkey");
+
+            entity.ToTable("itemmodifiergroup");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.Itemid).HasColumnName("itemid");
+            entity.Property(e => e.MaxAllowed)
+                .HasDefaultValueSql("0")
+                .HasColumnName("max_allowed");
+            entity.Property(e => e.MinAllowed)
+                .HasDefaultValueSql("0")
+                .HasColumnName("min_allowed");
+            entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ItemmodifiergroupCreatedByNavigations)
+                .HasForeignKey(d => d.CreatedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("itemmodifiergroup_created_by_fkey");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.Itemmodifiergroups)
+                .HasForeignKey(d => d.Itemid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("itemmodifiergroup_itemid_fkey");
+
+            entity.HasOne(d => d.ModifierGroup).WithMany(p => p.Itemmodifiergroups)
+                .HasForeignKey(d => d.ModifierGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("itemmodifiergroup_modifier_group_id_fkey");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ItemmodifiergroupUpdatedByNavigations)
+                .HasForeignKey(d => d.UpdatedBy)
+                .HasConstraintName("itemmodifiergroup_updated_by_fkey");
         });
 
         modelBuilder.Entity<Itemtype>(entity =>

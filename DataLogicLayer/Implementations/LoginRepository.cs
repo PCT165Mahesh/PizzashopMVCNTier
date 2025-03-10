@@ -55,7 +55,7 @@ public class LoginRepository : ILoginRepository
     public async Task<string> ValidateToken(string token)
     {
         ResetPasswordToken? resetPasswordToken = await _context.ResetPasswordTokens.Where(r => r.Token == token && !r.IsUsed).FirstOrDefaultAsync();
-        if(resetPasswordToken == null) return "Invalid Token";
+        if(resetPasswordToken == null) return "Link Expired";
 
         var difference = resetPasswordToken.Expirytime.Subtract(DateTime.Now).Ticks;
         if(difference > 0)

@@ -22,6 +22,8 @@ public class ResetPasswordService : IResetPasswordService
     /*-------------------------------------------------------------------------------------------------------------Reset Password Service Implementation
     -----------------------------------------------------------------------------------------------------------------------------------------*/
 
+    
+
     #region  Reset Password
     public async Task<bool> ResetPassword(string password, string newPassword, string token)
     {
@@ -50,5 +52,11 @@ public class ResetPasswordService : IResetPasswordService
         }
         return false;
     }
+
+    public Task<string> validateToken(string token)
+    {
+        return _loginRepository.ValidateToken(token);
+    }
+
     #endregion
 }

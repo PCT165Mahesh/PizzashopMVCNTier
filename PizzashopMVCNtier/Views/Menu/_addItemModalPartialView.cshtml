@@ -7,6 +7,7 @@
 <form id="menuItemForm" asp-action="SaveItem" asp-controller="Menu" enctype="multipart/form-data">
     <div class="modal-body">
         <input type="hidden" asp-for="@Model.ItemId" id="ModalAddItemID">
+        <input type="hidden" id="modifierList" name="modifierItemList">
         <div class="row gy-10">
             <div class="row col-lg-8 col-12">
 
@@ -38,7 +39,7 @@
                     <label class="form-label">Item Type*</label>
                 </div>
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
-                    <input asp-for="@Model.Rate" type="number" class="form-control"  required>
+                    <input asp-for="@Model.Rate" type="number" class="form-control" required>
                     <label class="form-label">Rate*</label>
                 </div>
                 <div class="form-floating col-xl-3 col-lg-6 mb-3">
@@ -101,18 +102,84 @@
                 </div>
             </div>
             <!-- Modifier Groups -->
-            <div class="col-lg-4 col-12 border itemModifierModal">
-                <select class="form-select">
-                    <option>Select Modifier Group(s)</option>
-                    <option>Extra Cheese</option>
-                    <option>Spicy</option>
-                </select>
+            <div class="col-lg-4 col-12 border itemModifierModal" id="mgItemList">
+                <!-- Modifiers Group List -->
+                <div class="modifier-group-list">
+                    <select class="form-select" id="selectModifiers">
+                        <option value="-2">Select Modfifer Group(s)</option>
+                        @foreach (var modifierGroup in Model.ModifierGropList)
+                        {
+                            <option value="@modifierGroup.ModifierId">@modifierGroup.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- section for modifier Item -->
+                <div class="modifier-g-itemList" style="padding: 16px !important;">
+                    @foreach (var modifierItem in Model.ItemModifierList)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-bold fs-5" style="color: rgb(119, 116, 113);">@modifierItem.Name</span>
+                            <img data-mgitemid="@modifierItem.ModifierGroupId" class="removeModifierGroup"
+                                src="~/images/icons/delete-trash-icon.svg" alt="">
+                        </div>
+                        <!-- Min Max Select  -->
+                        <div class="d-flex justify-content-between">
+                            <select id="MinAllowed"
+                                style="width: 50%; border-radius: 20px; height: 40px; margin-right: 15px; padding-left: 10px;">
+                                <option selected value="@modifierItem.MinAllowed">@modifierItem.MinAllowed</option>
+                                @for (int i = 0; i <= Model.ItemModifierList.Count; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                            <select id="MaxAllowed" style="width: 50%; border-radius: 20px; padding-left: 10px;">
+                                <option selected value="@modifierItem.MaxAllowed">@modifierItem.MaxAllowed</option>
+                                @for (int i = 0; i <= Model.ItemModifierList.Count; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Modifier align-items-center List  -->
+                        <div>
+                            <ul>
+                                @foreach (var items in modifierItem.ModifierItemList)
+                                {
+                                    <li>
+                                        <div class="d-flex justify-content-between">
+                                            <span>@items.Name</span>
+                                            <span>@items.Rate</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 
     <div class="modal-footer border-0">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" id="submitAddItemForm" class="btn btn-primary">Save</button>
         <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">Cancel</button>
     </div>
 </form>
+
+
+
+    <script>
+        var selectedModifiersItem = [];
+        function SubmitAddItem() {
+            $(".modifierGroup").each(function () {
+                var id = $(this).data("mgitemid");
+                selectedModifiersItem.push({
+                    ModifierGroupId: id,
+                    MinAllowed: Number($('.MinAllowed[data-mgitemid="' + id + '"]').val()),
+                    MaxAllowed: Number($('.MaxAllowed[data-mgitemid="' + id + '"]').val()),
+                })
+            })
+            $("#modifierList").val(JSON.stringify(selectedModifiersItem));
+        }
+    </script>

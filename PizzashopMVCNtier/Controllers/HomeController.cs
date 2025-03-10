@@ -81,24 +81,24 @@ public class HomeController : Controller
     }
 
 
-    [HttpPost]
+    [HttpPost]  
     public async Task<IActionResult> ForgotPassword(ForgotPassViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return View(model);
         }
-        string emailToken = Guid.NewGuid().ToString();
-        string? resetPasswordLink = Url.Action("ResetPassword", "Home", new {emailToken }, Request.Scheme);
+        string token = Guid.NewGuid().ToString();
+        string? resetPasswordLink = Url.Action("ResetPassword", "Home", new {token }, Request.Scheme);
 
-        bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink, emailToken);
+        bool result = await _forgotPasswordService.ForgotPassword(model.Email, resetPasswordLink, token);
 
         // If Email is send then Toast Message Display
         if (result)
         {
             TempData["NotificationMessage"] = NotificationMessages.EmailSentSuccessfully;
             TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("ResetPassword", "Home");
+            return RedirectToAction("ForgotPassword", "Home");
         }
         TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
         TempData["NotificationType"] = NotificationType.Error.ToString();
@@ -113,6 +113,13 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> ResetPassword(string token)
     {
+        var result = await _resetPasswordService.validateToken(token);
+        if(result != "true")
+        {
+            TempData["NotificationMessage"] = result;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return RedirectToAction("ForgotPassword", "Home");
+        }
         ViewData["Token"] = token;
         return View();
     }
@@ -141,8 +148,22 @@ public class HomeController : Controller
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [Route("Home/Error/{code}")]
+    public IActionResult Error(int code)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        if (code == 404)
+        {
+            return View("404"); // Custom 404 page
+        }
+        else if (code == 500)
+        {
+            return View("500"); // Custom 500 page
+        }
+        else if(code == 401 || code == 403)
+        {
+            ViewData["StatusCode"] = code;
+            return View("Unauthorized");
+        }
+        return View("Error"); // General error page
     }
 }

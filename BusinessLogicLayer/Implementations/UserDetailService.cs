@@ -75,6 +75,7 @@ public class UserDetailService : IUserDetailService
             lastName = user.Lastname,
             userName = user.Username,
             Role = roleObj.Rolename,
+            Email = user.Email,
             phoneNo = user.Phone,
             zipcode = user.Zipcode,
             address = user.Address,

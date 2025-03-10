@@ -27,6 +27,12 @@ public class ModifiersService : IModifiersService
         });
     }
 
+    public Task<List<ItemModifierGroupListViewModel>> GetAllModifierItemById(long itemId)
+    {
+        return _modifiersRepository.GetModifierItemByItemId(itemId);
+    }
+
+
     public async Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
     {
         ModifierItemListViewModel model = new() { Page = new() };
@@ -36,4 +42,10 @@ public class ModifiersService : IModifiersService
         model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
         return model;
     }
+
+    public async Task<ModifierGroupViewModel> GetModifierItemById(long modifierId)
+    {
+        return await _modifiersRepository.GetModifierItemByIdAsync(modifierId);
+    }
+
 }

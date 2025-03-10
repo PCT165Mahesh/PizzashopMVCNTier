@@ -136,7 +136,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            User? existingUser = await _context.Users.Where(u => u.Username == model.userName).FirstOrDefaultAsync();
+            User? existingUser = await _context.Users.Where(u => u.Username == model.userName && u.Id != user.Id).FirstOrDefaultAsync();
             if(existingUser != null && existingUser.Isdeleted == false)
             {
                 return ("Username Already Exist!", false);
@@ -192,7 +192,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            User? existingUser = await _context.Users.Where(u => u.Username == model.UserName).FirstOrDefaultAsync();
+            User? existingUser = await _context.Users.Where(u => u.Username == model.UserName && model.UserId != u.Id).FirstOrDefaultAsync();
             if(existingUser != null && existingUser.Isdeleted == false)
             {
                 return("Username already Exist", false);
