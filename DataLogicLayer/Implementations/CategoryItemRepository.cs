@@ -311,7 +311,7 @@ public class CategoryItemRepository : ICategoryItemRepository
             _context.Items.Update(item);
             await _context.SaveChangesAsync();
 
-            if(await EditItemModifier(item.ItemId, model.ItemModifierList, userId))
+            if(await AddItemModifier(item.ItemId, model.ItemModifierList, userId))
             {
                 return "true";
             }

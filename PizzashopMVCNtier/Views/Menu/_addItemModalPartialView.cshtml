@@ -115,36 +115,39 @@
                 </div>
 
                 <!-- section for modifier Item -->
-                <div class="modifier-g-itemList" style="padding: 16px !important;">
-                    @foreach (var modifierItem in Model.ItemModifierList)
-                    {
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-bold fs-5" style="color: rgb(119, 116, 113);">@modifierItem.Name</span>
-                            <img data-mgitemid="@modifierItem.ModifierGroupId" class="removeModifierGroup"
-                                src="~/images/icons/delete-trash-icon.svg" alt="">
-                        </div>
-                        <!-- Min Max Select  -->
-                        <div class="d-flex justify-content-between">
-                            <select id="MinAllowed"
+                @foreach(var modifier in Model.ItemModifierList)
+                {
+                    <!-- section for modifier Item -->
+                <div class="modifierGroup" style="padding: 16px !important;" data-mgitemid="@modifier.ModifierGroupId">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold fs-5" style="color: rgb(119, 116, 113);">@modifier.Name</span>
+                        <img data-mgItemId="@modifier.ModifierGroupId" src="~/images/icons/delete-trash-icon.svg" alt="" class="removeModifierGroup">
+
+                    </div>
+                    <!-- Min Max Select  -->
+                    <div class="d-flex justify-content-between">
+                            <select class="MinAllowed" data-mgitemid="@modifier.ModifierGroupId"
                                 style="width: 50%; border-radius: 20px; height: 40px; margin-right: 15px; padding-left: 10px;">
-                                <option selected value="@modifierItem.MinAllowed">@modifierItem.MinAllowed</option>
-                                @for (int i = 0; i <= Model.ItemModifierList.Count; i++)
+                                <option selected value="@modifier.MinAllowed">@modifier.MinAllowed</option>
+                                @for (int i = 1; i <= modifier.ModifierItemList.Count; i++)
                                 {
                                     <option value="@i">@i</option>
+
                                 }
                             </select>
-                            <select id="MaxAllowed" style="width: 50%; border-radius: 20px; padding-left: 10px;">
-                                <option selected value="@modifierItem.MaxAllowed">@modifierItem.MaxAllowed</option>
-                                @for (int i = 0; i <= Model.ItemModifierList.Count; i++)
+                            <select class="MaxAllowed" data-mgitemid="@modifier.ModifierGroupId"  style="width: 50%; border-radius: 20px; padding-left: 10px;">
+                                <option selected value="@modifier.MaxAllowed">@modifier.MaxAllowed</option>
+                                @for (int i = 1; i <= modifier.ModifierItemList.Count; i++)
                                 {
                                     <option value="@i">@i</option>
+
                                 }
                             </select>
                         </div>
                         <!-- Modifier align-items-center List  -->
                         <div>
                             <ul>
-                                @foreach (var items in modifierItem.ModifierItemList)
+                                @foreach (var items in modifier.ModifierItemList)
                                 {
                                     <li>
                                         <div class="d-flex justify-content-between">
@@ -155,8 +158,9 @@
                                 }
                             </ul>
                         </div>
-                    }
+                    
                 </div>
+                }
             </div>
         </div>
     </div>

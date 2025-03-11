@@ -141,34 +141,6 @@
 </div>
 
 
-<!-- Add Modifier Group Modal -->
-<div class="modal fade" tabindex="-1" id="modifierModal" aria-labelleby="modal-title">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bolder">Add Modifier Group</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column align-items-center">
-        <form class="w-75">
-          <div class="mb-3">
-            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-              placeholder="Name">
-          </div>
-          <div class="mb-3">
-            <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Description"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer border-0 d-flex flex-row justify-content-end">
-        <button type="button" class="btn btn-primary">Save</button>
-        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- Delete Categoty Modal -->
@@ -403,6 +375,7 @@
 
   <!-- Add Items Modal Partial View  -->
   <script>
+    let selectedModifiers = [];
     function loadItemModal(id) {
       
       $.ajax({
@@ -414,10 +387,15 @@
             selectedModifiers = [];
             $("#addItemModalContent").html(data);
             $('#categorySelect').val(categoryId);
-            selectedModifiers.push({$(this).data("mgitemid")});
+            $(document).on("each",".modifierGroup",function () {
+              console.log(this);
+              var id = $(this).data("mgitemid");
+              selectedModifiers.push({
+                ModifierGroupId: id
+                });
+            })
         },
         error: function () {
-          console.log("No Projects Found");
           $("#tableContent").html('No User Fetched');
         }
       })
@@ -433,7 +411,6 @@
 
     $(document).on("click", "#submitAddItemForm", function () {
       SubmitAddItem();
-      console.log(selectedModifiers);
       $("#menuItemForm").off('submit').submit();
     })
   </script>
@@ -624,7 +601,7 @@
 
   <!-- Select Modifiers in Add Item Modal-->
   <script>
-    let selectedModifiers = [];
+    @* let selectedModifiers = []; *@
 
     $(document).on("change", "#selectModifiers", function () {
       var modifierGroupId = $(this).val();
