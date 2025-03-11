@@ -16,6 +16,8 @@ public class EditUserViewModel
 
     public IFormFile? ProfileImage { get; set; } // For Uploading Image
 
+    public string? ImgUrl { get; set; }
+
     public long CountryId { get; set; }
     public long StateId { get; set; }
     public long CityId { get; set; }

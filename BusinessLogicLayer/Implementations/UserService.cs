@@ -42,6 +42,7 @@ public class UserService : IUserService
             UserName = user.Username,
             RoleId = user.Roleid,
             Email = user.Email,
+            ImgUrl = user.Imgurl,
             Status = user.Status,
             CountryId = user.Countryid,
             StateId = user.Stateid,
