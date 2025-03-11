@@ -116,8 +116,8 @@ public class UserController : Controller
         }
         TempData["NotificationMessage"] = message;
         TempData["NotificationType"] = NotificationType.Error.ToString();
-        await PopulateDropdownLists(model);
-        return View(model);
+        // await PopulateDropdownLists(model);
+        return RedirectToAction("Index", "User");
     }
     #endregion
 
@@ -145,6 +145,7 @@ public class UserController : Controller
 
     private async Task PopulateDropdownLists(EditUserViewModel model)
     {
+        model.UserName = await _userDetailService.UsernameByEmail(model.Email);
         model.Roles = await _roleService.GetRolesAsync();
         model.Countries = _countryService.GetCountries();
         model.States = model.CountryId > 0 ? _countryService.GetStates(model.CountryId) : new List<State>();

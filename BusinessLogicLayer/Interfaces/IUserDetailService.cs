@@ -10,6 +10,7 @@ public interface IUserDetailService
 
     public string UserName(string token);
     public string Email(string token);
+    public Task<string> UsernameByEmail(string email);
 
     /*-------------------------------------------------------------------------------------------------------------Get User Details Method Implementation
     -----------------------------------------------------------------------------------------------------------------------------------------*/

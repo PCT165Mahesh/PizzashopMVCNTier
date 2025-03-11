@@ -43,6 +43,12 @@ public class UserDetailService : IUserDetailService
         return _jwtService.GetClaimValue(token, "email");
     }
 
+    public async Task<string> UsernameByEmail(string email)
+    {
+        User user = await _userRepository.GetUserByEmail(email);
+        return user.Username;
+    }
+
     public string UserName(string token)
     {
         return _jwtService.GetClaimValue(token, "userName");

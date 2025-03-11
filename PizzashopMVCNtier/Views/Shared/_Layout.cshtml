@@ -242,6 +242,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <!-- Toastr Notification Partial -->
     @await Html.PartialAsync("_ToastrNotification")
+    @await Html.PartialAsync("_ValidationScriptsPartial")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

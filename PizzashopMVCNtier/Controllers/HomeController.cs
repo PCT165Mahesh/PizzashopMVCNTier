@@ -98,7 +98,7 @@ public class HomeController : Controller
         {
             TempData["NotificationMessage"] = NotificationMessages.EmailSentSuccessfully;
             TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("ForgotPassword", "Home");
+            return RedirectToAction("Login", "Home");
         }
         TempData["NotificationMessage"] = NotificationMessages.EmailSendingFailed;
         TempData["NotificationType"] = NotificationType.Error.ToString();
@@ -118,7 +118,7 @@ public class HomeController : Controller
         {
             TempData["NotificationMessage"] = result;
             TempData["NotificationType"] = NotificationType.Error.ToString();
-            return RedirectToAction("ForgotPassword", "Home");
+            return RedirectToAction("Login", "Home");
         }
         ViewData["Token"] = token;
         return View();
