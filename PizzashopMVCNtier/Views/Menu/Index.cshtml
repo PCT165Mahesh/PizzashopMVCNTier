@@ -229,31 +229,8 @@
 <!-- Add Modifier Group Modal -->
 <div class="modal fade" tabindex="-1" id="modifierModal" aria-labelleby="modal-title">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bolder">Add Modifier Group</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column align-items-center">
-        <form class="w-100">
-          <div class="mb-3">
-            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-              placeholder="Name">
-          </div>
-          <div class="mb-3">
-            <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Description"></textarea>
-          </div>
-        </form>
-      </div>
-      <div>
-        <button class="btn text-primary existingModifierBtn" data-bs-target="#existingModifierModal" data-bs-toggle="modal">+ Add Existing Modifiers</Address></button>
-      </div>
-      <div class="modal-footer border-0 d-flex flex-row justify-content-end">
-        <button type="button" class="btn btn-primary">Save</button>
-        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
-          Cancel
-        </button>
-      </div>
+    <div class="modal-content" id="addModifierGroupContent">
+
     </div>
   </div>
 </div>
@@ -269,22 +246,23 @@
       </div>
       <div class="modal-body d-flex flex-column">
         <div class="w-50">
-            <form class="d-flex position-relative" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" id="existingModifierSearch"
-                  aria-label="Search" />
-              <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
-                      alt="" /></label>
+          <form class="d-flex position-relative" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" id="existingModifierSearch"
+              aria-label="Search" />
+            <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                alt="" /></label>
           </form>
         </div>
 
         <div id="existingModifierModalContent">
 
         </div>
-        
+
       </div>
       <div class="modal-footer border-0 d-flex flex-row justify-content-end">
-        <button type="button" class="btn btn-primary">Save</button>
-        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+        <button type="button" id="saveExitingMgBtn" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#modifierModal">Save</button>
+        <button type="button" class="btn cancle_btn" data-bs-toggle="modal" data-bs-target="#modifierModal">
           Cancel
         </button>
       </div>
@@ -444,23 +422,23 @@
   <script>
     let selectedModifiers = [];
     function loadItemModal(id) {
-      
+
       $.ajax({
         url: '@Url.Action("SaveItem", "Menu")',
         type: "GET",
         data: { id: id },
         dataType: "html",
         success: function (data) {
-            selectedModifiers = [];
-            $("#addItemModalContent").html(data);
-            $('#categorySelect').val(categoryId);
-            $(document).on("each",".modifierGroup",function () {
-              console.log(this);
-              var id = $(this).data("mgitemid");
-              selectedModifiers.push({
-                ModifierGroupId: id
-                });
-            })
+          selectedModifiers = [];
+          $("#addItemModalContent").html(data);
+          $('#categorySelect').val(categoryId);
+          $(document).on("each", ".modifierGroup", function () {
+            console.log(this);
+            var id = $(this).data("mgitemid");
+            selectedModifiers.push({
+              ModifierGroupId: id
+            });
+          })
         },
         error: function () {
           $("#tableContent").html('No User Fetched');
@@ -670,16 +648,16 @@
   <script>
     @* let selectedModifiers = []; *@
 
-    $(document).on("change", "#selectModifiers", function () {
-      var modifierGroupId = $(this).val();
+      $(document).on("change", "#selectModifiers", function () {
+        var modifierGroupId = $(this).val();
 
-      if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
-        selectedModifiers.push(Number(modifierGroupId));
-        getModifierItemAjax(modifierGroupId);
-      }
+        if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
+          selectedModifiers.push(Number(modifierGroupId));
+          getModifierItemAjax(modifierGroupId);
+        }
 
-      $("#selectModifiers").val("-2");
-    })
+        $("#selectModifiers").val("-2");
+      })
 
     function getModifierItemAjax(modifierGroupId) {
       $.ajax({
@@ -706,42 +684,101 @@
   </script>
 
   <script>
-  function LoadModifierItem(currentPage){
-    let pageSize = $('#modifierItemPageSize').val();
-    let searchQuery = $('#existingModifierSearch').val();
-    if (pageSize == 0 || pageSize == null) pageSize = 3;
-    if (searchQuery == null) searchQuery = "";
-    $.ajax({
-      url: '@Url.Action("GetAllModifierItems", "Menu")',
-      type: "GET",
-      data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery },
-      dataType: "html",
-      success: function (data) {
-        $("#existingModifierModalContent").html(data);
-      },
-      error: function () {
-        console.log("No Projects Found");
-        $("#existingModifierModalContent").html('No User Fetched');
-      }
+    function LoadModifierItem(currentPage) {
+      let pageSize = $('#modifierItemPageSize').val();
+      let searchQuery = $('#existingModifierSearch').val();
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetAllModifierItems", "Menu")',
+        type: "GET",
+        data: { pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#existingModifierModalContent").html(data);
+        },
+        error: function () {
+          console.log("No Projects Found");
+          $("#existingModifierModalContent").html('No User Fetched');
+        }
+      })
+    }
+
+    $(document).on('click', '.existingModifierBtn', function () {
+      LoadModifierItem(1);
     })
-  }
 
-  $(document).on('click', '.existingModifierBtn',function(){
-    LoadModifierItem(1);
-  })
+    let debounceTimer;
+    $(document).on("input", "#existingModifierSearch", function () {
+      let searchValue = $(this).val().trim();
 
-  let debounceTimer;
-  $(document).on("input", "#existingModifierSearch", function () {
-    let searchValue = $(this).val().trim();
-
-    if (searchValue.length > 0) {
+      if (searchValue.length > 0) {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function () {
-            LoadModifierItem(1);
+          LoadModifierItem(1);
         }, 300);
+      }
+    });
+
+  </script>
+
+
+  <script>
+    var selectedExistingModifiers = [];
+    function loadModifierGroup(id) {
+      $.ajax({
+        url: '@Url.Action("SaveModifierGroup", "Menu")',
+        type: "GET",
+        data: { id: id },
+        dataType: "html",
+        success: function (data) {
+          $("#addModifierGroupContent").html(data);
+        },
+        error: function () {
+          $("#addModifierGroupContent").html('No Modifier Group');
+        }
+      })
     }
-});
 
-</script>
+    $(document).on("click", "#modifierGroupAddModalBtn", function () {
+      loadModifierGroup(0);
+    })
 
+    $(document).on("click", ".editModifierGroupBtn", function () {
+      loadModifierGroup($(this).data("mgid"));
+    })
+
+
+    function AppendModifiers(id, name) {
+      $('#existingModifierList').append(`
+            <span class="p-1 me-2 fw-medium existModifiers" style="border: 1px solid grey; border-radius: 15px;">
+                ${name}
+                <img src="/images/icons/x.svg" alt="" data-mgitemid="${id}">
+            </span>
+          `);
+    }
+
+    $(document).on("click", "#saveExitingMgBtn", function () {
+      selectedExistingModifiers = [];
+
+      $(".modifierItemCheckBox:checked").each(function () {
+        var id = $(this).data("mg-item-id");
+        var name = $(this).data("mg-item-name");
+
+        if (selectedExistingModifiers.indexOf(Number(id)) == -1) {
+          selectedExistingModifiers.push({ModifierItemId:Number(id)});
+          AppendModifiers(id, name);
+        }
+
+      })
+    })
+
+    $(document).on("click", "#submitMgBtn", function () {
+      $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
+      $("#submitModifierGroupForm").off('submit').submit();
+    })
+    
+
+
+  </script>
 }

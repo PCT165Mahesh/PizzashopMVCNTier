@@ -89,6 +89,10 @@ public partial class User
 
     public virtual ICollection<Modifiergroup> ModifiergroupUpdatedByNavigations { get; set; } = new List<Modifiergroup>();
 
+    public virtual ICollection<Modifiergroupitemmap> ModifiergroupitemmapCreatedByNavigations { get; set; } = new List<Modifiergroupitemmap>();
+
+    public virtual ICollection<Modifiergroupitemmap> ModifiergroupitemmapUpdatedByNavigations { get; set; } = new List<Modifiergroupitemmap>();
+
     public virtual ICollection<Modifieritem> ModifieritemCreatedByNavigations { get; set; } = new List<Modifieritem>();
 
     public virtual ICollection<Modifieritem> ModifieritemUpdatedByNavigations { get; set; } = new List<Modifieritem>();

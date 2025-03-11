@@ -239,6 +239,65 @@ public class MenuController : Controller
     {
         return PartialView("_existingModifierList", await _modifiersService.GetAllModfierItems(pageNo, pageSize, search));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> SaveModifierGroup(long id)
+    {
+        //for the Add Item Model
+        ModifierGroupViewModel model = new ModifierGroupViewModel();
+
+        //Fetch the Item details for Edit Item Modal
+        if(id > 0)
+        {
+            model = await _modifiersService.GetModifierGroupById(id);
+        }
+
+        return PartialView("_modifierGroupAdd", model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SaveModifierGroup(ModifierGroupViewModel model, string modifierItemList)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+        long userId = await _userDetailService.GetUserIdByUserNameAsync(userName); 
+        if(!string.IsNullOrEmpty(modifierItemList))
+        {
+            model.ModifierItemList = JsonSerializer.Deserialize<List<ModifierItemViewModel>>(modifierItemList);
+        }
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Index", "Menu");
+        }
+
+         string result = "";
+        bool isCreated = true;
+
+        //For Adding New Category
+        if (model.ModifierId == 0)
+        {
+            result = await _modifiersService.AddModifier(model, userId);
+        }
+        //For Editing Category
+        else
+        {
+            result = await _modifiersService.EditModifier(model, userId);
+            isCreated = false;
+        }
+        // Checking for Add or Update
+        if (result.Equals("true"))
+        {
+            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
+            TempData["NotificationType"] = NotificationType.Success.ToString();
+        }
+        else
+        {
+            TempData["NotificationMessage"] = result;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
+        }
+        return RedirectToAction("Index", "Menu");
+    }
+
     #endregion
 
 

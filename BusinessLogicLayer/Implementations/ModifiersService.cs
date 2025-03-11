@@ -9,12 +9,12 @@ namespace BusinessLogicLayer.Implementations;
 public class ModifiersService : IModifiersService
 {
     private readonly IModifiersRepository _modifiersRepository;
+    private readonly IUserRepository _userRepository;
 
-
-    public ModifiersService(IModifiersRepository modifiersRepository)
+    public ModifiersService(IModifiersRepository modifiersRepository, IUserRepository userRepository)
     {
         _modifiersRepository = modifiersRepository;
-
+        _userRepository = userRepository;
     }
     public IEnumerable<ModifierGroupViewModel> GetAllModifierGroup()
     {
@@ -57,6 +57,29 @@ public class ModifiersService : IModifiersService
     public async Task<ModifierGroupViewModel> GetModifierItemById(long modifierId)
     {
         return await _modifiersRepository.GetModifierItemByIdAsync(modifierId);
+    }
+
+    public async Task<string> AddModifier(ModifierGroupViewModel model, long userId)
+    {
+      if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _modifiersRepository.AddModifierAsync(model, userId);
+    }
+
+    public async Task<string> EditModifier(ModifierGroupViewModel model, long userId)
+    {
+       if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _modifiersRepository.EditModifierAsync(model, userId);
+    }
+
+    public async Task<ModifierGroupViewModel> GetModifierGroupById(long modifierId)
+    {
+        return await _modifiersRepository.GetModifierGroupByIdAsync(modifierId);
     }
 
 }

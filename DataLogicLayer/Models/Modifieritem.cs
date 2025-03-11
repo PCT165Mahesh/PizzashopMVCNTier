@@ -33,6 +33,8 @@ public partial class Modifieritem
 
     public virtual Modifiergroup ModifierGroup { get; set; } = null!;
 
+    public virtual ICollection<Modifiergroupitemmap> Modifiergroupitemmaps { get; set; } = new List<Modifiergroupitemmap>();
+
     public virtual ICollection<Orderitemsmodifier> Orderitemsmodifiers { get; set; } = new List<Orderitemsmodifier>();
 
     public virtual Unit Unit { get; set; } = null!;

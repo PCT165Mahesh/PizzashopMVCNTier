@@ -13,8 +13,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PizzashopMVCProject</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -41,7 +41,7 @@
                 <img 
                 @* src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
                 src="@profileImage"
-                alt="" class="rounded-circle me-3" height="50px" width="50px"
+                 class="rounded-circle me-3" height="50px" width="50px"
                 class="me-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -230,9 +230,8 @@
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/custom.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <!-- Toastr Notification Partial -->

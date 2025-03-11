@@ -5,7 +5,7 @@
         <!-- Tab Content Part 2 -->
         <div class="d-flex justify-content-between mb-4">
             <h4 class="heading_color fw-bold">Modifier Group </h4>
-            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#modifierModal">
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#modifierModal" id="modifierGroupAddModalBtn">
                 <img src="~/images/icons/plus-square.svg" alt="" width="30px" />
             </button>
         </div>
@@ -21,8 +21,8 @@
                             <a data-mgid="@modifierGroup.ModifierId">@modifierGroup.Name</a>
                         </div>
                         <div class="editDeleteBtn d-flex">
-                            <button class="btn user_action p-0 me-1" id="editButton" data-mgid="@modifierGroup.ModifierId"
-                                data-bs-toggle="modal" data-bs-target="#">
+                            <button class="btn user_action p-0 me-1 editModifierGroupBtn" id="editButton" data-mgid="@modifierGroup.ModifierId"
+                                data-bs-toggle="modal" data-bs-target="#modifierModal">
                                 <img src="/images/icons/edit-pen.svg" alt="" />
                             </button>
                             <button class="btn user_action user_action_delete deleteCategoryBtn p-0 me-1" id="deleteBtn"

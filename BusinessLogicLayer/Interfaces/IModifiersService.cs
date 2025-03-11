@@ -12,4 +12,8 @@ public interface IModifiersService
     public Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId, int pageNo, int pageSize, string search);
     public Task<ModifierItemListViewModel> GetAllModfierItems(int pageNo, int pageSize, string search);
 
+    public Task<string> AddModifier(ModifierGroupViewModel model, long userId);
+    public Task<string> EditModifier(ModifierGroupViewModel model, long userId);
+    public Task<ModifierGroupViewModel> GetModifierGroupById(long modifierId);
+
 }

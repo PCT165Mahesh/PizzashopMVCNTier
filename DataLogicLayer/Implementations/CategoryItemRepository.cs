@@ -181,7 +181,7 @@ public class CategoryItemRepository : ICategoryItemRepository
     }
     public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
-        Item oldItem = await _context.Items.Where(i => i.Name == model.Name).FirstOrDefaultAsync();
+        Item oldItem = await _context.Items.Where(i => i.Name == model.Name && !i.Isdeleted && i.ItemId != model.ItemId).FirstOrDefaultAsync();
         // Taxis tax = new
         if (oldItem != null && oldItem.Isdeleted == false)
         {

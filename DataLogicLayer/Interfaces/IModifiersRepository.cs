@@ -13,4 +13,9 @@ public interface IModifiersRepository
     public Task<(IEnumerable<ModifierItemViewModel> modifierItems, int totalRecords)> GetModifierItemAsync(long modifierGroupId, int pageNo, int pageSize, string search);
     public Task<(IEnumerable<ModifierItemViewModel> modifierItems, int totalRecords)> GetAllModifierItemAsync(int pageNo, int pageSize, string search);
 
+
+    public Task<string> AddModifierAsync(ModifierGroupViewModel model, long userId);
+    public Task<string> EditModifierAsync(ModifierGroupViewModel model, long userId);
+
+    public Task<ModifierGroupViewModel> GetModifierGroupByIdAsync(long modifierId);
 }

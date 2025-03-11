@@ -41,6 +41,8 @@ public partial class PizzaShopDbContext : DbContext
 
     public virtual DbSet<Modifiergroup> Modifiergroups { get; set; }
 
+    public virtual DbSet<Modifiergroupitemmap> Modifiergroupitemmaps { get; set; }
+
     public virtual DbSet<Modifieritem> Modifieritems { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -559,6 +561,46 @@ public partial class PizzaShopDbContext : DbContext
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ModifiergroupUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
                 .HasConstraintName("modifiergroup_updated_by_fkey");
+        });
+
+        modelBuilder.Entity<Modifiergroupitemmap>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("modifiergroupitemmap_pkey");
+
+            entity.ToTable("modifiergroupitemmap");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
+            entity.Property(e => e.ModifierItemId).HasColumnName("modifier_item_id");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ModifiergroupitemmapCreatedByNavigations)
+                .HasForeignKey(d => d.CreatedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("modifiergroupitemmap_created_by_fkey");
+
+            entity.HasOne(d => d.ModifierGroup).WithMany(p => p.Modifiergroupitemmaps)
+                .HasForeignKey(d => d.ModifierGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("modifiergroupitemmap_modifier_group_id_fkey");
+
+            entity.HasOne(d => d.ModifierItem).WithMany(p => p.Modifiergroupitemmaps)
+                .HasForeignKey(d => d.ModifierItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("modifiergroupitemmap_modifier_item_id_fkey");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ModifiergroupitemmapUpdatedByNavigations)
+                .HasForeignKey(d => d.UpdatedBy)
+                .HasConstraintName("modifiergroupitemmap_updated_by_fkey");
         });
 
         modelBuilder.Entity<Modifieritem>(entity =>

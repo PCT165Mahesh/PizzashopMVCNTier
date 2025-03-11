@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace DataLogicLayer.Models;
 
-public partial class Modifiergroup
+public partial class Modifiergroupitemmap
 {
     public long Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public long ModifierGroupId { get; set; }
 
-    public string? Description { get; set; }
+    public long ModifierItemId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -23,11 +23,9 @@ public partial class Modifiergroup
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 
-    public virtual ICollection<Itemmodifiergroup> Itemmodifiergroups { get; set; } = new List<Itemmodifiergroup>();
+    public virtual Modifiergroup ModifierGroup { get; set; } = null!;
 
-    public virtual ICollection<Modifiergroupitemmap> Modifiergroupitemmaps { get; set; } = new List<Modifiergroupitemmap>();
-
-    public virtual ICollection<Modifieritem> Modifieritems { get; set; } = new List<Modifieritem>();
+    public virtual Modifieritem ModifierItem { get; set; } = null!;
 
     public virtual User? UpdatedByNavigation { get; set; }
 }
