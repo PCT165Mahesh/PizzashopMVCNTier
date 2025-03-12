@@ -19,12 +19,12 @@
         <a class="btn text-primary existingModifierBtn" data-bs-target="#existingModifierModal" data-bs-toggle="modal">+
             Add Existing Modifiers</a>
     </div>
-    <div class="ps-3 pt-2" id="existingModifierList">
+    <div class="ps-3 pt-2 existingModifierList" >
         @foreach(var item in @Model.ModifierItemList)
         {
-            <span class="p-1 me-2 fw-medium existModifiers" style="border: 1px solid grey; border-radius: 15px;">
+            <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="@item.ModifierItemId" style="border: 1px solid grey; border-radius: 15px;">
                 @item.Name
-                <img src="/images/icons/x.svg" alt="" data-mgitemid="@item.ModifierItemId">
+                <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="@item.ModifierItemId"></button>
             </span>
         }
     </div>

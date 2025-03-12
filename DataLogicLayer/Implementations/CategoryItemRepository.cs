@@ -176,12 +176,12 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     public async Task<Item> GetItemByIdAsync(long id)
     {
-        Item item = await _context.Items.Where(i => i.ItemId == id && !i.Isdeleted).FirstOrDefaultAsync();
-        return item;
+        Item? item = await _context.Items.Where(i => i.ItemId == id && !i.Isdeleted).FirstOrDefaultAsync();
+        return item;    
     }
     public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
-        Item oldItem = await _context.Items.Where(i => i.Name == model.Name && !i.Isdeleted && i.ItemId != model.ItemId).FirstOrDefaultAsync();
+        Item? oldItem = await _context.Items.Where(i => i.Name == model.Name && !i.Isdeleted && i.ItemId != model.ItemId).FirstOrDefaultAsync();
         // Taxis tax = new
         if (oldItem != null && oldItem.Isdeleted == false)
         {
@@ -349,9 +349,24 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     public async Task<bool> AddItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId)
     {
+        List<long> exisingModifierIds = await _context.Itemmodifiergroups
+                                        .Where(im => im.Itemid == itemId && !im.Isdeleted)
+                                        .Select(mi => mi.ModifierGroupId)
+                                        .ToListAsync();
+
+        List<long> newModifierGroupIds = itemModifierList.Select(m => m.ModifierGroupId).ToList();
+        List<long> toBeRemoved = exisingModifierIds.Except(newModifierGroupIds).ToList();
 
         try
         {
+            if (toBeRemoved.Count > 0)
+            {
+                foreach (var deleteItem in toBeRemoved)
+                {
+                    await DeleteSelectModifierGroups(itemId,deleteItem, userId);
+                }
+            }
+            
             foreach(var item in itemModifierList)
             {
                 Itemmodifiergroup? existingOne = await _context.Itemmodifiergroups.Where(i => i.Itemid == itemId && i.ModifierGroupId == item.ModifierGroupId && !i.Isdeleted)
@@ -381,6 +396,7 @@ public class CategoryItemRepository : ICategoryItemRepository
                     await _context.SaveChangesAsync();
                 }
             }
+            
             return true;
         }
         catch (Exception ex)
@@ -389,31 +405,31 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
-    public async Task<bool> EditItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId)
-    {
 
+    public async Task<bool> DeleteSelectModifierGroups(long Itemid,long id, long userId)
+    {
         try
         {
-            foreach(var item in itemModifierList)
-            {
-                Itemmodifiergroup? existingOne = await _context.Itemmodifiergroups.Where(i => i.Itemid == itemId && i.ModifierGroupId == item.ModifierGroupId && !i.Isdeleted)
-                .FirstOrDefaultAsync();
+            Itemmodifiergroup? existingOne = await _context.Itemmodifiergroups
+                                            .Where(im => im.ModifierGroupId == id && im.Itemid == Itemid && !im.Isdeleted)
+                                            .FirstOrDefaultAsync();
 
-                if(existingOne != null)
-                {
-                    existingOne.MinAllowed = item.MinAllowed;
-                    existingOne.MaxAllowed = item.MaxAllowed;
-                    existingOne.UpdatedAt = DateTime.Now;
-                    existingOne.UpdatedBy = userId;
-                    _context.Itemmodifiergroups.Update(existingOne);
-                    await _context.SaveChangesAsync();
-                }
+            if(existingOne == null)
+            {
+                return false;
             }
+
+            existingOne.Isdeleted = true;
+            existingOne.UpdatedAt = DateTime.Now;
+            existingOne.UpdatedBy = userId;
+
+            _context.Itemmodifiergroups.Update(existingOne);
+            await _context.SaveChangesAsync();
             return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error in Modifier Item", ex.Message);
+            Console.WriteLine("Error Deleting Selected Modifier Group", ex.Message);
             return false;
         }
     }

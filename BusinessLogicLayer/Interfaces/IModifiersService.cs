@@ -16,4 +16,6 @@ public interface IModifiersService
     public Task<string> EditModifier(ModifierGroupViewModel model, long userId);
     public Task<ModifierGroupViewModel> GetModifierGroupById(long modifierId);
 
+    public Task<bool> DeleteModifier(long modifierGroupId, string userName);
+
 }

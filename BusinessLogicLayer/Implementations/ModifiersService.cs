@@ -82,4 +82,20 @@ public class ModifiersService : IModifiersService
         return await _modifiersRepository.GetModifierGroupByIdAsync(modifierId);
     }
 
+    public async Task<bool> DeleteModifier(long modifierGroupId, string userName)
+    {
+        if(modifierGroupId == -1 || modifierGroupId == null)
+        {
+            return false;
+        }
+
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        return await _modifiersRepository.DeleteModifierGroupAsync(modifierGroupId, user.Id);
+    }
+
 }

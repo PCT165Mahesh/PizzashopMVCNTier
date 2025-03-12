@@ -298,6 +298,20 @@ public class MenuController : Controller
         return RedirectToAction("Index", "Menu");
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteModifierGroup(long id){
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _modifiersService.DeleteModifier(id, userName);
+        if(result){
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier") });
+        }
+        else{
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier") });
+        }
+    }
     #endregion
 
 
