@@ -418,6 +418,26 @@ public class ModifiersRepository : IModifiersRepository
          await _context.SaveChangesAsync();
 
     }
+
+    public async Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId)
+    {
+        AddEditModifierViewModel? model = await _context.Modifieritems.Include(mi => mi.ModifierGroup)
+                                        .Where(mi => mi.Id == modifierId && !mi.Isdeleted)
+                                        .Select(mi => new AddEditModifierViewModel
+                                        {
+                                            ModifierGroupId = mi.ModifierGroup.Id,
+                                            ModifierItemId = modifierId,
+                                            Name = mi.Name,
+                                            Description = mi.Description,
+                                            Rate = mi.Rate,
+                                            Quantity = mi.Quantity,
+                                            UnitId = mi.Unitid,
+                                        }).FirstOrDefaultAsync();
+
+
+        return model;
+    }
+
     #endregion
 }
 

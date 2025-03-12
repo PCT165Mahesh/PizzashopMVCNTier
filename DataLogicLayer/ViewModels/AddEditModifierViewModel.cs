@@ -8,7 +8,7 @@ public class AddEditModifierViewModel
     public long ModifierGroupId { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
-    public decimal Rate { get; set; } = 0;
+    public decimal? Rate { get; set; } = 0;
     public int Quantity { get; set; } = 0;
 
     public long UnitId { get; set; }

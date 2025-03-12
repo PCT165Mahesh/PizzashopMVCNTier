@@ -336,7 +336,7 @@ public class MenuController : Controller
         //Fetch the Item details for Edit Item Modal
         if (id > 0)
         {
-            // model = await _categoryItemService.GetItemByID(id);
+            model =await _modifiersService.GetModifierById(id);
         }
         model.UnitList = _categoryItemService.GetUnits();
         model.ModifierGroupList = _modifiersService.GetAllModifierGroup();

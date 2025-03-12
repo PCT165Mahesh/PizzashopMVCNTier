@@ -893,6 +893,10 @@
 
     $(document).on("click", "#newModifierBtn", function () {
       loadModifierItemModal(0);
-    })
+    });
+
+    $(document).on("click", '.modifierEditBtn', function () {
+      loadModifierItemModal($(this).data("mg-item-id"));
+    });
   </script>
 }

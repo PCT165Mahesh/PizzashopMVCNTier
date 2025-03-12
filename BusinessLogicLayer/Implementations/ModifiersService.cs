@@ -108,6 +108,12 @@ public class ModifiersService : IModifiersService
         }
         return await _modifiersRepository.AddModifierItemAsync(model, userId);
     }
+
+    public async Task<AddEditModifierViewModel> GetModifierById(long modifierId)
+    {
+        return await _modifiersRepository.GetModifierByIdAsync(modifierId);
+    }
     #endregion
+
 
 }
