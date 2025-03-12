@@ -6,6 +6,7 @@ public class AddEditModifierViewModel
 {
     public long ModifierItemId { get; set; } = 0;
     public long ModifierGroupId { get; set; }
+    public long OldModifierGroupId { get; set; } = 0;
     public string Name { get; set; }
     public string? Description { get; set; }
     public decimal? Rate { get; set; } = 0;

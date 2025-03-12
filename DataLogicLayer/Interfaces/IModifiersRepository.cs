@@ -22,6 +22,7 @@ public interface IModifiersRepository
     public Task<bool> DeleteModifierGroupAsync(long modifierGroupId, long userId);
 
     public Task<string> AddModifierItemAsync(AddEditModifierViewModel model, long userId);
+    public Task<string> EditModifierItemAsync(AddEditModifierViewModel model, long userId);
 
     public Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId);
 }

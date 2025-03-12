@@ -108,6 +108,14 @@ public class ModifiersService : IModifiersService
         }
         return await _modifiersRepository.AddModifierItemAsync(model, userId);
     }
+    public async Task<string> EditModifierItem(AddEditModifierViewModel model, long userId)
+    {
+        if (model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _modifiersRepository.EditModifierItemAsync(model, userId);
+    }
 
     public async Task<AddEditModifierViewModel> GetModifierById(long modifierId)
     {

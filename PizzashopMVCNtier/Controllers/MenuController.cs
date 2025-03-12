@@ -367,7 +367,7 @@ public class MenuController : Controller
         //For Editing Category
         else
         {
-            // result = await _modifiersService.EditModifier(model, userId);
+            result = await _modifiersService.EditModifierItem(model, userId);
             isCreated = false;
         }
         // Checking for Add or Update

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj": {}
+    "d:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+    "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectUniqueName": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "projectName": "BusinessLogicLayer",
-        "projectPath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
+        "projectPath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj",
         "packagesPath": "C:\\Users\\pct165\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\obj\\",
+        "outputPath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pct165\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -180,14 +180,14 @@
         }
       }
     },
-    "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj": {
+    "d:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj",
+        "projectUniqueName": "d:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj",
         "projectName": "PizzashopMVCNtier",
-        "projectPath": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj",
+        "projectPath": "d:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\PizzashopMVCNtier.csproj",
         "packagesPath": "C:\\Users\\pct165\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\obj\\",
+        "outputPath": "d:\\Projects\\PizzashopMVC\\PizzashopMVCNtier\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pct165\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -202,8 +202,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
-                "projectPath": "D:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
+              "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj": {
+                "projectPath": "d:\\Projects\\PizzashopMVC\\BusinessLogicLayer\\BusinessLogicLayer.csproj"
               },
               "d:\\Projects\\PizzashopMVC\\DataLogicLayer\\DataLogicLayer.csproj": {
                 "projectPath": "d:\\Projects\\PizzashopMVC\\DataLogicLayer\\DataLogicLayer.csproj"

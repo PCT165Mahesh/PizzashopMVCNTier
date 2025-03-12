@@ -1,13 +1,14 @@
 @model DataLogicLayer.ViewModels.AddEditModifierViewModel
 <div class="modal-header border-0">
     <h5 class="modal-title fw-bolder txt-color">
-        Add New Modifier
+         @(Model.ModifierItemId == 0 ? "Add New " : "Edit ") Modifier
     </h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
 <form id="modifierItemForm" asp-action="SaveModifier" asp-controller="Menu">
     <input type="hidden" asp-for="@Model.ModifierItemId">
+    <input type="hidden" asp-for="@Model.OldModifierGroupId">
     <div class="modal-body text-center">
         <!-- row 1-->
         <div class="row mb-3">
