@@ -295,6 +295,14 @@
   </div>
 </div>
 
+<!-- Add Modifier Item Modal -->
+<div class="modal fade" tabindex="-1" id="addModifierItem" aria-labelledby="modal-title">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" id="addModifierModalContent">
+    </div>
+  </div>
+</div>
+
 
 
 @section Scripts {
@@ -465,7 +473,7 @@
           })
         },
         error: function () {
-          $("#tableContent").html('No User Fetched');
+          $("#addItemModalContent").html('No User Fetched');
         }
       })
     }
@@ -505,15 +513,15 @@
 
 
     $(document).on("change", "#selectModifiers", function () {
-        var modifierGroupId = $(this).val();
+      var modifierGroupId = $(this).val();
 
-        if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
-          selectedModifiers.push(Number(modifierGroupId));
-          getModifierItemAjax(modifierGroupId);
-        }
+      if (selectedModifiers.indexOf(Number(modifierGroupId)) == -1) {
+        selectedModifiers.push(Number(modifierGroupId));
+        getModifierItemAjax(modifierGroupId);
+      }
 
-        $("#selectModifiers").val("-2");
-      })
+      $("#selectModifiers").val("-2");
+    })
 
     // Remove Modifier Group
     $(document).on("click", ".removeModifierGroup", function () {
@@ -526,7 +534,7 @@
   </script>
 
 
-   <!-- ----------------------------------------------------------- Handle Delete Item in Items Tab Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Handle Delete Item in Items Tab Javascript--------------------------------------------------------->
 
   <script>
     $(document).on("click", ".deleteItemBtn", function () {
@@ -598,7 +606,7 @@
   </script>
 
 
-   <!-- ----------------------------------------------------------- Handle Mass Delete Item Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Handle Mass Delete Item Javascript--------------------------------------------------------->
 
   <script>
 
@@ -640,7 +648,7 @@
 
 
 
-   <!-- ----------------------------------------------------------- Modifiers Tab Partial View AJAX call Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Modifiers Tab Partial View AJAX call Javascript--------------------------------------------------------->
 
   <script>
     $('#profile-tab').on("click", function () {
@@ -660,7 +668,7 @@
 
 
 
-   <!-- ----------------------------------------------------------- Modifier Items according to modifier_active group Partial View AJAX call Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Modifier Items according to modifier_active group Partial View AJAX call Javascript--------------------------------------------------------->
 
   <script>
     function ModifierPaginationAjax(currentPage) {
@@ -692,7 +700,7 @@
   </script>
 
 
-     <!-- ----------------------------------------------------------- Load first Modifier Item and Highlighted Class Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Load first Modifier Item and Highlighted Class Javascript--------------------------------------------------------->
   <script>
     function InitializeModifier() {
       $('#modifier_listUl li:first>div>a').addClass("modifier_active");
@@ -721,7 +729,7 @@
 
 
 
- <!-- ----------------------------------------------------------- Load Modifier Item In Modifier Tab Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Load Modifier Item In Modifier Tab Javascript--------------------------------------------------------->
 
   <script>
     function LoadModifierItem(currentPage) {
@@ -761,7 +769,7 @@
     });
 
   </script>
- <!-- ----------------------------------------------------------- Modifier Group Add Edit Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Modifier Group Add Edit Javascript--------------------------------------------------------->
 
   <script>
     var selectedExistingModifiers = [];
@@ -774,7 +782,7 @@
         success: function (data) {
           $("#addModifierGroupContent").html(data);
           selectedExistingModifiers = [];
-          $('.existModifiers').each(function (){
+          $('.existModifiers').each(function () {
             var id = $(this).data("mgitemid");
             selectedExistingModifiers.push({ ModifierItemId: id });
           });
@@ -796,36 +804,36 @@
 
     function AppendModifiers(id, name) {
       $('.existingModifierList').append(`
-            <span class="p-1 me-2 fw-medium existModifiers" style="border: 1px solid grey; border-radius: 15px;">
-                ${name}
-                <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
-            </span>
-          `);
+                      <span class="p-1 me-2 fw-medium existModifiers" style="border: 1px solid grey; border-radius: 15px;">
+                          ${name}
+                          <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
+                      </span>
+                    `);
     }
 
     $(document).on("click", "#saveExitingMgBtn", function () {
       @* selectedExistingModifiers = []; *@
 
-      $(".modifierItemCheckBox:checked").each(function () {
-        var id = $(this).data("mg-item-id");
-        var name = $(this).data("mg-item-name");
+        $(".modifierItemCheckBox:checked").each(function () {
+          var id = $(this).data("mg-item-id");
+          var name = $(this).data("mg-item-name");
 
-        if (selectedExistingModifiers.indexOf(Number(id)) == -1) {
-          selectedExistingModifiers.push({ModifierItemId:Number(id)});
-          AppendModifiers(id, name);
-        }
+          if (selectedExistingModifiers.indexOf(Number(id)) == -1) {
+            selectedExistingModifiers.push({ ModifierItemId: Number(id) });
+            AppendModifiers(id, name);
+          }
 
-      })
+        })
     })
 
     $(document).on("click", "#submitMgBtn", function () {
       $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
       $("#submitModifierGroupForm").off('submit').submit();
     })
-    
+
 
     // Handle Delete Modifier Group Confirmation Click
-    $(document).on("click", '.deleteModifierGroupBtn',function () {
+    $(document).on("click", '.deleteModifierGroupBtn', function () {
       let modifierGroupId = $(this).data("mgid");
       $("#confirmMGDeleteBtn").on("click", function () {
         if (modifierGroupId) {
@@ -861,5 +869,30 @@
       $("span").remove(".existModifiers[data-mgitemid='" + removeteModifierItemID + "']");
     });
 
+  </script>
+
+  <!-- ----------------------------------------------------------- Modifier Items Add Edit Javascript--------------------------------------------------------->
+
+  <script>
+    function loadModifierItemModal(id) {
+      $.ajax({
+        url: '@Url.Action("SaveModifier", "Menu")',
+        type: "GET",
+        data: { id: id },
+        dataType: "html",
+        success: function (data) {
+          $("#addModifierModalContent").html(data);
+          $('#modifierSelect').val(modifierGroupId);
+        },
+        error: function () {
+          $("#addModifierModalContent").html('Try Again');
+        }
+      })
+    }
+
+
+    $(document).on("click", "#newModifierBtn", function () {
+      loadModifierItemModal(0);
+    })
   </script>
 }

@@ -350,6 +350,75 @@ public class ModifiersRepository : IModifiersRepository
             return false;
         }
     }
+
+
+    #region Modifier Item CRUD
+    public async Task<string> AddModifierItemAsync(AddEditModifierViewModel model, long userId)
+    {
+        Modifieritem? existingModifier = await _context.Modifieritems.Where(mi => mi.Id == model.ModifierItemId && !mi.Isdeleted).FirstOrDefaultAsync();
+        if (existingModifier != null && existingModifier.Isdeleted == false)
+        {
+            return $"{model.Name} Modifier already exist! ";
+        }
+        if (existingModifier != null && existingModifier.Isdeleted == true)
+        {
+            existingModifier.Name = string.Concat(existingModifier.Name, DateTime.Now);
+            _context.Modifieritems.Update(existingModifier);
+            await _context.SaveChangesAsync();
+        }
+
+        try
+        {
+            Modifieritem modifierItem = new Modifieritem
+            {
+                ModifierGroupId = model.ModifierGroupId,
+                Name = model.Name,
+                Description = model.Description,
+                Rate = model.Rate,
+                Quantity = model.Quantity,
+                Unitid = model.UnitId,
+                CreatedAt = DateTime.Now,
+                CreatedBy = userId
+            };
+
+            _context.Modifieritems.Add(modifierItem);
+            await _context.SaveChangesAsync();
+
+            await SaveModifierItem(modifierItem.Id, model.ModifierGroupId, userId);
+            return "true";
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error In Category Repository :", ex.Message);
+            return "Error Adding Modifier";
+        }
+    }
+
+    public async Task SaveModifierItem(long modifierId, long modifierGroupId, long userId)
+    {
+        Modifiergroupitemmap? existingOne = await _context.Modifiergroupitemmaps
+                                            .Where(im => im.ModifierGroupId == modifierGroupId && im.ModifierItemId == modifierId && !im.Isdeleted)
+                                            .FirstOrDefaultAsync();
+
+        if (existingOne != null)
+        {
+            return;
+        }
+
+        //If Existing Item is Not Found
+        Modifiergroupitemmap modifiergroupitemmap = new Modifiergroupitemmap{
+            ModifierGroupId = modifierGroupId,
+            ModifierItemId = modifierId,
+            CreatedBy = userId,
+            CreatedAt = DateTime.Now,
+
+        };
+         _context.Modifiergroupitemmaps.Add(modifiergroupitemmap);
+         await _context.SaveChangesAsync();
+
+    }
+    #endregion
 }
 
 

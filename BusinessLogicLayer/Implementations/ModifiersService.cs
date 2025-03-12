@@ -27,7 +27,7 @@ public class ModifiersService : IModifiersService
         });
     }
 
-    
+
 
     public Task<List<ItemModifierGroupListViewModel>> GetAllModifierItemById(long itemId)
     {
@@ -47,7 +47,7 @@ public class ModifiersService : IModifiersService
     public async Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
     {
         ModifierItemListViewModel model = new() { Page = new() };
-        var modifierItemData = await _modifiersRepository.GetModifierItemAsync(modifierGroupId, pageNo, pageSize, search);;
+        var modifierItemData = await _modifiersRepository.GetModifierItemAsync(modifierGroupId, pageNo, pageSize, search); ;
 
         model.ModifierItemList = modifierItemData.modifierItems;
         model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
@@ -61,7 +61,7 @@ public class ModifiersService : IModifiersService
 
     public async Task<string> AddModifier(ModifierGroupViewModel model, long userId)
     {
-      if(model == null)
+        if (model == null)
         {
             return "Model is Empty";
         }
@@ -70,7 +70,7 @@ public class ModifiersService : IModifiersService
 
     public async Task<string> EditModifier(ModifierGroupViewModel model, long userId)
     {
-       if(model == null)
+        if (model == null)
         {
             return "Model is Empty";
         }
@@ -84,18 +84,30 @@ public class ModifiersService : IModifiersService
 
     public async Task<bool> DeleteModifier(long modifierGroupId, string userName)
     {
-        if(modifierGroupId == -1 || modifierGroupId == null)
+        if (modifierGroupId == -1 || modifierGroupId == null)
         {
             return false;
         }
 
         User user = await _userRepository.GetUserByUserName(userName);
-        if(user == null)
+        if (user == null)
         {
             return false;
         }
 
         return await _modifiersRepository.DeleteModifierGroupAsync(modifierGroupId, user.Id);
     }
+
+
+    #region Modifier Item CRUD
+    public async Task<string> AddModifierItem(AddEditModifierViewModel model, long userId)
+    {
+        if (model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _modifiersRepository.AddModifierItemAsync(model, userId);
+    }
+    #endregion
 
 }
