@@ -509,6 +509,42 @@ public class ModifiersRepository : IModifiersRepository
         return model;
     }
 
+    public async Task<bool> DeleteModifierItemAsync(long modifierId, long userId)
+    {
+        Modifieritem? modifierItem = _context.Modifieritems.Where(c => c.Id != modifierId && !c.Isdeleted).FirstOrDefault();
+        List<Modifiergroupitemmap> modifierGroupItems = _context.Modifiergroupitemmaps.Where(i => i.ModifierItemId == modifierId && !i.Isdeleted).ToList();
+        if (modifierItem == null)
+        {
+            return false;
+        }
+        try
+        {
+            //For Cascade Soft Deleting the Items with Category
+            if (modifierGroupItems != null)
+            {
+                foreach (var item in modifierGroupItems)
+                {
+                    item.Isdeleted = true;
+                    item.UpdatedAt = DateTime.Now;
+                    item.UpdatedBy = userId;
+                    _context.Modifiergroupitemmaps.Update(item);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            modifierItem.Isdeleted = true;
+            modifierItem.UpdatedBy = userId;
+            modifierItem.UpdatedAt = DateTime.Now;
+            _context.Modifieritems.Update(modifierItem);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error Deleting Modifier", ex.Message);
+            return false;
+        }
+    }
+
     #endregion
 }
 

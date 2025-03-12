@@ -271,7 +271,7 @@
 </div>
 
 
-<!-- Delete Categoty Modal -->
+<!-- Delete Modifier Group Modal -->
 <div class="modal fade" tabindex="-1" id="deleteModifierGroupModal" aria-labelledby="modal-title">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -302,6 +302,31 @@
     </div>
   </div>
 </div>
+
+<!-- Delete Modifier Item Modal -->
+<div class="modal fade" tabindex="-1" id="deleteModifierModal" aria-labelledby="modal-title">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bolder text-muted">
+          Delete Confirmation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="~/images/icons/warning-icon.svg" alt="" width="35px" />
+        <p class="fs-5 fw-bold text-muted">
+          Are you sure you want to delete this Modifier?
+        </p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary delteModifierModalBtn" id="confirmModifierDeleteBtn">Yes</button>
+        <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -897,6 +922,37 @@
 
     $(document).on("click", '.modifierEditBtn', function () {
       loadModifierItemModal($(this).data("mg-item-id"));
+    });
+  </script>
+
+  <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->
+  
+  <script>
+    $(document).on("click", ".modifierDeleteBtn", function () {
+      modifierId = $(this).data("mg-item-id");
+      $("#confirmModifierDeleteBtn").on("click", function () {
+        if (modifierId) {
+          $.ajax({
+            url: "/Menu/DeleteModifier",
+            type: "POST",
+            data: { id: modifierId },
+            success: function (response) {
+              if (response.success) {
+                $("#deleteModifierModal").modal("hide");
+                toastr.success(response.message);
+                setTimeout(function () {
+                  location.reload(); // Refresh Category list
+                }, 3000);
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      });
     });
   </script>
 }

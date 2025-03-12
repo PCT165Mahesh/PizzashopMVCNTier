@@ -84,7 +84,7 @@ public class ModifiersService : IModifiersService
 
     public async Task<bool> DeleteModifier(long modifierGroupId, string userName)
     {
-        if (modifierGroupId == -1 || modifierGroupId == null)
+        if (modifierGroupId == 0 || modifierGroupId == null)
         {
             return false;
         }
@@ -121,6 +121,23 @@ public class ModifiersService : IModifiersService
     {
         return await _modifiersRepository.GetModifierByIdAsync(modifierId);
     }
+
+    public async Task<bool> DeleteModifierItem(long modifierId, string userName)
+    {
+        if (modifierId == 0 || modifierId == null)
+        {
+            return false;
+        }
+
+        User user = await _userRepository.GetUserByUserName(userName);
+        if (user == null)
+        {
+            return false;
+        }
+
+        return await _modifiersRepository.DeleteModifierItemAsync(modifierId, user.Id);
+    }
+
     #endregion
 
 

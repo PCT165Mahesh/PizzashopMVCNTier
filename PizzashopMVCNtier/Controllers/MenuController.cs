@@ -317,11 +317,11 @@ public class MenuController : Controller
         bool result = await _modifiersService.DeleteModifier(id, userName);
         if (result)
         {
-            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier") });
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier Group") });
         }
         else
         {
-            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier") });
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier group") });
         }
     }
     #endregion
@@ -382,6 +382,23 @@ public class MenuController : Controller
             TempData["NotificationType"] = NotificationType.Error.ToString();
         }
         return RedirectToAction("Index", "Menu");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteModifier(long id)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _modifiersService.DeleteModifierItem(id, userName);
+        if (result)
+        {
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier") });
+        }
+        else
+        {
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier") });
+        }
     }
     #endregion
 
