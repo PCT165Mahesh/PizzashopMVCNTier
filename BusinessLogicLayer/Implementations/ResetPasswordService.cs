@@ -22,8 +22,6 @@ public class ResetPasswordService : IResetPasswordService
     /*-------------------------------------------------------------------------------------------------------------Reset Password Service Implementation
     -----------------------------------------------------------------------------------------------------------------------------------------*/
 
-    
-
     #region  Reset Password
     public async Task<bool> ResetPassword(string password, string newPassword, string token)
     {

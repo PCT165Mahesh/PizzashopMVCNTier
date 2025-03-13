@@ -16,6 +16,10 @@ public class ModifiersService : IModifiersService
         _modifiersRepository = modifiersRepository;
         _userRepository = userRepository;
     }
+
+    /*---------------------------------------------------------------------------Modifier GROUP CRUD------------------------------------------------------------------------------*/
+
+    #region Modifier Group CRUD
     public IEnumerable<ModifierGroupViewModel> GetAllModifierGroup()
     {
         IEnumerable<Modifiergroup> modifiergroups = _modifiersRepository.GetAllModifierGroup();
@@ -26,37 +30,9 @@ public class ModifiersService : IModifiersService
             Description = m.Description
         });
     }
-
-
-
-    public Task<List<ItemModifierGroupListViewModel>> GetAllModifierItemById(long itemId)
+    public async Task<ModifierGroupViewModel> GetModifierGroupById(long modifierId)
     {
-        return _modifiersRepository.GetModifierItemByItemId(itemId);
-    }
-
-    public async Task<ModifierItemListViewModel> GetAllModfierItems(int pageNo = 1, int pageSize = 3, string search = "")
-    {
-        ModifierItemListViewModel model = new() { Page = new() };
-        var modifierItemData = await _modifiersRepository.GetAllModifierItemAsync(pageNo, pageSize, search);
-        model.ModifierItemList = modifierItemData.modifierItems;
-        model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
-        return model;
-    }
-
-
-    public async Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
-    {
-        ModifierItemListViewModel model = new() { Page = new() };
-        var modifierItemData = await _modifiersRepository.GetModifierItemAsync(modifierGroupId, pageNo, pageSize, search); ;
-
-        model.ModifierItemList = modifierItemData.modifierItems;
-        model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
-        return model;
-    }
-
-    public async Task<ModifierGroupViewModel> GetModifierItemById(long modifierId)
-    {
-        return await _modifiersRepository.GetModifierItemByIdAsync(modifierId);
+        return await _modifiersRepository.GetModifierGroupByIdAsync(modifierId);
     }
 
     public async Task<string> AddModifier(ModifierGroupViewModel model, long userId)
@@ -77,10 +53,7 @@ public class ModifiersService : IModifiersService
         return await _modifiersRepository.EditModifierAsync(model, userId);
     }
 
-    public async Task<ModifierGroupViewModel> GetModifierGroupById(long modifierId)
-    {
-        return await _modifiersRepository.GetModifierGroupByIdAsync(modifierId);
-    }
+    
 
     public async Task<bool> DeleteModifier(long modifierGroupId, string userName)
     {
@@ -98,8 +71,30 @@ public class ModifiersService : IModifiersService
         return await _modifiersRepository.DeleteModifierGroupAsync(modifierGroupId, user.Id);
     }
 
+    #endregion
 
-    #region Modifier Item CRUD
+    /*---------------------------------------------------------------------------Modifier Items CRUD------------------------------------------------------------------------------*/
+
+    #region Modifier Items CRUD
+    public Task<List<ItemModifierGroupListViewModel>> GetAllModifierItemById(long itemId)
+    {
+        return _modifiersRepository.GetModifierItemByItemId(itemId);
+    }
+    public async Task<ModifierGroupViewModel> GetModifierItemById(long modifierId)
+    {
+        return await _modifiersRepository.GetModifierItemByIdAsync(modifierId);
+    }
+
+    public async Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        ModifierItemListViewModel model = new() { Page = new() };
+        var modifierItemData = await _modifiersRepository.GetModifierItemAsync(modifierGroupId, pageNo, pageSize, search); ;
+
+        model.ModifierItemList = modifierItemData.modifierItems;
+        model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
+        return model;
+    }
+
     public async Task<string> AddModifierItem(AddEditModifierViewModel model, long userId)
     {
         if (model == null)
@@ -139,6 +134,17 @@ public class ModifiersService : IModifiersService
     }
 
     #endregion
+    
+    /*---------------------------------------------------------------------------Pagination Modal Modifeir Item CRUD------------------------------------------------------------------------------*/
 
-
+    #region Modifier Item For Modal Pagination
+    public async Task<ModifierItemListViewModel> GetAllModfierItems(int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        ModifierItemListViewModel model = new() { Page = new() };
+        var modifierItemData = await _modifiersRepository.GetAllModifierItemAsync(pageNo, pageSize, search);
+        model.ModifierItemList = modifierItemData.modifierItems;
+        model.Page.SetPagination(modifierItemData.totalRecords, pageSize, pageNo);
+        return model;
+    }
+    #endregion
 }

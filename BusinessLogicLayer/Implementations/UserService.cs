@@ -59,7 +59,6 @@ public class UserService : IUserService
 
     #endregion
 
-
     #region Add User Service
     public async Task<(string message, bool result)> AddUserAsync(AddUserViewModel model, string userName)
     {
@@ -89,7 +88,6 @@ public class UserService : IUserService
 
     #endregion
 
-
     #region Update User Service
     public async Task<(string message, bool result)> UpdateUserAsync(EditUserViewModel model, string userName)
     {
@@ -101,7 +99,6 @@ public class UserService : IUserService
         return await _userRepository.EditUserAsync(model, user, admin.Id);
     }
     #endregion
-
 
     #region Delete User Service
     public async Task<bool> DeleteUserAsync(long id, string adminName)

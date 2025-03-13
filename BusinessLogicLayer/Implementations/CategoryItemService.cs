@@ -118,8 +118,7 @@ public class CategoryItemService : ICategoryItemService
 
     #endregion
 
-    #region Items CRUD
-
+    #region Get Items
     public async Task<AdditemViewModel> GetItemByID(long id)
     {
         Item item = await _categoryItemRepository.GetItemByIdAsync(id);
@@ -144,6 +143,9 @@ public class CategoryItemService : ICategoryItemService
 
         return model;
     }
+    #endregion
+
+    #region ADD : Item
     public async Task<string> AddItem(AdditemViewModel model, long userId)
     {
         if(model == null)
@@ -152,7 +154,9 @@ public class CategoryItemService : ICategoryItemService
         }
         return await _categoryItemRepository.AddItemAsync(model, userId);
     }
+    #endregion
 
+   #region EDIT : Item
     public async Task<string> EditItem(AdditemViewModel model, long userId)
     {
         if(model == null)
@@ -161,7 +165,9 @@ public class CategoryItemService : ICategoryItemService
         }
         return await _categoryItemRepository.EditItemAsync(model, userId);
     }
+    #endregion
 
+    #region DELETE : Item
     public async Task<bool> DeleteItem(long id, string userName)
     {
         if(id == 0)
@@ -177,7 +183,9 @@ public class CategoryItemService : ICategoryItemService
 
         return await _categoryItemRepository.DeleteItemAsync(id, user.Id);
     }
+    #endregion
 
+    #region DELETE : Mass Delete Items
     public async Task<bool> DeleteSelectedItems(List<long> id, string userName)
     {
         if(id.IsNullOrEmpty())
@@ -201,5 +209,4 @@ public class CategoryItemService : ICategoryItemService
         return result;
     }
     #endregion
-
 }

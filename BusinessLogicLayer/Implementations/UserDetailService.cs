@@ -63,7 +63,6 @@ public class UserDetailService : IUserDetailService
 
     #endregion
 
-
     #region Profile Data Service
     public async Task<ProfileDataViewModel> GetProfileData(string email)
     {
@@ -115,7 +114,6 @@ public class UserDetailService : IUserDetailService
         return -1;
     }
     #endregion
-
 
     #region Update Profile Data Service
     public async Task<(string message, bool result)> UpdateUserProfileData(ProfileDataViewModel model, string email)

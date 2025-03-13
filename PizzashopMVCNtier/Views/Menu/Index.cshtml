@@ -754,7 +754,7 @@
 
 
 
-  <!-- ----------------------------------------------------------- Load Modifier Item In Modifier Tab Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Load Existing Modifier Item In Modifier Modal Javascript--------------------------------------------------------->
 
   <script>
     function LoadModifierItem(currentPage) {
@@ -769,6 +769,7 @@
         dataType: "html",
         success: function (data) {
           $("#existingModifierModalContent").html(data);
+          checkBoxModifierItemInModal();
         },
         error: function () {
           console.log("No Projects Found");
@@ -850,6 +851,12 @@
 
         })
     })
+
+    function checkBoxModifierItemInModal(){
+      $.each(selectedExistingModifiers, function(index,id){
+        $('.modifierItemCheckBox[data-mg-item-id="' + id.ModifierItemId + '"]').prop("checked",true);
+      });
+    }
 
     $(document).on("click", "#submitMgBtn", function () {
       $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
