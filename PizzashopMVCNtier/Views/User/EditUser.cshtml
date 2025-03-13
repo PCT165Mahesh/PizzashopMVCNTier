@@ -204,6 +204,18 @@
           }
         })
 
+        //Phone Number Validation (Must be 10 Digits)
+        let phoneNumber = $("#phone").val().trim();
+        if (phoneNumber === "" || phoneNumber === "0" || !/^\d{10}$/.test(phoneNumber)) {
+            $("#phone").addClass("is-invalid");
+            $("#phone").next(".invalid-feedback").remove();
+            $("#phone").after('<div class="invalid-feedback">Phone number must be exactly 10 digits</div>');
+            isValid = false;
+        } else {
+            $("#phone").removeClass("is-invalid");
+            $("#phone").next(".invalid-feedback").remove();
+        }
+
 
         // Zipcode Validation (Must Not Be Empty or 0)
         let zipcode = $("#zipcode").val().trim();
