@@ -511,7 +511,7 @@ public class ModifiersRepository : IModifiersRepository
 
     public async Task<bool> DeleteModifierItemAsync(long modifierId, long userId)
     {
-        Modifieritem? modifierItem = _context.Modifieritems.Where(c => c.Id != modifierId && !c.Isdeleted).FirstOrDefault();
+        Modifieritem? modifierItem = _context.Modifieritems.Where(mi => mi.Id == modifierId && !mi.Isdeleted).FirstOrDefault();
         List<Modifiergroupitemmap> modifierGroupItems = _context.Modifiergroupitemmaps.Where(i => i.ModifierItemId == modifierId && !i.Isdeleted).ToList();
         if (modifierItem == null)
         {

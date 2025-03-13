@@ -36,6 +36,7 @@ builder.Services.AddScoped<IRolePermissionsRepository, RolePermissionsRepository
 builder.Services.AddScoped<ICategoryItemRepository, CategoryItemRepository>();
 builder.Services.AddScoped<IModifiersRepository, ModifiersRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<ITableSectionRepository, TableSectionRepository>();
 
 
 
@@ -52,6 +53,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<ICategoryItemService, CategoryItemService>();
 builder.Services.AddScoped<IModifiersService, ModifiersService>();
+builder.Services.AddScoped<ITableSectionService, TableSectionService>();
 
 
 builder.Services.AddSession(options =>

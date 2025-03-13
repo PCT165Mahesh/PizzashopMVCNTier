@@ -468,6 +468,29 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   opacity: 0.5;
 }
 
+
+
+/* Tables and Sections CSS */
+.table_status{
+  max-width: 122px;
+  border-radius: 20px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 15px;
+}
+
+.occupied_status{
+  background-color: #6c757d;
+}
+
+.available_status{
+  background-color: #44cf72;
+}
+
+.center-text{
+  text-align: center;
+}
+
  
 
 /* Media Query */

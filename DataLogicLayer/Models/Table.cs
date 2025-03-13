@@ -13,7 +13,7 @@ public partial class Table
 
     public int Capacity { get; set; }
 
-    public long TableStatus { get; set; }
+    public long? TableStatus { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -25,6 +25,8 @@ public partial class Table
 
     public bool Isdeleted { get; set; }
 
+    public bool IsOccupied { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual ICollection<Orderitemsmodifier> Orderitemsmodifiers { get; set; } = new List<Orderitemsmodifier>();
@@ -33,7 +35,7 @@ public partial class Table
 
     public virtual Section Section { get; set; } = null!;
 
-    public virtual TableStatus TableStatusNavigation { get; set; } = null!;
+    public virtual TableStatus? TableStatusNavigation { get; set; }
 
     public virtual User? UpdatedByNavigation { get; set; }
 }

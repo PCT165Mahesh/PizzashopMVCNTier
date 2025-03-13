@@ -1,0 +1,148 @@
+@model IEnumerable<DataLogicLayer.ViewModels.SectionViewModel>
+@{
+    ViewData["Title"] = "Table And Sections Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body_content">
+    <!-- Header Menu -->
+  <div class="d-flex flex-row justify-content-between user_list_header">
+    <!-- Menu Header -->
+    <div class="user_header fs-2 fs-lg-1">
+      <span>Sections/Tables</span>
+    </div>
+  </div>
+  <!-- Tabs For Sections -->
+  <ul class="nav nav-tabs bg-white mb-3" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active ms-3 fs-5 tab_btn" id="home-tab" data-bs-toggle="tab"
+        data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+        <img src="~/images/icons/list-check.svg" alt="" class="pe-2" width="30px" />Sections
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content bg-white" id="pills-tabContent">
+    <div class="tab-pane fade show active p-0" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+      tabindex="0">
+      <div class="container-fluid d-flex flex-column flex-lg-row p-0">
+    <div class="fs-5 category_part">
+        <!-- Tab Content Part 2 -->
+        <div class="d-flex justify-content-between mb-4">
+            <h4 class="heading_color fw-bold">Sections</h4>
+            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#modifierModal" id="modifierGroupAddModalBtn">
+                <img src="~/images/icons/plus-square.svg" alt="" width="30px" />
+            </button>
+        </div>
+
+        <!-- Modifier List Starts -->
+        <div class="category_list">
+            <ul class="p-0" id="table_listUl">
+                @foreach (var sections in Model)
+                {
+                    <li class="section-list-items pb-3 d-flex align-items-center justify-content-between">
+                        <div>
+                            <img src="~/images/icons/grid-3x2.svg" alt="" class="item-grid" />
+                            <a data-sectionid="@sections.SectionID">@sections.Name</a>
+                        </div>
+                        <div class="editDeleteBtn d-flex">
+                            <button class="btn user_action p-0 me-1 editSectionGroupBtn" id="editButton" data-sectionid="@sections.SectionID"
+                                data-bs-toggle="modal" data-bs-target="#modifierModal">
+                                <img src="/images/icons/edit-pen.svg" alt="" />
+                            </button>
+                            <button class="btn user_action user_action_delete deleteSectionBtn p-0 me-1" id="confirmDeleteSection"
+                                data-sectionid="@sections.SectionID" data-bs-toggle="modal" data-bs-target="#deleteSectionModal">
+                                <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                            </button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modifiers Section -->
+    <div class="w-100 table-responsive">
+        <p class="heading_color fs-4 fw-bold ms-2">Tables</p>
+        <div class="items_header_buttons d-flex justify-content-end me-3">
+            <div class="d-flex flex-row">
+                <form class="d-flex position-relative" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" id="tableSearch"
+                        aria-label="Search" />
+                    <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                            alt="" /></label>
+                </form>
+                <button class="btn border border-black me-2">
+                    <img src="~/images/icons/delete-trash-icon.svg" alt="" />
+                </button>
+            </div>
+            <button type="button" id="newTableBtn" class="btn add_user_btn" data-bs-target="#addTable" data-bs-toggle="modal">
+                <a  class="text-white text-decoration-none">New Table</a>
+            </button>
+        </div>
+
+
+        <!-- Table For Modifier Items Data -->
+        <div id="sectionTableContent">
+            
+        </div>
+
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+
+    <!-- Category selection Javascript-->
+  <script>
+    $(document).ready(function () {
+      var sectionId = $('#table_listUl li:first>div>a').data("sectionid");
+      $('#table_listUl li:first>div>a').addClass("category_active");
+      loadTablesAjax(1);
+    });
+
+    $('.section-list-items>div>a').on("click", function () {
+      $('.section-list-items').each(function () {
+        $('.section-list-items>div>a').removeClass("category_active");
+      });
+      sectionId = $(this).data("sectionid");
+      $(this).addClass("category_active");
+      loadTablesAjax(1);
+    })
+    </script>
+
+    <!-- Items  Display With Pagination Javascript-->
+  <script>
+    function loadTablesAjax(currentPage) {
+      let pageSize = $('#tablePageSize').val();
+      let searchQuery = $('#tableSearch').val();
+      sectionId = $('.category_active').data("sectionid");
+      if (pageSize == 0 || pageSize == null) pageSize = 3;
+      if (searchQuery == null) searchQuery = "";
+      $.ajax({
+        url: '@Url.Action("GetTableList", "TableAndSection")',
+        type: "GET",
+        data: { sectionId: sectionId, pageNo: currentPage, pageSize: pageSize, search: searchQuery },
+        dataType: "html",
+        success: function (data) {
+          $("#sectionTableContent").html(data);
+        },
+        error: function () {
+          console.log("No Table Found");
+          $("#sectionTableContent").html('No Table Fetched');
+        }
+      })
+    }
+
+    //Items Display With Search Javascript
+
+    $("#tableSearch").on("input", function () {
+      currentPage = 1;
+      loadTablesAjax(currentPage);
+    });
+  </script>
+}

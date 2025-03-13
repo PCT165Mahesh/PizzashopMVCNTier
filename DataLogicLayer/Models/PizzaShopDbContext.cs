@@ -1018,7 +1018,6 @@ public partial class PizzaShopDbContext : DbContext
 
             entity.HasOne(d => d.TableStatusNavigation).WithMany(p => p.Tables)
                 .HasForeignKey(d => d.TableStatus)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("tables_table_status_fkey");
 
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.TableUpdatedByNavigations)
