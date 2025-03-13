@@ -21,6 +21,9 @@ public class TableAndSectionController : Controller
         _userDetailService = userDetailService;
     }
 
+/*---------------------------------------------------------------------------Sectoin and Table List------------------------------------------------------------------------------*/
+
+    #region Section and Table List   
     public async Task<IActionResult> Index()
     {
         IEnumerable<SectionViewModel> model = await _tableSectionService.GetSectionsList();
@@ -32,8 +35,11 @@ public class TableAndSectionController : Controller
     {
         return PartialView("_tablesList", await _tableSectionService.GetTableList(sectionId, pageNo, pageSize, search));
     }
+    #endregion
 
+/*---------------------------------------------------------------------------Sections CRUD------------------------------------------------------------------------------*/
 
+    #region Add/Edit Section
     [HttpGet]
     public async Task<IActionResult> SaveSection(long sectionId)
     {
@@ -90,7 +96,9 @@ public class TableAndSectionController : Controller
         }
         return RedirectToAction("Index", "TableAndSection");
     }
+    #endregion
 
+    #region Delete Section
     [HttpPost]
     public async Task<IActionResult> DeleteSection(long sectionId)
     {
@@ -107,4 +115,5 @@ public class TableAndSectionController : Controller
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Section") });
         }
     }
+    #endregion
 }

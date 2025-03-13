@@ -18,7 +18,23 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     }
 
-    #region Data Fetch for Category
+    /*---------------------------------------------------------------------------Items, Unit List------------------------------------------------------------------------------*/
+
+    #region Get Item, Unit and Item Type
+    public List<Itemtype> GetAllItemType()
+    {
+        return _context.Itemtypes.ToList();
+    }
+
+    public List<Unit> GetAllUnit()
+    {
+        return _context.Units.ToList();
+    }
+
+    #endregion
+    /*---------------------------------------------------------------------------Category CRUD------------------------------------------------------------------------------*/
+    
+    #region Get Categories
     public List<Category> GetAllCategories()
     {
         return _context.Categories.Where(c => !c.Isdeleted).ToList();
@@ -70,21 +86,7 @@ public class CategoryItemRepository : ICategoryItemRepository
     }
     #endregion
 
-    #region Data fetch for Item, Unit and Item Type
-    public List<Itemtype> GetAllItemType()
-    {
-        return _context.Itemtypes.ToList();
-    }
-
-    public List<Unit> GetAllUnit()
-    {
-        return _context.Units.ToList();
-    }
-
-    #endregion
-
-    #region CRUD For Category
-
+    #region ADD : Category
     public async Task<bool> AddCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -106,6 +108,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+    #endregion
+
+    #region EDIT : Category
     public async Task<bool> EditCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -134,7 +139,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+    #endregion
 
+    #region DELETE : Category
     public async Task<bool> DeleteCategoryAsync(long categoryId, long userId)
     {
         Category category = _context.Categories.Where(c => c.CategoryId == categoryId && !c.Isdeleted).FirstOrDefault();
@@ -172,13 +179,17 @@ public class CategoryItemRepository : ICategoryItemRepository
     }
     #endregion
 
-    #region CRUD For Items
+    /*---------------------------------------------------------------------------Items CRUD------------------------------------------------------------------------------*/
 
+    #region Get Items
     public async Task<Item> GetItemByIdAsync(long id)
     {
         Item? item = await _context.Items.Where(i => i.ItemId == id && !i.Isdeleted).FirstOrDefaultAsync();
         return item;    
     }
+    #endregion
+
+    #region ADD : Items
     public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
         Item? oldItem = await _context.Items.Where(i => i.Name == model.Name && !i.Isdeleted && i.ItemId != model.ItemId).FirstOrDefaultAsync();
@@ -249,7 +260,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return "Error Adding Item";
         }
     }
+    #endregion
 
+    #region EDIT : Items
     public async Task<string> EditItemAsync(AdditemViewModel model, long userId)
     {
         Item? item = await _context.Items.Where(i => i.ItemId == model.ItemId).FirstOrDefaultAsync();
@@ -323,7 +336,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return "Error Updating Item";
         }
     }
+    #endregion
 
+    #region DELETE : Items
     public async Task<bool> DeleteItemAsync(long id, long userId)
     {
         Item item = await _context.Items.Where(i => i.ItemId == id).FirstOrDefaultAsync();
@@ -347,6 +362,9 @@ public class CategoryItemRepository : ICategoryItemRepository
     }
     #endregion
 
+    /*---------------------------------------------------------------------------Add Item Modifiers CRUD------------------------------------------------------------------------------*/
+
+    #region ADD : Modifers In Mapping Tabble
     public async Task<bool> AddItemModifier(long itemId, List<ItemModifierGroupListViewModel> itemModifierList, long userId)
     {
         List<long> exisingModifierIds = await _context.Itemmodifiergroups
@@ -405,7 +423,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+    #endregion
 
+    #region DELETE : Modifers In Mapping Tabble
     public async Task<bool> DeleteSelectModifierGroups(long Itemid,long id, long userId)
     {
         try
@@ -433,4 +453,5 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
+    #endregion
 }

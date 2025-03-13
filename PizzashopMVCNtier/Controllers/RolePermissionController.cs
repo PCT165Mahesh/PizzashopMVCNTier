@@ -25,6 +25,8 @@ public class RolePermissionController :Controller
 
     }
 
+/*---------------------------------------------------------------------------Role List------------------------------------------------------------------------------*/
+
     #region Role List
     [HttpGet]
     public async Task<IActionResult> Role(){
@@ -66,5 +68,4 @@ public class RolePermissionController :Controller
         return View(model);
     }
     #endregion
-    
 }

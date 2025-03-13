@@ -15,6 +15,29 @@ public class RolePermissionsRepository : IRolePermissionsRepository
 
     }
 
+    /*---------------------------------------------------------------------------Get Role and Permissions Method Implementation
+    -------------------------------------------------------------------------------------------------------*/
+    public List<PermissionsViewModel> GetRoleAndPermissions(long roleId)
+    {
+        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
+        List<PermissionsViewModel> model = new List<PermissionsViewModel>();
+        
+        foreach(Rolesandpermission perm in permissions){
+            model.Add(
+                new PermissionsViewModel(){
+                    PermissionId = perm.Permissionid,
+                    PermissionName = perm.Permission.Name,
+                    View = perm.Canview,
+                    AddOrEdit = perm.Canaddedit,
+                    Delete = perm.Candelete
+                }
+            );
+        }
+        return model;
+    }
+    /*---------------------------------------------------------------------------Edit Permissions Method Implementation
+    -------------------------------------------------------------------------------------------------------*/
+
     public async Task<bool> EditPermission(long roleId, List<PermissionsViewModel> PermissionList, long userId)
     {
        
@@ -40,25 +63,5 @@ public class RolePermissionsRepository : IRolePermissionsRepository
         await _context.SaveChangesAsync();
        }
         return true;
-    }
-
-
-    public List<PermissionsViewModel> GetRoleAndPermissions(long roleId)
-    {
-        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
-        List<PermissionsViewModel> model = new List<PermissionsViewModel>();
-        
-        foreach(Rolesandpermission perm in permissions){
-            model.Add(
-                new PermissionsViewModel(){
-                    PermissionId = perm.Permissionid,
-                    PermissionName = perm.Permission.Name,
-                    View = perm.Canview,
-                    AddOrEdit = perm.Canaddedit,
-                    Delete = perm.Candelete
-                }
-            );
-        }
-        return model;
     }
 }

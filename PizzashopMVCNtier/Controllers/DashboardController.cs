@@ -29,6 +29,7 @@ public class DashboardController : Controller
     }
 
 
+/*---------------------------------------------------------------------------Dashboard------------------------------------------------------------------------------*/
 
     #region Dashboard
     public IActionResult Index()
@@ -37,6 +38,8 @@ public class DashboardController : Controller
         return View();
     }
     #endregion
+
+/*---------------------------------------------------------------------------Profile Data------------------------------------------------------------------------------*/
 
     #region Profile Data
     [HttpGet]
@@ -71,6 +74,8 @@ public class DashboardController : Controller
 
     #endregion
 
+/*---------------------------------------------------------------------------Change Password------------------------------------------------------------------------------*/
+
     #region Change Password
     [HttpGet]
     public IActionResult ChangePassword()
@@ -103,6 +108,8 @@ public class DashboardController : Controller
     }
 
     #endregion
+
+/*---------------------------------------------------------------------------Country, State,City, Role List------------------------------------------------------------------------------*/
 
     #region Coutry, City, States, Roles
 

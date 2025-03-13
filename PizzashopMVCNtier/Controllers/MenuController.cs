@@ -27,6 +27,8 @@ public class MenuController : Controller
 
     }
 
+    /*---------------------------------------------------------------------------Menu Page Index------------------------------------------------------------------------------*/
+
     #region Menu Home Page
     [HttpGet]
     public IActionResult Index()
@@ -42,7 +44,16 @@ public class MenuController : Controller
     }
     #endregion
 
-    #region Save Categories
+    /*---------------------------------------------------------------------------Category CRUD---------------------------------------------------------------------------------*/
+
+    #region Get Categories
+    public IActionResult GetCategoryById(long id)
+    {
+        return Json(_categoryItemService.GetCategoryById(id));
+    }
+    #endregion
+
+    #region Add/Edit Categories
     [HttpPost]
     public async Task<IActionResult> SaveCategory(MenuViewModel model)
     {
@@ -102,8 +113,16 @@ public class MenuController : Controller
     }
     #endregion
 
-    #region Crud Item
+    /*---------------------------------------------------------------------------Items CRUD-----------------------------------------------------------------------------------*/
 
+    #region Get Items List
+    public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return PartialView("_itemsPartialView", await _categoryItemService.GetItemList(categoryId, pageNo, pageSize, search));
+    }
+    #endregion
+
+    #region Add/Edit Items
     [HttpGet]
     public async Task<IActionResult> SaveItem(long id)
     {
@@ -172,14 +191,9 @@ public class MenuController : Controller
         }
         return RedirectToAction("Index");
     }
+    #endregion
 
-    // ---------------------------------------------------- Add Item Modifier Select Group --------------------------------------------------------------//
-    [HttpGet]
-    public async Task<IActionResult> GetModifierItemById(long modifierId)
-    {
-        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierId));
-    }
-
+    #region Delete Item
     [HttpPost]
     public async Task<IActionResult> DeleteItem(long id)
     {
@@ -197,7 +211,10 @@ public class MenuController : Controller
         }
     }
 
-
+    
+    #endregion
+    
+    #region Mass Delte Item
     [HttpPost]
     public async Task<IActionResult> DeleteSelectedItems(List<long> id)
     {
@@ -214,41 +231,28 @@ public class MenuController : Controller
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Items") });
         }
     }
-
-
     #endregion
-
-    #region Items By Category
-    public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    
+    // -------------------------------------------------------------------- Add Item Modifier Select Group ------------------------------------------------------------------//
+    #region Modifier Item For Add Item
+    [HttpGet]
+    public async Task<IActionResult> GetModifierItemById(long modifierId)
     {
-        return PartialView("_itemsPartialView", await _categoryItemService.GetItemList(categoryId, pageNo, pageSize, search));
+        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierId));
     }
     #endregion
 
-    #region Category By Id
-    public IActionResult GetCategoryById(long id)
-    {
-        return Json(_categoryItemService.GetCategoryById(id));
-    }
-    #endregion
+    /*-----------------------------------------------------------------------Modifier Group CRUD------------------------------------------------------------------------------*/
 
-    #region Modifier Group CRUD
+    #region Get Modifier Group
     public IActionResult ModifiersTab()
     {
         IEnumerable<ModifierGroupViewModel> model = _modifiersService.GetAllModifierGroup();
         return PartialView("_modifiersTab", model);
     }
+    #endregion
 
-    public async Task<IActionResult> GetModifierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
-    {
-        return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
-    }
-
-    public async Task<IActionResult> GetAllModifierItems(int pageNo = 1, int pageSize = 3, string search = "")
-    {
-        return PartialView("_existingModifierList", await _modifiersService.GetAllModfierItems(pageNo, pageSize, search));
-    }
-
+    #region Add/Edit Modifier Group
     [HttpGet]
     public async Task<IActionResult> SaveModifierGroup(long id)
     {
@@ -306,8 +310,9 @@ public class MenuController : Controller
         }
         return RedirectToAction("Index", "Menu");
     }
+    #endregion
 
-
+    #region Delete Modifier Group
     [HttpPost]
     public async Task<IActionResult> DeleteModifierGroup(long id)
     {
@@ -326,7 +331,21 @@ public class MenuController : Controller
     }
     #endregion
 
-    #region Modifier Item CRUD
+    /*---------------------------------------------------------------------------Modifier Item CRUD------------------------------------------------------------------------------*/
+
+    #region Get Modifer Items
+    public async Task<IActionResult> GetModifierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
+    }
+
+    public async Task<IActionResult> GetAllModifierItems(int pageNo = 1, int pageSize = 3, string search = "")
+    {
+        return PartialView("_existingModifierList", await _modifiersService.GetAllModfierItems(pageNo, pageSize, search));
+    }
+    #endregion
+    
+    #region Add/Edit Modifer Item
     [HttpGet]
     public async Task<IActionResult> SaveModifier(long id)
     {
@@ -336,7 +355,7 @@ public class MenuController : Controller
         //Fetch the Item details for Edit Item Modal
         if (id > 0)
         {
-            model =await _modifiersService.GetModifierById(id);
+            model = await _modifiersService.GetModifierById(id);
         }
         model.UnitList = _categoryItemService.GetUnits();
         model.ModifierGroupList = _modifiersService.GetAllModifierGroup();
@@ -383,7 +402,9 @@ public class MenuController : Controller
         }
         return RedirectToAction("Index", "Menu");
     }
+    #endregion
 
+    #region Delete Modifier Item
     [HttpPost]
     public async Task<IActionResult> DeleteModifier(long id)
     {
@@ -401,5 +422,4 @@ public class MenuController : Controller
         }
     }
     #endregion
-
 }

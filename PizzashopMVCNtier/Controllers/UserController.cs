@@ -27,6 +27,7 @@ public class UserController : Controller
         _countryService = countryService;
     }
 
+/*---------------------------------------------------------------------------User List------------------------------------------------------------------------------*/
 
     #region User List
     [Authorize]
@@ -46,6 +47,8 @@ public class UserController : Controller
     }
 
     #endregion
+
+/*---------------------------------------------------------------------------User CRUD------------------------------------------------------------------------------*/
 
     #region Add User
     [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
@@ -143,6 +146,7 @@ public class UserController : Controller
     }
     #endregion
 
+    #region Populate List
     private async Task PopulateDropdownLists(EditUserViewModel model)
     {
         model.UserName = await _userDetailService.UsernameByEmail(model.Email);
@@ -151,5 +155,5 @@ public class UserController : Controller
         model.States = model.CountryId > 0 ? _countryService.GetStates(model.CountryId) : new List<State>();
         model.Cities = model.StateId > 0 ?  _countryService.GetCities(model.StateId) : new List<City>();
     }
-
+    #endregion
 }

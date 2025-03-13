@@ -14,12 +14,20 @@ public class TableSectionRepository : ITableSectionRepository
         _context = context;
 
     }
+    /*---------------------------------------------------------------------------Sections CRUD------------------------------------------------------------------------------*/
 
+    #region Get Sections List
     public async Task<Section> GetSectionByIdAsync(long sectionId)
     {
         return await _context.Sections.Where(s => s.SectionId == sectionId && !s.Isdeleted).FirstOrDefaultAsync();
     }
+    public Task<List<Section>> GetSectionsListAsync()
+    {
+        return _context.Sections.Where(s => !s.Isdeleted).ToListAsync();
+    }
+    #endregion
 
+    #region ADD : Section
     public async Task<string> AddSectionAsync(SectionViewModel model, long userId)
     {
         Section? existingSection = await _context.Sections.Where(s => s.Name == model.Name && s.SectionId != model.SectionID && !s.Isdeleted).FirstOrDefaultAsync();
@@ -55,7 +63,9 @@ public class TableSectionRepository : ITableSectionRepository
             return "Failed To Add Section";
         }
     }
+    #endregion
 
+    #region EDIT : Section
     public async Task<string> EditSectionAsync(SectionViewModel model, long userId)
     {
         try
@@ -93,7 +103,9 @@ public class TableSectionRepository : ITableSectionRepository
             return "Failed To Updated Section";
         }
     }
+    #endregion
 
+    #region DELETE : Section
     public async Task<bool> DeleteSectionAsync(long sectionId, long userId)
     {
         try
@@ -126,13 +138,9 @@ public class TableSectionRepository : ITableSectionRepository
         }
 
     }
+    #endregion
 
-
-    public Task<List<Section>> GetSectionsListAsync()
-    {
-        return _context.Sections.Where(s => !s.Isdeleted).ToListAsync();
-    }
-
+    #region Tables List
     public async Task<(List<TableViewModel> tables, int totalRecords)> GetTableListAsync(long sectionId, int pageNo, int pageSize, string search)
     {
         IQueryable<TableViewModel> query = _context.Tables
@@ -163,7 +171,6 @@ public class TableSectionRepository : ITableSectionRepository
                      .ToListAsync();
 
         return (tables, totalRecords);
-
     }
-
+    #endregion
 }

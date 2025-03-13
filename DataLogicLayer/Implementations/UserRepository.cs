@@ -18,7 +18,6 @@ public class UserRepository : IUserRepository
         _context = context;
 
     }
-
     #region Get User Implementations
     public async Task<User> GetUserByEmail(string email)
     {

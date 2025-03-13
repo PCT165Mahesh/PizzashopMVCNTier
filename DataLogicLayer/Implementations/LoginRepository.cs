@@ -15,6 +15,8 @@ public class LoginRepository : ILoginRepository
         _context = context;
 
     }
+
+    #region RESET password Token CRUD
     public async Task<string> GetEmailFromToken(string token)
     {
         ResetPasswordToken? resetToken = await _context.ResetPasswordTokens.Where(r => r.Token == token && !r.IsUsed).FirstOrDefaultAsync();
@@ -64,5 +66,5 @@ public class LoginRepository : ILoginRepository
         }
         return "Link Expired";
     }
-
+    #endregion
 }
