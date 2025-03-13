@@ -242,7 +242,8 @@
     <div class="modal-content">
       <div class="modal-header border-0 pb-0">
         <h5 class="modal-title fw-bolder">Select Existing Modifier</h5>
-        <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#modifierModal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#modifierModal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex flex-column">
         <div class="w-50">
@@ -830,15 +831,15 @@
 
     function AppendModifiers(id, name) {
       $('.existingModifierList').append(`
-                      <span class="p-1 me-2 fw-medium existModifiers" style="border: 1px solid grey; border-radius: 15px;">
-                          ${name}
-                          <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
-                      </span>
-                    `);
+                        <span class="p-1 me-2 fw-medium existModifiers" data-mgitemid="${id}" style="border: 1px solid grey; border-radius: 15px;">
+                            ${name}
+                            <button type="button" class="btn btn-close removeAddedModifierItem" data-mgitemid="${id}"></button>
+                        </span>
+                      `);
     }
 
-    $(document).on("click", "#saveExitingMgBtn", function () {
-      @* selectedExistingModifiers = []; *@
+    @* $(document).on("click", "#saveExitingMgBtn", function () {
+      selectedExistingModifiers = [];
 
         $(".modifierItemCheckBox:checked").each(function () {
           var id = $(this).data("mg-item-id");
@@ -850,13 +851,28 @@
           }
 
         })
-    })
+    }) *@
 
-    function checkBoxModifierItemInModal(){
-      $.each(selectedExistingModifiers, function(index,id){
-        $('.modifierItemCheckBox[data-mg-item-id="' + id.ModifierItemId + '"]').prop("checked",true);
+    function checkBoxModifierItemInModal() {
+      $.each(selectedExistingModifiers, function (index, id) {
+        $('.modifierItemCheckBox[data-mg-item-id="' + id.ModifierItemId + '"]').prop("checked", true);
       });
     }
+
+    $(document).on("change", '.modifierItemCheckBox', function () {
+      let id = $(this).data("mg-item-id");
+      var name = $(this).data("mg-item-name");
+      if (!selectedExistingModifiers.some(e => e.ModifierItemId===Number(id))) {
+        selectedExistingModifiers.push({ ModifierItemId: Number(id) });
+        AppendModifiers(id, name);
+      }
+      else {
+        selectedExistingModifiers = $.grep(selectedExistingModifiers, function (selectedExistingModifiers) {
+          return selectedExistingModifiers.ModifierItemId !== id;
+        });
+        $("span").remove(".existModifiers[data-mgitemid='" + id + "']");
+      }
+    })
 
     $(document).on("click", "#submitMgBtn", function () {
       $("#existingItemList").val(JSON.stringify(selectedExistingModifiers));
@@ -933,7 +949,7 @@
   </script>
 
   <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->
-  
+
   <script>
     $(document).on("click", ".modifierDeleteBtn", function () {
       modifierId = $(this).data("mg-item-id");
