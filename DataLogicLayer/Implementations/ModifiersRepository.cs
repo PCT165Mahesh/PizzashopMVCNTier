@@ -18,7 +18,7 @@ public class ModifiersRepository : IModifiersRepository
 
     /*---------------------------------------------------------------------------Modifier Group CRUD------------------------------------------------------------------------------*/
 
-    #region Get Modifier Group
+    #region Modifier Group CRUD
     public IEnumerable<Modifiergroup> GetAllModifierGroup()
     {
         return _context.Modifiergroups.Where(m => !m.Isdeleted).OrderBy(m => m.Id).ToList();
@@ -105,9 +105,9 @@ public class ModifiersRepository : IModifiersRepository
 
         return (modifierItems, totalRecords);
     }
-    #endregion
 
-    #region ADD : Modifier Group
+
+
     public async Task<string> AddModifierGroupAsync(ModifierGroupViewModel model, long userId)
     {
         Modifiergroup existingGroup = await _context.Modifiergroups.Where(m => m.Name == model.Name && !m.Isdeleted && m.Id != model.ModifierId).FirstOrDefaultAsync();
@@ -147,9 +147,9 @@ public class ModifiersRepository : IModifiersRepository
             return "Error Adding Modifier";
         }
     }
-    #endregion
 
-    #region EDIT : Modifier Group
+
+
     public async Task<string> EditModifierGroupAsync(ModifierGroupViewModel model, long userId)
     {
         Modifiergroup? existingGroup = await _context.Modifiergroups.Where(m => m.Name == model.Name && !m.Isdeleted && m.Id != model.ModifierId).FirstOrDefaultAsync();
@@ -192,9 +192,9 @@ public class ModifiersRepository : IModifiersRepository
             return "Error Adding Item";
         }
     }
-    #endregion
 
-    #region DELETE : Modifier Group
+
+
     public async Task<bool> DeleteModifierGroupAsync(long modifierGroupId, long userId)
     {
         Modifiergroup? modifiergroup = _context.Modifiergroups.Where(mg => mg.Id == modifierGroupId).FirstOrDefault();
@@ -230,11 +230,12 @@ public class ModifiersRepository : IModifiersRepository
             return false;
         }
     }
+
     #endregion
 
     /*---------------------------------------------------------------------------Modifier Item CRUD------------------------------------------------------------------------------*/
 
-    #region Get Modifier Items By Group Id
+    #region Modifier Item CRUD
     public async Task<(IEnumerable<ModifierItemViewModel> modifierItems, int totalRecords)> GetModifierItemAsync(long modifierGroupId, int pageNo, int pageSize, string search)
     {
         IQueryable<ModifierItemViewModel> query = _context.Modifiergroupitemmaps
@@ -267,9 +268,9 @@ public class ModifiersRepository : IModifiersRepository
 
         return (modifierItems, totalRecords);
     }
-    #endregion
 
-    #region Get Modifier Items for modifier Id
+
+
     public async Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId)
     {
         AddEditModifierViewModel? model = await _context.Modifieritems.Include(mi => mi.ModifierGroup)
@@ -289,9 +290,9 @@ public class ModifiersRepository : IModifiersRepository
 
         return model;
     }
-    #endregion
 
-    #region ADD : Modifier Item
+
+
     public async Task<string> AddModifierItemAsync(AddEditModifierViewModel model, long userId)
     {
         Modifieritem? existingModifier = await _context.Modifieritems.Where(mi => mi.Name == model.Name && mi.Id != model.ModifierItemId && !mi.Isdeleted).FirstOrDefaultAsync();
@@ -333,9 +334,9 @@ public class ModifiersRepository : IModifiersRepository
             return "Error Adding Modifier";
         }
     }
-    #endregion
 
-    #region EDIT : Modifier Item
+
+
     public async Task<string> EditModifierItemAsync(AddEditModifierViewModel model, long userId)
     {
         Modifieritem? existingModifier = await _context.Modifieritems.Where(mi => mi.Name == model.Name && mi.Id != model.ModifierItemId && !mi.Isdeleted).FirstOrDefaultAsync();
@@ -385,9 +386,9 @@ public class ModifiersRepository : IModifiersRepository
             return "Error Adding Item";
         }
     }
-    #endregion
 
-    #region DELETE : Modifier Item
+
+
     public async Task<bool> DeleteModifierItemAsync(long modifierGroupId,long modifierId, long userId)
     {
         // Modifieritem? modifierItem = _context.Modifieritems.Where(mi => mi.Id == modifierId && !mi.Isdeleted).FirstOrDefault();

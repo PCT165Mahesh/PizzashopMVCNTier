@@ -47,14 +47,13 @@ public class MenuController : Controller
 
     /*---------------------------------------------------------------------------Category CRUD---------------------------------------------------------------------------------*/
 
-    #region Get Categories
+    #region Category CRUD
     public IActionResult GetCategoryById(long id)
     {
         return Json(_categoryItemService.GetCategoryById(id));
     }
-    #endregion
 
-    #region Add/Edit Categories
+
     [HttpPost]
     [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveCategory(MenuViewModel model)
@@ -94,9 +93,7 @@ public class MenuController : Controller
         return RedirectToAction("Index", "Menu");
     }
 
-    #endregion
 
-    #region Delete Category
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteCategory(long id)
@@ -118,14 +115,13 @@ public class MenuController : Controller
 
     /*---------------------------------------------------------------------------Items CRUD-----------------------------------------------------------------------------------*/
 
-    #region Get Items List
+    #region Items CRUD
     public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
     {
         return PartialView("_itemsPartialView", await _categoryItemService.GetItemList(categoryId, pageNo, pageSize, search));
     }
-    #endregion
 
-    #region Add/Edit Items
+
     [HttpGet]
     // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveItem(long id)
@@ -195,9 +191,9 @@ public class MenuController : Controller
             return Json(new { success = false, errorMessage = result});
         }
     }
-    #endregion
 
-    #region Delete Item
+
+
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteItem(long id)
@@ -216,10 +212,7 @@ public class MenuController : Controller
         }
     }
 
-    
-    #endregion
-    
-    #region Mass Delte Item
+
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteSelectedItems(List<long> id)
@@ -250,15 +243,14 @@ public class MenuController : Controller
 
     /*-----------------------------------------------------------------------Modifier Group CRUD------------------------------------------------------------------------------*/
 
-    #region Get Modifier Group
+    #region Modifier Group CRUD
     public IActionResult ModifiersTab()
     {
         IEnumerable<ModifierGroupViewModel> model = _modifiersService.GetAllModifierGroup();
         return PartialView("_modifiersTab", model);
     }
-    #endregion
 
-    #region Add/Edit Modifier Group
+
     [HttpGet]
     // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifierGroup(long id)
@@ -317,9 +309,8 @@ public class MenuController : Controller
             return Json(new { success = false, errorMessage = result});
         }
     }
-    #endregion
 
-    #region Delete Modifier Group
+
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteModifierGroup(long id)
@@ -341,7 +332,7 @@ public class MenuController : Controller
 
     /*---------------------------------------------------------------------------Modifier Item CRUD------------------------------------------------------------------------------*/
 
-    #region Get Modifer Items
+    #region Modifer Items CRUD
     public async Task<IActionResult> GetModifierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")
     {
         return PartialView("_ModifierItemsPartialView", await _modifiersService.GetModfierItems(modifierGroupId, pageNo, pageSize, search));
@@ -351,9 +342,8 @@ public class MenuController : Controller
     {
         return PartialView("_existingModifierList", await _modifiersService.GetAllModfierItems(pageNo, pageSize, search));
     }
-    #endregion
-    
-    #region Add/Edit Modifer Item
+
+
     [HttpGet]
     // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifier(long id)
@@ -412,9 +402,8 @@ public class MenuController : Controller
            return Json(new { success = false, errorMessage = result });
         }
     }
-    #endregion
 
-    #region Delete Modifier Item
+
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteModifier(long modifierGroupId, long id)
@@ -432,9 +421,8 @@ public class MenuController : Controller
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier") });
         }
     }
-    #endregion
 
-    #region Mass Delte Modifier
+
     [HttpPost]
     [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteSelectedModifiers(List<long> id,long modifierGroupId)

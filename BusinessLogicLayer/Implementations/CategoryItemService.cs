@@ -19,7 +19,7 @@ public class CategoryItemService : ICategoryItemService
         _userRepository = userRepository;
     }
 
-    #region Add Category
+    #region Category CRUD
     public async Task<bool> AddCategory(CategoryViewModel model, string userName)
     {
         User user = await _userRepository.GetUserByUserName(userName);
@@ -36,9 +36,6 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.AddCategoryAsync(model, user.Id);
     }
 
-    #endregion
-
-    #region Get Categories
     public List<CategoryViewModel> GetCategories()
     {
         List<Category> categories = _categoryItemRepository.GetAllCategories();
@@ -55,9 +52,7 @@ public class CategoryItemService : ICategoryItemService
         return _categoryItemRepository.GetCategoryId(id);
     }
 
-    #endregion
 
-    #region Edit Categories
     public async Task<bool> EditCategory(CategoryViewModel model, string userName)
     {
 
@@ -74,9 +69,7 @@ public class CategoryItemService : ICategoryItemService
         return await _categoryItemRepository.EditCategoryAsync(model, user.Id);
     }
 
-    #endregion
 
-    #region Delete Category
     public async Task<bool> DeleteCategory(long categoryId, string userName)
     {
         if(categoryId == -1 || categoryId == null)
@@ -94,7 +87,7 @@ public class CategoryItemService : ICategoryItemService
     }
     #endregion
 
-    #region Get Items List
+    #region Items CRUD
     public async Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search)
     {
         ItemListViewModel model = new() {Page = new ()};
@@ -116,9 +109,6 @@ public class CategoryItemService : ICategoryItemService
         return _categoryItemRepository.GetAllUnit();
     }
 
-    #endregion
-
-    #region Get Items
     public async Task<AdditemViewModel> GetItemByID(long id)
     {
         Item item = await _categoryItemRepository.GetItemByIdAsync(id);
@@ -143,9 +133,7 @@ public class CategoryItemService : ICategoryItemService
 
         return model;
     }
-    #endregion
 
-    #region ADD : Item
     public async Task<string> AddItem(AdditemViewModel model, long userId)
     {
         if(model == null)
@@ -154,9 +142,9 @@ public class CategoryItemService : ICategoryItemService
         }
         return await _categoryItemRepository.AddItemAsync(model, userId);
     }
-    #endregion
 
-   #region EDIT : Item
+
+
     public async Task<string> EditItem(AdditemViewModel model, long userId)
     {
         if(model == null)
@@ -165,9 +153,8 @@ public class CategoryItemService : ICategoryItemService
         }
         return await _categoryItemRepository.EditItemAsync(model, userId);
     }
-    #endregion
 
-    #region DELETE : Item
+
     public async Task<bool> DeleteItem(long id, string userName)
     {
         if(id == 0)
@@ -183,9 +170,8 @@ public class CategoryItemService : ICategoryItemService
 
         return await _categoryItemRepository.DeleteItemAsync(id, user.Id);
     }
-    #endregion
 
-    #region DELETE : Mass Delete Items
+
     public async Task<bool> DeleteSelectedItems(List<long> id, string userName)
     {
         if(id.IsNullOrEmpty())

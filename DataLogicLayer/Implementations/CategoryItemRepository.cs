@@ -34,7 +34,7 @@ public class CategoryItemRepository : ICategoryItemRepository
     #endregion
     /*---------------------------------------------------------------------------Category CRUD------------------------------------------------------------------------------*/
     
-    #region Get Categories
+    #region Category CRUD
     public List<Category> GetAllCategories()
     {
         return _context.Categories.Where(c => !c.Isdeleted).ToList();
@@ -84,9 +84,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             Description = c.Description
         }).FirstOrDefault();
     }
-    #endregion
 
-    #region ADD : Category
+
+
     public async Task<bool> AddCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -108,9 +108,9 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
-    #endregion
 
-    #region EDIT : Category
+
+
     public async Task<bool> EditCategoryAsync(CategoryViewModel model, long userId)
     {
         try
@@ -139,9 +139,8 @@ public class CategoryItemRepository : ICategoryItemRepository
             return false;
         }
     }
-    #endregion
 
-    #region DELETE : Category
+
     public async Task<bool> DeleteCategoryAsync(long categoryId, long userId)
     {
         Category category = _context.Categories.Where(c => c.CategoryId == categoryId && !c.Isdeleted).FirstOrDefault();
@@ -181,15 +180,14 @@ public class CategoryItemRepository : ICategoryItemRepository
 
     /*---------------------------------------------------------------------------Items CRUD------------------------------------------------------------------------------*/
 
-    #region Get Items
+    #region Items CRUD
     public async Task<Item> GetItemByIdAsync(long id)
     {
         Item? item = await _context.Items.Where(i => i.ItemId == id && !i.Isdeleted).FirstOrDefaultAsync();
         return item;    
     }
-    #endregion
 
-    #region ADD : Items
+
     public async Task<string> AddItemAsync(AdditemViewModel model, long userId)
     {
         Item? oldItem = await _context.Items.Where(i => i.Name == model.Name && !i.Isdeleted && i.ItemId != model.ItemId).FirstOrDefaultAsync();
@@ -260,9 +258,8 @@ public class CategoryItemRepository : ICategoryItemRepository
             return "Error Adding Item";
         }
     }
-    #endregion
 
-    #region EDIT : Items
+
     public async Task<string> EditItemAsync(AdditemViewModel model, long userId)
     {
         Item? item = await _context.Items.Where(i => i.ItemId == model.ItemId).FirstOrDefaultAsync();
@@ -336,9 +333,8 @@ public class CategoryItemRepository : ICategoryItemRepository
             return "Error Updating Item";
         }
     }
-    #endregion
 
-    #region DELETE : Items
+
     public async Task<bool> DeleteItemAsync(long id, long userId)
     {
         Item item = await _context.Items.Where(i => i.ItemId == id).FirstOrDefaultAsync();
