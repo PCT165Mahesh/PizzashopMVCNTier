@@ -30,7 +30,7 @@ public class UserController : Controller
 /*---------------------------------------------------------------------------User List------------------------------------------------------------------------------*/
 
     #region User List
-    [Authorize]
+    [PermissionAuthorize("Users_View")]
     public IActionResult Index()
     {
         ViewData["ActiveLink"] = "User";
@@ -40,7 +40,8 @@ public class UserController : Controller
 
 
     [HttpGet]
-    [Authorize]
+
+    
     public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "",string columnName="", string sortOrder="")
     {
         return PartialView("_userListPartialView",await _userDetailService.GetUserDetails(pageNo, pageSize, search, columnName, sortOrder));
@@ -50,76 +51,60 @@ public class UserController : Controller
 
 /*---------------------------------------------------------------------------User CRUD------------------------------------------------------------------------------*/
 
-    #region Add User
-    [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
+    #region Add/Edit User
+
     [HttpGet]
-    public async Task<IActionResult> AddUser()
+    [PermissionAuthorize("Users_AddEdit")]
+    public async Task<IActionResult> SaveUser(long? id)
     {
-        ViewData["ActiveLink"] = "User";
-        return View();
-    }
-
-    [HttpPost]
-    [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
-    public async Task<IActionResult> AddUser(AddUserViewModel model)
-    {
-        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
-        string userName = _userDetailService.UserName(token);
-
-        if (!ModelState.IsValid)
+        AddUserViewModel model = new AddUserViewModel();
+        if (id.HasValue && id > 0)
         {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
-            TempData["NotificationType"] = NotificationType.Error.ToString();
-            return View(model);
+            model = await _userService.GetUserByIdAsync(id.Value);
         }
-        (string message, bool result) = await _userService.AddUserAsync(model, userName);
-        if (result)
-        {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreated, "User");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("Index", "User");
-        }
-
-        // TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityCreatedFailed, "User");
-        TempData["NotificationMessage"] = message;
-        TempData["NotificationType"] = NotificationType.Error.ToString();
-        return RedirectToAction("AddUser", "User");
-    }
-    #endregion
-
-    #region Edit User
-    [HttpGet]
-    [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
-    public async Task<IActionResult> EditUser(int id)
-    {
-        EditUserViewModel model = await _userService.GetUserByIdAsync(id);
+        await PopulateDropdownLists(model);
         return View(model);
     }
 
     [HttpPost]
-    [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
-    public async Task<IActionResult> EditUser(EditUserViewModel model)
+    [PermissionAuthorize("Users_AddEdit")]
+    public async Task<IActionResult> SaveUser(AddUserViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
 
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdatedFailed, "User"); ;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            model.UserName = await _userDetailService.UsernameByEmail(model.Email);
             await PopulateDropdownLists(model);
             return View(model);
         }
-        (string message, bool result) = await _userService.UpdateUserAsync(model, userName);
+        var message = "";
+        bool result = false;
+        bool isCreated = true;
+
+        if(model.UserId.HasValue && model.UserId.Value > 0)
+        {
+            (message, result) = await _userService.UpdateUserAsync(model, userName);
+            isCreated = false;
+        }
+        else
+        {
+            (message, result) = await _userService.AddUserAsync(model, userName);
+        }
         if (result)
         {
-            TempData["NotificationMessage"] = string.Format(NotificationMessages.EntityUpdated, "User"); ;
+            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "User");
             TempData["NotificationType"] = NotificationType.Success.ToString();
-            return RedirectToAction("Index", "User");
         }
-        TempData["NotificationMessage"] = message;
-        TempData["NotificationType"] = NotificationType.Error.ToString();
-        // await PopulateDropdownLists(model);
+        else
+        {
+            TempData["NotificationMessage"] = message;
+            TempData["NotificationType"] = NotificationType.Error.ToString();
+            // model.UserName = await _userDetailService.UsernameByEmail(model.Email);
+            await PopulateDropdownLists(model);
+            return View(model);
+        }
         return RedirectToAction("Index", "User");
     }
     #endregion
@@ -127,7 +112,7 @@ public class UserController : Controller
     #region Delete User
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = nameof(UserRoles.SuperAdmin))]
+    [PermissionAuthorize("Users_Delete")]
 
     public async Task<IActionResult> DeleteUser(long id)
     {
@@ -147,9 +132,9 @@ public class UserController : Controller
     #endregion
 
     #region Populate List
-    private async Task PopulateDropdownLists(EditUserViewModel model)
+    private async Task PopulateDropdownLists(AddUserViewModel model)
     {
-        model.UserName = await _userDetailService.UsernameByEmail(model.Email);
+        // model.UserName = await _userDetailService.UsernameByEmail(model.Email);
         model.Roles = await _roleService.GetRolesAsync();
         model.Countries = _countryService.GetCountries();
         model.States = model.CountryId > 0 ? _countryService.GetStates(model.CountryId) : new List<State>();

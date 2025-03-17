@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PizzashopMVCNtier.Controllers;
 
-[Authorize]
 public class TableAndSectionController : Controller
 {
     private readonly ITableSectionService _tableSectionService;
@@ -24,6 +23,7 @@ public class TableAndSectionController : Controller
 /*---------------------------------------------------------------------------Sectoin and Table List------------------------------------------------------------------------------*/
 
     #region Section and Table List   
+    [PermissionAuthorize("TableAndSection_View")]
     public async Task<IActionResult> Index()
     {
         IEnumerable<SectionViewModel> model = await _tableSectionService.GetSectionsList();
@@ -41,6 +41,7 @@ public class TableAndSectionController : Controller
 
     #region Add/Edit Section
     [HttpGet]
+    [PermissionAuthorize("TableAndSection_AddEdit")]
     public async Task<IActionResult> SaveSection(long sectionId)
     {
         SectionViewModel model = new SectionViewModel();
@@ -54,6 +55,7 @@ public class TableAndSectionController : Controller
     }
 
     [HttpPost]
+    [PermissionAuthorize("TableAndSection_AddEdit")]
     public async Task<IActionResult> SaveSection(SectionViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -100,6 +102,7 @@ public class TableAndSectionController : Controller
 
     #region Delete Section
     [HttpPost]
+    [PermissionAuthorize("TableAndSection_Delete")]
     public async Task<IActionResult> DeleteSection(long sectionId)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -113,6 +116,108 @@ public class TableAndSectionController : Controller
         else
         {
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Section") });
+        }
+    }
+    #endregion
+
+/*---------------------------------------------------------------------------Tables CRUD------------------------------------------------------------------------------*/
+    #region Add/Edit Table
+    [HttpGet]
+    [PermissionAuthorize("TableAndSection_AddEdit")]
+    public async Task<IActionResult> SaveTable(long tableId)
+    {
+        TableViewModel model = new TableViewModel();
+        model.SectionList = await _tableSectionService.GetSectionsList();
+
+
+        if (tableId > 0)
+        {
+            model = await _tableSectionService.GetTableById(tableId);
+            model.SectionList = await _tableSectionService.GetSectionsList();
+            return PartialView("_addTable", model);
+        }
+        return PartialView("_addTable", model);
+    }
+
+    [HttpPost]
+    [PermissionAuthorize("TableAndSection_AddEdit")]
+    public async Task<IActionResult> SaveTable(TableViewModel model)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+        long userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
+
+
+        if (!ModelState.IsValid)
+        {
+            model.SectionList = await _tableSectionService.GetSectionsList();
+            return View(model);
+        }
+
+
+        string result = "";
+        bool isCreated = true;
+
+        //For Adding New Item
+        if (model.TableId == 0 || model.TableId == null)
+        {
+            result = await _tableSectionService.AddTable(model, userId);
+        }
+        //For Editing Item
+        else
+        {
+            result = await _tableSectionService.EditTable(model, userId);
+            isCreated = false;
+        }
+        // Checking for Add or Update
+        if (result.Equals("true"))
+        {
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Table");
+            return Json(new {success=true, message=message});
+        }
+        else
+        {
+            return Json(new {success=false, errorMessage= result});
+        }
+    }
+    #endregion
+
+    #region Delete Table
+    [HttpPost]
+    [PermissionAuthorize("TableAndSection_Delete")]
+    public async Task<IActionResult> DeleteTable(long tableId, long sectionId)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _tableSectionService.DeleteTable(sectionId,tableId, userName);
+        if (result)
+        {
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Table") });
+        }
+        else
+        {
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Table") });
+        }
+    }
+    #endregion
+
+    #region Mass Delte Table
+    [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
+    public async Task<IActionResult> DeleteSelectedTables(List<long> id,long sectionId)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _tableSectionService.DeleteSelectedTable(id,sectionId, userName);
+        if (result)
+        {
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Tables") });
+        }
+        else
+        {
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Table") });
         }
     }
     #endregion

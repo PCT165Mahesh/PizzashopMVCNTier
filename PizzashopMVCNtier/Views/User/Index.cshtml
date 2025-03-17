@@ -19,7 +19,7 @@
                 <label for="search" class="search_icon"><img src="~/images/icons/search.svg" alt="" /></label>
             </form>
             <button type="button" class="btn add_user_btn">
-                <a asp-action="AddUser" asp-controller="User" class="text-white text-decoration-none">+Add User</a>
+                <a asp-action="SaveUser" asp-controller="User" class="text-white text-decoration-none">+Add User</a>
             </button>
         </div>
         <!-- Search box and button Ends -->
@@ -123,9 +123,10 @@
                             if (response.success) {
                                 $("#myModal").modal("hide");
                                 toastr.success(response.message);
-                                setTimeout(function () {
+                                @* setTimeout(function () {
                                     location.reload(); // Refresh user list
-                                }, 1000);
+                                }, 1000); *@
+                                paginationAjax(1);
                             } else {
                                 toastr.error(response.message);
                             }

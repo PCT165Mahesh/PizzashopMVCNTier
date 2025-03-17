@@ -4,6 +4,7 @@ namespace DataLogicLayer.ViewModels;
 
 public class ModifierItemViewModel
 {
+    public long? ModifierGroupId { get; set; }
     public long ModifierItemId { get; set; }
     public string Name { get; set; }
     public decimal? Rate { get; set; }

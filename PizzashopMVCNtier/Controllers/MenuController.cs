@@ -31,6 +31,7 @@ public class MenuController : Controller
 
     #region Menu Home Page
     [HttpGet]
+    [PermissionAuthorize("Menu_View")]
     public IActionResult Index()
     {
         MenuViewModel model = new()
@@ -55,6 +56,7 @@ public class MenuController : Controller
 
     #region Add/Edit Categories
     [HttpPost]
+    [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveCategory(MenuViewModel model)
     {
         if (!ModelState.IsValid)
@@ -96,6 +98,7 @@ public class MenuController : Controller
 
     #region Delete Category
     [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteCategory(long id)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -124,6 +127,7 @@ public class MenuController : Controller
 
     #region Add/Edit Items
     [HttpGet]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveItem(long id)
     {
         //for the Add Item Model
@@ -145,6 +149,7 @@ public class MenuController : Controller
     }
 
     [HttpPost]
+    [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveItem(AdditemViewModel model, string modifierItemList)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -157,12 +162,13 @@ public class MenuController : Controller
 
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = NotificationMessages.InvalidModelState;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            model.CategoryList = _categoryItemService.GetCategories();
+            model.ItemTypeList = _categoryItemService.GetItemtypes();
+            model.UnitList = _categoryItemService.GetUnits();
+            model.ModifierGropList = _modifiersService.GetAllModifierGroup();
+            model.ItemModifierList = await _modifiersService.GetAllModifierItemById(model.ItemId);
             return PartialView("_addItemModalPartialView", model);
         }
-
-
 
         string result = "";
         bool isCreated = true;
@@ -181,20 +187,19 @@ public class MenuController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Item");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Item");
+            return Json(new { success = true, message = message });
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return Json(new { success = false, errorMessage = result});
         }
-        return RedirectToAction("Index");
     }
     #endregion
 
     #region Delete Item
     [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteItem(long id)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -216,6 +221,7 @@ public class MenuController : Controller
     
     #region Mass Delte Item
     [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteSelectedItems(List<long> id)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -236,9 +242,9 @@ public class MenuController : Controller
     // -------------------------------------------------------------------- Add Item Modifier Select Group ------------------------------------------------------------------//
     #region Modifier Item For Add Item
     [HttpGet]
-    public async Task<IActionResult> GetModifierItemById(long modifierId)
+    public async Task<IActionResult> GetModifierItemById(long modifierGroupId)
     {
-        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierId));
+        return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierGroupId));
     }
     #endregion
 
@@ -254,6 +260,7 @@ public class MenuController : Controller
 
     #region Add/Edit Modifier Group
     [HttpGet]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifierGroup(long id)
     {
         //for the Add Item Model
@@ -269,6 +276,7 @@ public class MenuController : Controller
     }
 
     [HttpPost]
+    [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifierGroup(ModifierGroupViewModel model, string modifierItemList)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -280,7 +288,8 @@ public class MenuController : Controller
         }
         if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "Menu");
+            model.ModifierItemList = JsonSerializer.Deserialize<List<ModifierItemViewModel>>(modifierItemList);
+            return PartialView("_modifierGroupAdd", model);
         }
 
         string result = "";
@@ -289,37 +298,36 @@ public class MenuController : Controller
         //For Adding New Category
         if (model.ModifierId == 0)
         {
-            result = await _modifiersService.AddModifier(model, userId);
+            result = await _modifiersService.AddModifierGroup(model, userId);
         }
         //For Editing Category
         else
         {
-            result = await _modifiersService.EditModifier(model, userId);
+            result = await _modifiersService.EditModifierGroup(model, userId);
             isCreated = false;
         }
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier Group");
+            return Json(new { success = true , message = message});
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return Json(new { success = false, errorMessage = result});
         }
-        return RedirectToAction("Index", "Menu");
     }
     #endregion
 
     #region Delete Modifier Group
     [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
     public async Task<IActionResult> DeleteModifierGroup(long id)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
 
-        bool result = await _modifiersService.DeleteModifier(id, userName);
+        bool result = await _modifiersService.DeleteModifierGroup(id, userName);
         if (result)
         {
             return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier Group") });
@@ -347,6 +355,7 @@ public class MenuController : Controller
     
     #region Add/Edit Modifer Item
     [HttpGet]
+    // [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifier(long id)
     {
         //for the Add Item Model
@@ -365,6 +374,7 @@ public class MenuController : Controller
 
 
     [HttpPost]
+    [PermissionAuthorize("Menu_AddEdit")]
     public async Task<IActionResult> SaveModifier(AddEditModifierViewModel model)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
@@ -372,7 +382,9 @@ public class MenuController : Controller
         long userId = await _userDetailService.GetUserIdByUserNameAsync(userName);
         if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "Menu");
+            model.UnitList = _categoryItemService.GetUnits();
+            model.ModifierGroupList = _modifiersService.GetAllModifierGroup();
+            return PartialView("_addModifierModal", model);   
         }
 
         string result = "";
@@ -392,26 +404,25 @@ public class MenuController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Modifier");
+            return Json(new { success = true, message = message});
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+           return Json(new { success = false, errorMessage = result });
         }
-        return RedirectToAction("Index", "Menu");
     }
     #endregion
 
     #region Delete Modifier Item
     [HttpPost]
-    public async Task<IActionResult> DeleteModifier(long id)
+    [PermissionAuthorize("Menu_Delete")]
+    public async Task<IActionResult> DeleteModifier(long modifierGroupId, long id)
     {
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);
 
-        bool result = await _modifiersService.DeleteModifierItem(id, userName);
+        bool result = await _modifiersService.DeleteModifierItem(modifierGroupId,id, userName);
         if (result)
         {
             return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifier") });
@@ -419,6 +430,26 @@ public class MenuController : Controller
         else
         {
             return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifier") });
+        }
+    }
+    #endregion
+
+    #region Mass Delte Modifier
+    [HttpPost]
+    [PermissionAuthorize("Menu_Delete")]
+    public async Task<IActionResult> DeleteSelectedModifiers(List<long> id,long modifierGroupId)
+    {
+        string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
+        string userName = _userDetailService.UserName(token);
+
+        bool result = await _modifiersService.DeleteSelectedModifier(id,modifierGroupId, userName);
+        if (result)
+        {
+            return Json(new { success = true, message = string.Format(NotificationMessages.EntityDeleted, "Modifiers") });
+        }
+        else
+        {
+            return Json(new { success = false, message = string.Format(NotificationMessages.EntityDeletedFailed, "Modifiers") });
         }
     }
     #endregion

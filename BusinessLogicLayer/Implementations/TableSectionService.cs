@@ -3,6 +3,7 @@ using BusinessLogicLayer.Common;
 using DataLogicLayer.Interfaces;
 using DataLogicLayer.Models;
 using DataLogicLayer.ViewModels;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BusinessLogicLayer.Implementations;
 
@@ -17,7 +18,9 @@ public class TableSectionService : ITableSectionService
         _userRepository = userRepository;
     }
 
-    #region Sections CRUD
+/*---------------------------------------------------------------------------Sections CRUD------------------------------------------------------------------------------*/
+
+    #region Get Sections List
     public async Task<IEnumerable<SectionViewModel>> GetSectionsList()
     {
         IEnumerable<Section> sections = await _tableSectionRepository.GetSectionsListAsync();
@@ -38,7 +41,9 @@ public class TableSectionService : ITableSectionService
         };
         return model;
     }
+    #endregion
 
+    #region ADD : Section
     public async Task<string> AddSection(SectionViewModel model, long userId)
     {
         if(model == null)
@@ -47,6 +52,9 @@ public class TableSectionService : ITableSectionService
         }
         return await _tableSectionRepository.AddSectionAsync(model, userId);
     }
+    #endregion
+
+    #region EDIT : Section
 
     public async Task<string> EditSection(SectionViewModel model, long userId)
     {
@@ -56,19 +64,9 @@ public class TableSectionService : ITableSectionService
         }
         return await _tableSectionRepository.EditSectionAsync(model, userId);
     }
-
     #endregion
 
-    public async Task<TableListViewModel> GetTableList(long sectionId,int pageNo, int pageSize, string search)
-    {
-        TableListViewModel model = new() {Page = new ()};
-        var tableData = await _tableSectionRepository.GetTableListAsync(sectionId, pageNo, pageSize, search);
-
-        model.TableList = tableData.tables;
-        model.Page.SetPagination(tableData.totalRecords, pageSize, pageNo);
-        return model;
-    }
-
+    #region DELETE : Section
     public async Task<bool> DeleteSection(long id, string userName)
     {
         if(id == 0)
@@ -84,4 +82,101 @@ public class TableSectionService : ITableSectionService
 
         return await _tableSectionRepository.DeleteSectionAsync(id, user.Id);
     }
+    #endregion
+
+/*---------------------------------------------------------------------------Table CRUD------------------------------------------------------------------------------*/
+
+
+    #region Get Table List
+    public async Task<TableListViewModel> GetTableList(long sectionId,int pageNo, int pageSize, string search)
+    {
+        TableListViewModel model = new() {Page = new ()};
+        var tableData = await _tableSectionRepository.GetTableListAsync(sectionId, pageNo, pageSize, search);
+
+        model.TableList = tableData.tables;
+        model.Page.SetPagination(tableData.totalRecords, pageSize, pageNo);
+        return model;
+    }
+
+    public async Task<TableViewModel> GetTableById(long tableId)
+    {
+        Table table = await _tableSectionRepository.GetTableByIdAsync(tableId);
+        TableViewModel model = new TableViewModel{
+            TableId = table.Id,
+            IsOccupied = table.IsOccupied,
+            SectionId = table.Sectionid,
+            TableName = table.Name,
+            Capacity = table.Capacity
+        };
+        return model;
+    }
+    #endregion
+
+    #region ADD : Table
+    public async Task<string> AddTable(TableViewModel model, long userId)
+    {
+        if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _tableSectionRepository.AddTableAsync(model, userId);
+    }
+    #endregion
+    
+    #region EDIT : Table
+
+    public async Task<string> EditTable(TableViewModel model, long userId)
+    {
+        if(model == null)
+        {
+            return "Model is Empty";
+        }
+        return await _tableSectionRepository.EditTableAsync(model, userId);
+    }
+    #endregion
+
+    #region DELETE : Table
+    public async Task<bool> DeleteTable(long sectionId,long id, string userName)
+    {
+        if(id == 0)
+        {
+            return false;
+        }
+
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        return await _tableSectionRepository.DeleteTableAsync(sectionId,id, user.Id);
+    }
+    #endregion
+
+    #region DELETE : Mass Delete Tabled
+    public async Task<bool> DeleteSelectedTable(List<long> id, long sectionId, string userName)
+    {
+        if(id.IsNullOrEmpty())
+        {
+            return false;
+        }
+        User user = await _userRepository.GetUserByUserName(userName);
+        if(user == null)
+        {
+            return false;
+        }
+
+        bool result = true;
+
+        foreach(long tableId in id)
+        {
+            result = await _tableSectionRepository.DeleteTableAsync(sectionId,tableId, user.Id);
+            if(result == false)
+                return result;
+        }
+        return result;
+    }
+    #endregion
 }
+
+

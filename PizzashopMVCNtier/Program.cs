@@ -139,6 +139,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<PermissionMiddleware>();
+
 
 app.MapControllerRoute(
     name: "default",

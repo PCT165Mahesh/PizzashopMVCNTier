@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace PizzashopMVCNtier.Controllers;
 
 
-[Authorize(Roles = nameof(UserRoles.SuperAdmin))]
 public class RolePermissionController :Controller
 {
     private readonly IRoleService _roleService;
@@ -29,6 +28,7 @@ public class RolePermissionController :Controller
 
     #region Role List
     [HttpGet]
+    [PermissionAuthorize("RoleAndPermission_View")]
     public async Task<IActionResult> Role(){
         List<Role> roleObj = await _roleService.GetRolesAsync();
         ViewData["Activelink"] = "Role";
@@ -39,6 +39,7 @@ public class RolePermissionController :Controller
 
     #region  Permissions Get and Post
     [HttpGet]
+    [PermissionAuthorize("RoleAndPermission_AddEdit")]
     public async Task<IActionResult> Permission(long id)
     {
         RolePermissionViewModel model = _rolePermissionService.GetRolePermissions(id);
@@ -49,6 +50,7 @@ public class RolePermissionController :Controller
 
 
     [HttpPost]
+    [PermissionAuthorize("RoleAndPermission_AddEdit")]
     public async Task<IActionResult> Permission(long roleId, List<PermissionsViewModel> model){
         string? token = HttpContext.Session.GetString("SuperSecretAuthToken");
         string userName = _userDetailService.UserName(token);

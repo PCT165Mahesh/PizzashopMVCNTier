@@ -46,9 +46,9 @@ public class LoginService : ILoginService
             }
 
             //Fetch the role 
-            Role roleObj =await _roleRepository.GetRoleById(user.Roleid);
+            Role roleObj = await _roleRepository.GetRoleById(user.Roleid);
             // Generate a new JWT token
-            string newToken = _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username);
+            string newToken = await _jwtService.GenerateJwtToken(userEmail, roleObj.Rolename, user.Username, user.Roleid);
 
             // Update the JWT token in the session
             if(newToken != null)
@@ -62,7 +62,6 @@ public class LoginService : ILoginService
         return false;
     }
     #endregion
-
 
     #region  Login User Service
     public async Task<bool> LoginUser(string email, string password, bool rememberMe)
@@ -81,7 +80,7 @@ public class LoginService : ILoginService
         if(user.Password == _encryptSercive.EncryptPassword(password)){
 
             // generate the Jwt token
-            string token = _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username);
+            string token = await _jwtService.GenerateJwtToken(email, roleObj.Rolename, user.Username, user.Roleid);
             if(token != null){
                 // Store JWT Token in Session
                 _httpContextAccessor?.HttpContext?.Session.SetString("SuperSecretAuthToken", token);

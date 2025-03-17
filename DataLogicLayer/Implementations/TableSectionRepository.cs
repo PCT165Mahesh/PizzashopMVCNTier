@@ -172,5 +172,115 @@ public class TableSectionRepository : ITableSectionRepository
 
         return (tables, totalRecords);
     }
+
+    public async Task<Table> GetTableByIdAsync(long tableId)
+    {
+        return await _context.Tables.Where(t => t.Id == tableId && !t.Isdeleted).FirstOrDefaultAsync();
+    }
+    #endregion
+
+    #region ADD : Table
+    public async Task<string> AddTableAsync(TableViewModel model, long userId)
+    {
+        Table? existingTable = await _context.Tables.Where(t => t.Name == model.TableName && t.Id != model.TableId && t.Sectionid == model.SectionId && !t.Isdeleted).FirstOrDefaultAsync();
+        if (existingTable != null && existingTable.Isdeleted == false)
+        {
+            return $"{model.TableName} Table already exist! ";
+        }
+        if (existingTable != null && existingTable.Isdeleted == true)
+        {
+            existingTable.Name = string.Concat(existingTable.Name, DateTime.Now);
+            _context.Tables.Update(existingTable);
+            await _context.SaveChangesAsync();
+        }
+
+        try
+        {
+            Table newTable = new Table
+            {
+                Name = model.TableName,
+                Sectionid = model.SectionId,
+                Capacity = model.Capacity,
+                IsOccupied = model.IsOccupied,
+                CreatedBy = userId,
+                CreatedAt = DateTime.Now
+            };
+
+            await _context.Tables.AddAsync(newTable);
+            await _context.SaveChangesAsync();
+            return "true";
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error In Table and Section Repository :", ex.Message);
+            return "Failed To Add Table";
+        }
+    }
+    #endregion
+
+    #region EDIT : Table
+    public async Task<string> EditTableAsync(TableViewModel model, long userId)
+    {
+        try
+        {
+            Table? existingTable = await _context.Tables.Where(t => t.Name == model.TableName && t.Id != model.TableId && t.Sectionid == model.SectionId && !t.Isdeleted).FirstOrDefaultAsync();
+            if (existingTable != null && existingTable.Isdeleted == false)
+            {
+                return $"{model.TableName} Table already exist! ";
+            }
+            if (existingTable != null && existingTable.Isdeleted == true)
+            {
+                existingTable.Name = string.Concat(existingTable.Name, DateTime.Now);
+                _context.Tables.Update(existingTable);
+                await _context.SaveChangesAsync();
+            }
+
+            Table? table = await _context.Tables.Where(t => t.Id == model.TableId && !t.Isdeleted).FirstOrDefaultAsync();
+
+            if(table == null)
+            {
+                return "Table Does not exists";
+            }
+
+            table.Name = model.TableName;
+            table.Capacity = model.Capacity;
+            table.UpdatedBy = userId;
+            table.UpdatedAt = DateTime.Now;
+            _context.Tables.Update(table);
+            await _context.SaveChangesAsync();
+            return "true"; 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error Updating Table", ex.Message);
+            return "Failed To Updated Table";
+        }
+    }
+    #endregion
+
+    #region DELETE : Table
+    public async Task<bool> DeleteTableAsync(long sectionId, long tableId, long userId)
+    {
+        try
+        {
+            Table? table = await _context.Tables.Where(t => t.Id == tableId && t.Sectionid == sectionId).FirstOrDefaultAsync();
+
+            if(table == null) return false;
+
+            table.Isdeleted = true;
+            table.UpdatedAt = DateTime.Now;
+            table.UpdatedBy = userId;
+            _context.Tables.Update(table);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine("Error In Delete table Repository: ", ex.Message);
+            return false;
+        }
+
+    }
     #endregion
 }

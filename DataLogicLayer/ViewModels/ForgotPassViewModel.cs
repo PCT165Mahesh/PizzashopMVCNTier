@@ -4,7 +4,7 @@ namespace DataLogicLayer.ViewModels;
 
 public class ForgotPassViewModel
 {
-    [EmailAddress]
-    [Required(ErrorMessage = "Email is Required")]
+    [Required(ErrorMessage = "Email is required")]
+    [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", ErrorMessage = "Enter Valid Email")]
     public string Email { get; set; }
 }

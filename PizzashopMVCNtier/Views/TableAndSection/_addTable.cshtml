@@ -1,0 +1,50 @@
+@model DataLogicLayer.ViewModels.TableViewModel
+<div class="modal-header border-0">
+    <h5 class="modal-title fw-bolder">@((Model.TableId == null || Model.TableId == 0) ? "Add" : "Edit") Section</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form  asp-action="SaveTable" asp-controller="TableAndSection" method="post" id="tableSaveForm">
+    <div class="modal-body d-flex flex-column align-items-center">
+        <input type="hidden" asp-for="@Model.SectionId" id="hiddenSection">
+        <input type="hidden" asp-for="@Model.IsOccupied" id="hiddenOccupied">
+        <input type="hidden" asp-for="@Model.TableId" >
+        <div class="row w-100">
+            <div class="form-floating col-lg-6 col-12 mb-3">
+                <input asp-for="@Model.TableName" type="text" class="form-control" placeholder="Enter name">
+                <label class="form-label txt-color">Name*</label>
+                <span class="text-danger" asp-validation-for="TableName"></span>
+            </div>
+            <div class=" form-floating col-lg-6 col-12 mb-3">
+                <select asp-for="@Model.SectionId" class="form-select" id="sectionSelect" disabled>
+                    <option value="0">select active Category</option>
+                    @foreach (var sections in Model.SectionList)
+                    {
+                        <option value="@sections.SectionID">@sections.Name</option>
+                    }
+                </select>
+                <label class="form-label">Section*</label>
+                <span class="text-danger" asp-validation-for="SectionId"></span>
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="form-floating col-lg-6 col-12 mb-3">
+                <input asp-for="@Model.Capacity" type="text" class="form-control" >
+                <label class="form-label txt-color">Capacity*</label>
+                <span class="text-danger" asp-validation-for="Capacity"></span>
+            </div>
+            <div class="form-floating col-md-6 col-12 mb-3 position-relative">
+                <select class="form-select" aria-label="Default select example" id="tableStatus" name="IsOccupied" disabled>
+                    <option value="true" selected="@(Model.IsOccupied)">Occupied</option>
+                    <option value="false" selected="@(!Model.IsOccupied)">Available</option>
+                </select>
+                <label for="tableState">Occupied</label>
+            </div>
+        </div>
+        <div class=" w-100 d-flex flex-row justify-content-end">
+            <button type="submit" id="confirmTableBtn" class="btn btn-primary mx-3">Save</button>
+            <button type="button"  class="btn cancle_btn" data-bs-dismiss="modal">
+                Cancel
+            </button>
+        </div>
+    </div>
+</form>

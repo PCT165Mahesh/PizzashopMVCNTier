@@ -15,5 +15,9 @@ public interface ITableSectionRepository
 
     #region Tables CRUD
     public Task<(List<TableViewModel> tables, int totalRecords)> GetTableListAsync(long sectionId, int pageNo, int pageSize, string search);
+    public Task<Table> GetTableByIdAsync(long tableId);
+    public  Task<string> AddTableAsync(TableViewModel model, long userId);
+    public  Task<string> EditTableAsync(TableViewModel model, long userId);
+    public Task<bool> DeleteTableAsync(long sectionId, long tableId, long userId);
     #endregion
 }

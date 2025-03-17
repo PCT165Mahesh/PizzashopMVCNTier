@@ -41,8 +41,8 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            User? existingUser = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
-            User? existingUserName = await _context.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
+            User? existingUser = await _context.Users.Where(u => u.Email == model.Email && !u.Isdeleted).FirstOrDefaultAsync();
+            User? existingUserName = await _context.Users.Where(u => u.Email == model.Email && !u.Isdeleted).FirstOrDefaultAsync();
             if (existingUser != null && existingUser.Isdeleted == false)
             {
                 string message = "Email already exist!";
@@ -64,7 +64,7 @@ public class UserRepository : IUserRepository
             {
                 Firstname = model.FirstName,
                 Lastname = model.LastName,
-                Email = model.Email,
+                Email = model.Email.ToLower(),
                 Username = model.UserName,
                 Password = model.Password,
                 Roleid = model.RoleId,
@@ -80,6 +80,14 @@ public class UserRepository : IUserRepository
             // Handle Image Upload
             if (model.ProfileImage != null)
             {
+                // var extension = Path.GetExtension(model.ProfileImage.FileName).ToLower();
+                // var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+                // if (!allowedExtensions.Contains(extension))
+                // {
+                //     return(null, "Invalid file type");
+                // }
+
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
                 if (!Directory.Exists(uploadsFolder))
                 {
@@ -187,7 +195,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<(string message, bool result)> EditUserAsync(EditUserViewModel model, User user, long adminId)
+    public async Task<(string message, bool result)> EditUserAsync(AddUserViewModel model, User user, long adminId)
     {
         try
         {

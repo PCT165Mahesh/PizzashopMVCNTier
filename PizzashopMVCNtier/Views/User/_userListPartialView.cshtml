@@ -51,7 +51,7 @@
                         }
                 </td>
                 <td>
-                    <a class="btn user_action  @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("EditUser", "User")?id=@user.UserId">
+                    <a class="btn user_action" href="@Url.Action("SaveUser", "User")?id=@user.UserId">
                         <img src="/images/icons/edit-pen.svg" alt="" />
                     </a>
                     @if(User.IsInRole("SuperAdmin"))
@@ -63,7 +63,7 @@
                     }
                     else
                     {
-                        <a class="btn user_action user_action_delete deleteUserBtn disabled-link @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 
+                        <a class="btn user_action user_action_delete deleteUserBtn disabled-link" data-id="@user.UserId" 
                             data-bs-toggle="modal" data-bs-target="#myModal">
                             <img src="/images/icons/delete-trash-icon.svg" alt="" />
                         </a>

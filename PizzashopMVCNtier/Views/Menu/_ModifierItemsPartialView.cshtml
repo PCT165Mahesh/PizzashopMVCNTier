@@ -5,7 +5,7 @@
         <tr>
             <th id="itemName" scope="col">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="selectAll" onclick="toggleCheckBoxes(this)" />
+                    <input type="checkbox" class="form-check-input" id="modifierSuperCheckbox"  />
                     <label class="form-check-label" for="selectAll">Name</label>
                 </div>
             </th>
@@ -21,7 +21,7 @@
             <tr>
                 <td class="user_profile">
                     <div class="d-flex align-items-center gap-2">
-                        <input type="checkbox" class="form-check-input modifierItemCheckBox" data-mg-item-id="@modifierItem.ModifierItemId"/>
+                        <input type="checkbox" class="form-check-input modifierCheckbox" data-mg-item-id="@modifierItem.ModifierItemId" data-mgid="@modifierItem.ModifierGroupId"/>
                         @modifierItem.Name
                     </div>
                 </td>
@@ -34,7 +34,7 @@
                     <a class="btn user_action modifierEditBtn" type="button" data-mg-item-id="@modifierItem.ModifierItemId" data-bs-target="#addModifierItem" data-bs-toggle="modal">
                         <img src="~/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <button class="btn user_action modifierDeleteBtn" type="button" data-mg-item-id="@modifierItem.ModifierItemId" data-bs-target="#deleteModifierModal" data-bs-toggle="modal">
+                    <button class="btn user_action modifierDeleteBtn" type="button" data-mg-item-id="@modifierItem.ModifierItemId" data-mgid="@modifierItem.ModifierGroupId"  data-bs-target="#deleteModifierModal" data-bs-toggle="modal">
                         <img src="~/images/icons/delete-trash-icon.svg" alt="" />
                     </button>
                 </td>

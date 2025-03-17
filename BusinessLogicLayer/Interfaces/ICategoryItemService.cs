@@ -6,6 +6,7 @@ namespace BusinessLogicLayer.Interfaces;
 
 public interface ICategoryItemService
 {
+    #region CRUD For Category
     public List<CategoryViewModel> GetCategories();
     public CategoryViewModel GetCategoryById(long id);
     public Task<ItemListViewModel> GetItemList(long categoryId,int pageNo, int pageSize, string search);
@@ -14,6 +15,7 @@ public interface ICategoryItemService
     public Task<bool> AddCategory(CategoryViewModel model, string userName);
     public Task<bool> EditCategory(CategoryViewModel model, string userName);
     public Task<bool> DeleteCategory(long categoryId, string userName);
+    #endregion
 
     #region CRUD For Items
 

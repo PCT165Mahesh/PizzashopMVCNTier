@@ -6,7 +6,7 @@
         <tr>
             <th id="itemName" scope="col" style="width: 650px;">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="selectAll" onclick="toggleCheckBoxes(this)" />
+                    <input type="checkbox" class="form-check-input" id="tableSuperCheckBox" />
                     <label class="form-check-label" for="selectAll">Name</label>
                 </div>
             </th>
@@ -21,7 +21,7 @@
             <tr>
                 <td class="user_profile" style="vertical-align: middle;">
                     <div class="d-flex align-items-center gap-2">
-                        <input type="checkbox" class="form-check-input" data-tableid="@tables.TableId"/>
+                        <input type="checkbox" class="form-check-input tableCheckbox" data-tableid="@tables.TableId" data-sectionid="@tables.SectionId"/>
                         @tables.TableName
                     </div>
                 </td>
@@ -39,10 +39,12 @@
                         }
                 </td>
                 <td class="center-text">
-                    <a class="btn user_action p-0 tableEditBtn" type="button" data-tableid="@tables.TableId">
+                    <a class="btn user_action p-0 tableEditBtn" type="button" data-tableid="@tables.TableId" data-bs-target="#addEditTableModal"
+              data-bs-toggle="modal">
                         <img src="~/images/icons/edit-pen.svg" alt="" />
                     </a>
-                    <button class="btn user_action tableDeleteBtn" type="button" data-mg-item-id="@tables.TableId">
+                    <button class="btn user_action tableDeleteBtn" type="button" data-sectionid="@tables.SectionId" data-tableid="@tables.TableId"
+                        data-bs-target="#deleteTableModal" data-bs-toggle="modal">
                         <img src="~/images/icons/delete-trash-icon.svg" alt="" />
                     </button>
                 </td>

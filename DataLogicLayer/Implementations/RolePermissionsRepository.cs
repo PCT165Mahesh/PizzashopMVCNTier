@@ -19,7 +19,7 @@ public class RolePermissionsRepository : IRolePermissionsRepository
     -------------------------------------------------------------------------------------------------------*/
     public List<PermissionsViewModel> GetRoleAndPermissions(long roleId)
     {
-        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).ToList();
+        List<Rolesandpermission> permissions =  _context.Rolesandpermissions.Where(rp => rp.Roleid == roleId).Include(rp => rp.Permission).OrderBy(rp=>rp.Id).ToList();
         List<PermissionsViewModel> model = new List<PermissionsViewModel>();
         
         foreach(Rolesandpermission perm in permissions){
@@ -64,4 +64,11 @@ public class RolePermissionsRepository : IRolePermissionsRepository
        }
         return true;
     }
+
+    public async Task<List<Rolesandpermission>> GetRolesandpermissionsList(long roleId)
+    {
+        List<Rolesandpermission> rolesandpermissions = await _context.Rolesandpermissions.Include(rp=>rp.Permission).Where(rp => rp.Roleid == roleId).ToListAsync();
+        return rolesandpermissions;
+    }
+
 }
