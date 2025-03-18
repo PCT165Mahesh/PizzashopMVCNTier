@@ -1,0 +1,105 @@
+@model DataLogicLayer.ViewModels.TaxViewModel
+<div class="table-responsive" >
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+            <th scope="col">Type</th>
+            <th scope="col">IsEnabled</th>
+            <th scope="col">
+                Default
+            </th>
+            <th scope="col">Tax Value</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody id="userListBody">
+        @foreach (var tax in Model.TaxList)
+        {
+            <tr>
+                <td>
+                    @tax.TaxName
+                </td>
+                <td>
+                    @if(tax.TaxType)
+                        {
+                            <div>Percentage</div>
+                        }
+                        else
+                        {
+                            <div>Flat Amount</div>
+                        }
+                </td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input taxCheckBox" type="checkbox" role="switch"
+                             @(tax.Isenabled ? "checked" : "") disabled />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input taxCheckBox" type="checkbox" role="switch"
+                             @((bool)tax.Default ? "checked" : "") disabled />
+                    </div>
+                </td>
+                <td>
+                   @tax.TaxValue
+                </td>
+                <td>
+                    <a class="btn user_action editTaxBtn" data-bs-toggle="modal" data-bs-target="#addEditTaxModal" data-taxid="@tax.TaxId">
+                        <img src="/images/icons/edit-pen.svg" alt="" />
+                    </a>
+                    <a class="btn user_action user_action_delete taxDeleteBtn" data-bs-target="#deleteTaxModal" data-bs-toggle="modal" data-taxid="@tax.TaxId">
+                        <img src="/images/icons/delete-trash-icon.svg" alt="" />
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<!-- Paggination Frontend Start -->
+<div class="d-flex flex-sm-row flex-column align-items-sm-center justify-content-end pagination_container">
+    <div class="d-flex flex-row align-items-center">
+        <span>Items per page:</span>
+
+        <!-- Page  Numbers Drop Down -->
+        <select class="form-select w-auto" onchange="TaxesPaginationAjax(1)" aria-label="Default select example" id="taxPageSize">
+            @if (Model.Page.PageSize != null)
+            {
+                <option value="2" selected="@(Model.Page.PageSize == 2 ? true : false)">2</option>
+                <option value="5" selected="@(Model.Page.PageSize == 5 ? true : false)">5</option>
+                <option value="10" selected="@(Model.Page.PageSize == 10 ? true : false)">10</option>
+                <option value="15" selected="@(Model.Page.PageSize == 15 ? true : false)">15</option>
+                <option value="20" selected="@(Model.Page.PageSize == 20 ? true : false)">20</option>
+            }
+        </select>
+    </div>
+
+    <span style="margin-left: 8px" class="pagination_details">
+        Showing @Model.Page.FromRec - @Model.Page.ToRec of @Model.Page.TotalRecords
+
+    </span>
+
+    @if (Model.Page.TotalPages >= 1)
+    {
+        <div>
+            <!-- Previous Page button-->
+
+            <button type="button" class="btn border border-black prev_page" id="prevPageIcon" @(Model.Page.CurrentPage > 1 ?
+                " " : "disabled") onclick="TaxesPaginationAjax(@Model.Page.CurrentPage-1)">
+                <img src="~/images/icons/chevron-left.svg" alt="" />
+            </button>
+
+            <!-- Next Page button-->
+            <button type="button" class="btn border border-black" id="nextPageIcon" @(Model.Page.CurrentPage <
+                Model.Page.TotalPages ? " " : "disabled") onclick="TaxesPaginationAjax(@Model.Page.CurrentPage+1)">
+            <img src="~/images/icons/chevron-right.svg" alt="" />
+        </button>
+    </div>
+        }
+</div>
+<!-- Pagination Frontend Ends -->

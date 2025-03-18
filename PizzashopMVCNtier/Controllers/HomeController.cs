@@ -26,7 +26,6 @@ public class HomeController : Controller
         _resetPasswordService = resetPasswordService;
     }
 
-/*---------------------------------------------------------------------------Login------------------------------------------------------------------------------*/
 
     #region Login
     [HttpGet]
@@ -62,8 +61,6 @@ public class HomeController : Controller
     }
     #endregion
 
-/*---------------------------------------------------------------------------Logout------------------------------------------------------------------------------*/
-
     #region Logout
     [Authorize]
     public IActionResult Logout()
@@ -72,8 +69,6 @@ public class HomeController : Controller
         return RedirectToAction("Login", "Home");
     }
     #endregion
-
-/*---------------------------------------------------------------------------Forgot Password------------------------------------------------------------------------------*/
 
     #region Forgot Password
     [HttpGet]
@@ -109,8 +104,6 @@ public class HomeController : Controller
     }
 
     #endregion
-
-/*---------------------------------------------------------------------------Reset Password------------------------------------------------------------------------------*/
 
     #region Reset Password
 
@@ -149,8 +142,6 @@ public class HomeController : Controller
         return View(model);
     }
     #endregion
-
-/*---------------------------------------------------------------------------Error Controll------------------------------------------------------------------------------*/
 
     #region Error Controll
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

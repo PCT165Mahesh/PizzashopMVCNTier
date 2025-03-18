@@ -20,7 +20,8 @@
           <tr>
             <td>@role.Rolename</td>
             <td>
-              <a asp-action="Permission" asp-controller="RolePermission" asp-route-id="@role.RoleId" class="btn">
+              <a asp-action="Permission" asp-controller="RolePermission" asp-route-id="@role.RoleId" 
+                class="btn @(!User.IsInRole("SuperAdmin") && role.Rolename == "SuperAdmin" ? "disabled-link" : "")">
                 <img src="~/images/icons/edit-pen.svg" alt="">
               </a>
             </td>

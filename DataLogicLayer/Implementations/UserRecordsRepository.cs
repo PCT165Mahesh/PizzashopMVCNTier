@@ -20,7 +20,6 @@ public class UserRecordsRepository : IGetUserRecordsRepository
     #region  Get User Records for Pagination
     public async Task<(List<UserListViewModel> users, int totalRecords)> GetAllUserRecordsAsync(int pageNo, int pageSize, string search, string columnName, string sortOrder)
     {
-
         IQueryable<UserListViewModel> query = _context.Users
                                             .Include(u => u.Role)
                                             .Where(u => !u.Isdeleted)
@@ -66,6 +65,7 @@ public class UserRecordsRepository : IGetUserRecordsRepository
 
         return (users, totalRecords);
     }
+
     #endregion
 
 }

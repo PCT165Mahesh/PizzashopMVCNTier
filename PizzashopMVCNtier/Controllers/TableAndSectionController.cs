@@ -20,8 +20,6 @@ public class TableAndSectionController : Controller
         _userDetailService = userDetailService;
     }
 
-/*---------------------------------------------------------------------------Sectoin and Table List------------------------------------------------------------------------------*/
-
     #region Section and Table List   
     [PermissionAuthorize("TableAndSection_View")]
     public async Task<IActionResult> Index()
@@ -36,8 +34,6 @@ public class TableAndSectionController : Controller
         return PartialView("_tablesList", await _tableSectionService.GetTableList(sectionId, pageNo, pageSize, search));
     }
     #endregion
-
-/*---------------------------------------------------------------------------Sections CRUD------------------------------------------------------------------------------*/
 
     #region Add/Edit Section
     [HttpGet]
@@ -116,7 +112,6 @@ public class TableAndSectionController : Controller
     }
     #endregion
 
-/*---------------------------------------------------------------------------Tables CRUD------------------------------------------------------------------------------*/
     #region Add/Edit Table
     [HttpGet]
     [PermissionAuthorize("TableAndSection_AddEdit")]

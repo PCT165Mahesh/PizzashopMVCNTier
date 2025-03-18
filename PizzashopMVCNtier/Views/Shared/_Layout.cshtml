@@ -93,7 +93,7 @@
                 }
                 @if(permissions.Contains("RoleAndPermission_View"))
                 {
-                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "") text-nowrap">
                         <a asp-action="Role" asp-controller="RolePermission">
                             <img src="~/images/icons/person-gear.svg" alt="" />
                             <span class="sidebar_desc">Roles and Permisions</span>
@@ -121,7 +121,7 @@
                 @if(permissions.Contains("TaxAndFee_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                        <a href="">
+                        <a asp-action="Index" asp-controller="TaxesAndFees">
                             <img src="~/images/icons/cash-coin.svg" alt="" />
                             <span class="sidebar_desc">Taxes and Fees</span>
                         </a>
@@ -180,7 +180,7 @@
                         }
                         @if(permissions.Contains("RoleAndPermission_View"))
                         {
-                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
+                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "") text-nowrap">
                                 <a asp-action="Role" asp-controller="RolePermission">
                                     <img src="~/images/icons/person-gear.svg" alt="" />
                                     <span class="sidebar_desc">Roles and Permisions</span>
@@ -208,7 +208,7 @@
                         @if(permissions.Contains("TaxAndFee_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                                <a href="">
+                                <a asp-action="Index" asp-controller="TaxesAndFees">
                                     <img src="~/images/icons/cash-coin.svg" alt="" />
                                     <span class="sidebar_desc">Taxes and Fees</span>
                                 </a>

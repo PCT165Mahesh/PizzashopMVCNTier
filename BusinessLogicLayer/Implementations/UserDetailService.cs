@@ -97,10 +97,17 @@ public class UserDetailService : IUserDetailService
     public async Task<UserViewModel> GetUserDetails(int pageNo, int pageSize, string search, string columnName, string sortOrder)
     {
         UserViewModel model = new() { Page = new()};
+
+        HttpContext? context = _httpContextAccessor.HttpContext;
+        string? token = context.Session.GetString("SuperSecretAuthToken");
+        string? userName = _jwtService.GetClaimValue(token, "userName");
+
+        User? currentUser = await _userRepository.GetUserByUserName(userName);
         var userData = await _userRecordsRepository.GetAllUserRecordsAsync(pageNo, pageSize, search, columnName, sortOrder);
 
         model.UserList = userData.users;
         model.Page.SetPagination(userData.totalRecords, pageSize, pageNo);
+        model.CurrentUserId = currentUser.Id;
         
         return model;
     }

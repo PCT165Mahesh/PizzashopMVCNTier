@@ -1,0 +1,53 @@
+@model DataLogicLayer.ViewModels.TaxListViewModel
+<div class="modal-header border-0 border-bottom">
+    <h5 class="modal-title fw-bolder">@((Model.TaxId == null || Model.TaxId == 0) ? "Add" : "Edit") Tax</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form asp-action="AddEditTax" asp-controller="TaxesAndFees" method="post" id="taxSaveForm">
+    <div class="modal-body d-flex flex-column align-items-center">
+        <input type="hidden" asp-for="@Model.TaxId">
+        <div class="row w-100">
+            <div class="form-floating col-12 mb-3">
+                <input asp-for="@Model.TaxName" type="text" class="form-control" placeholder="Enter name">
+                <label class="form-label txt-color">Name*</label>
+                <span class="text-danger" asp-validation-for="TaxName"></span>
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="form-floating col-md-6 col-12 mb-3 position-relative">
+                <select class="form-select" id="taxType" asp-for="TaxType">
+                    <option value="true" selected="@(Model.TaxType)">Percentage</option>
+                    <option value="false" selected="@(!Model.TaxType)">Flat Amount</option>
+                </select>
+                <label for="taxType">Tax Type*</label>
+                <span class="text-danger" asp-validation-for="TaxType"></span>
+            </div>
+            <div class="form-floating col-lg-6 col-12 mb-3">
+                <input asp-for="@Model.TaxValue" type="text" class="form-control">
+                <label class="form-label txt-color">Tax Amount*</label>
+                <span class="text-danger" asp-validation-for="TaxValue"></span>
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="col-6 mb-3 d-flex justify-content-center">
+                <div class="form-check form-switch taxCheckBox">
+                    <input asp-for="@Model.Isenabled" class="form-check-input" type="checkbox">
+                </div>
+                <label class="form-label txt-color me-2">Available</label>
+            </div>
+            <div class="col-6 mb-3 d-flex justify-content-center">
+                <div class="form-check form-switch taxCheckBox">
+                    <input asp-for="@Model.Default" class="form-check-input" type="checkbox">
+                </div>
+                <label class="form-label txt-color me-2">Default Tax</label>
+            </div>
+        </div>
+        <div class=" w-100 d-flex flex-row justify-content-end">
+            <button type="submit" id="confirmTaxBtn" class="btn btn-primary mx-3">Save</button>
+            <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">
+                Cancel
+            </button>
+        </div>
+    </div>
+</form>
+

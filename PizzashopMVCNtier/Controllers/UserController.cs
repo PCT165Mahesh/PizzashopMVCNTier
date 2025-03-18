@@ -27,7 +27,6 @@ public class UserController : Controller
         _countryService = countryService;
     }
 
-/*---------------------------------------------------------------------------User List------------------------------------------------------------------------------*/
 
     #region User List
     [PermissionAuthorize("Users_View")]
@@ -39,17 +38,13 @@ public class UserController : Controller
 
 
 
-    [HttpGet]
-
-    
+    [HttpGet]   
     public async Task<IActionResult> GetUserList(int pageNo = 1, int pageSize = 3, string search = "",string columnName="", string sortOrder="")
     {
         return PartialView("_userListPartialView",await _userDetailService.GetUserDetails(pageNo, pageSize, search, columnName, sortOrder));
     }
 
     #endregion
-
-/*---------------------------------------------------------------------------User CRUD------------------------------------------------------------------------------*/
 
     #region Add/Edit User
 

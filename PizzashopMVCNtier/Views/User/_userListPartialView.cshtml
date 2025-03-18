@@ -1,4 +1,24 @@
 @model DataLogicLayer.ViewModels.UserViewModel
+@functions{
+    string MaskEmail(string email)
+    {
+        if(string.IsNullOrEmpty(email))
+        {
+            return "";
+        }
+        var parts = email.Split('@');
+        return parts[0].Substring(0,2) + "****@" + parts[1];
+    }
+
+    string MaskPhone(string phone)
+    {
+        if(string.IsNullOrEmpty(phone) || phone.Length < 4)
+        {
+            return "****";
+        }
+        return "****" + phone.Substring(phone.Length-4);
+    }
+}
 
 <div class="table-responsive" >
 <table class="table">
@@ -31,16 +51,16 @@
     <tbody id="userListBody">
         @foreach (var user in Model.UserList)
         {
-            <tr>
-                <td>
+            <tr data-userid="@user.UserId">
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">
                     <img src="@(string.IsNullOrEmpty(user.ImgUrl as string) ? "/uploads/Default_pfp.svg.png" : user.ImgUrl)"
                             class="rounded-circle" width="25px" height="25px">
                     @user.FirstName @user.LastName
                 </td>
-                <td>@user.Email</td>
-                <td>@user.Phone</td>
-                <td>@user.RoleName</td>
-                <td>
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">@(User.IsInRole("SuperAdmin") ? user.Email : MaskEmail(user.Email))</td>
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">@(User.IsInRole("SuperAdmin") ? user.Phone : MaskPhone(user.Phone))</td>
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">@user.RoleName</td>
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">
                    @if(user.Status)
                         {
                             <div class="status active_status">Active</div>
@@ -50,10 +70,10 @@
                             <div class="status inactive_status">Inactive</div>
                         }
                 </td>
-                <td>
+                <td class="@(Model.CurrentUserId == user.UserId ? "highlighted_row" : "")">
                     @if(User.IsInRole("SuperAdmin"))
                     {
-                        <a class="btn user_action" href="@Url.Action("SaveUser", "User")?id=@user.UserId">
+                        <a class="btn user_action @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" href="@Url.Action("SaveUser", "User")?id=@user.UserId">
                             <img src="/images/icons/edit-pen.svg" alt="" />
                         </a>
                         <a class="btn user_action user_action_delete deleteUserBtn @(user.RoleName == "SuperAdmin" ? "disabled-link" : "")" data-id="@user.UserId" 

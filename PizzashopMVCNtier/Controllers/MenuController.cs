@@ -27,7 +27,6 @@ public class MenuController : Controller
 
     }
 
-    /*---------------------------------------------------------------------------Menu Page Index------------------------------------------------------------------------------*/
 
     #region Menu Home Page
     [HttpGet]
@@ -44,8 +43,6 @@ public class MenuController : Controller
         return View(model);
     }
     #endregion
-
-    /*---------------------------------------------------------------------------Category CRUD---------------------------------------------------------------------------------*/
 
     #region Category CRUD
     public IActionResult GetCategoryById(long id)
@@ -112,8 +109,6 @@ public class MenuController : Controller
         }
     }
     #endregion
-
-    /*---------------------------------------------------------------------------Items CRUD-----------------------------------------------------------------------------------*/
 
     #region Items CRUD
     public async Task<IActionResult> GetItemList(long categoryId = 1, int pageNo = 1, int pageSize = 3, string search = "")
@@ -232,7 +227,6 @@ public class MenuController : Controller
     }
     #endregion
     
-    // -------------------------------------------------------------------- Add Item Modifier Select Group ------------------------------------------------------------------//
     #region Modifier Item For Add Item
     [HttpGet]
     public async Task<IActionResult> GetModifierItemById(long modifierGroupId)
@@ -240,8 +234,6 @@ public class MenuController : Controller
         return PartialView("_modifierItemPartialView", await _modifiersService.GetModifierItemById(modifierGroupId));
     }
     #endregion
-
-    /*-----------------------------------------------------------------------Modifier Group CRUD------------------------------------------------------------------------------*/
 
     #region Modifier Group CRUD
     public IActionResult ModifiersTab()
@@ -329,8 +321,6 @@ public class MenuController : Controller
         }
     }
     #endregion
-
-    /*---------------------------------------------------------------------------Modifier Item CRUD------------------------------------------------------------------------------*/
 
     #region Modifer Items CRUD
     public async Task<IActionResult> GetModifierItems(long modifierGroupId = 1, int pageNo = 1, int pageSize = 3, string search = "")

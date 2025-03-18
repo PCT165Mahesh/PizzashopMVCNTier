@@ -1,3 +1,10 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+} */
+
 * {
   margin: 0;
   padding: 0;
@@ -382,6 +389,9 @@ a{
   transform: scale(2);
   margin-right: 12px;
 }
+.addItemCheckBox, .taxCheckBox{
+  transform: scale(1.5);
+}
 
 /* Edit Delete Button in Menu */
 .editDeleteBtn{
@@ -491,6 +501,12 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 .center-text{
   text-align: center;
+}
+
+.highlighted_row
+{
+  background-color: rgb(125, 222, 240) !important;
+  color: rgb(65, 61, 61) !important;
 }
 
  

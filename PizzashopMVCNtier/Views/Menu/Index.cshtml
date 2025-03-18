@@ -85,13 +85,13 @@
                     alt="" /></label>
               </form>
               <button class="btn border border-black me-2" id="MassdeleteItemBtn" data-bs-toggle="modal"
-                data-bs-target="#massDeleteItemModal">
+                data-bs-target="#massDeleteItemModal" disabled>
                 <img src="~/images/icons/delete-trash-icon.svg" alt="" />
               </button>
             </div>
             <button type="button" id="newItemBtn" class="btn add_user_btn" data-bs-toggle="modal"
               data-bs-target="#addItemModal">
-              <a class="text-white text-decoration-none">New Items</a>
+              <a class="text-white text-decoration-none">New Item</a>
             </button>
           </div>
 
@@ -652,9 +652,9 @@
 
   <!-- ----------------------------------------------------------- Mass delete Diasble Property Javascript--------------------------------------------------------->
   <script>
-    $(document).ready(function () {
+    @* $(document).ready(function () {
       $("#MassdeleteItemBtn").prop("disabled", true);
-    });
+    }); *@
 
     function toggleMasterDeleteBtn() {
       if ($(".itemCheckBox:checked").length > 0) {
@@ -1087,7 +1087,7 @@
 
   <!-- ----------------------------------------------------------- Mass Modifier delete Diasble Property Javascript--------------------------------------------------------->
   <script>
-    function toggleMasterDeleteBtn() {
+    function toggleMasterDeleteModifierBtn() {
       if ($(".modifierCheckbox:checked").length > 0) {
         $("#MassDeleteModifierBtn").prop("disabled", false);
       }
@@ -1100,7 +1100,7 @@
       $(".modifierCheckbox").each(function () {
         $(this).prop("checked", $("#modifierSuperCheckbox").prop("checked"));
       });
-      toggleMasterDeleteBtn();
+      toggleMasterDeleteModifierBtn();
     });
 
     $(document).on("change", ".modifierCheckbox", function () {
@@ -1115,7 +1115,7 @@
       else {
         $("#modifierSuperCheckbox").prop("indeterminate", true);
       }
-      toggleMasterDeleteBtn();
+      toggleMasterDeleteModifierBtn();
     });
 
   </script>

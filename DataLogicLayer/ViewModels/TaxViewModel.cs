@@ -2,7 +2,6 @@ namespace DataLogicLayer.ViewModels;
 
 public class TaxViewModel
 {
-    public long? TaxId { get; set; }
-    public bool TaxType { get; set;}
-
+    public List<TaxListViewModel> TaxList { get; set; } = new List<TaxListViewModel>();
+    public PaginationViewModel? Page{ get; set; }
 }
