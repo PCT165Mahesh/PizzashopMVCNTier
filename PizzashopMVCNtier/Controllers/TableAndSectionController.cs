@@ -65,9 +65,7 @@ public class TableAndSectionController : Controller
 
         if (!ModelState.IsValid)
         {
-            TempData["NotificationMessage"] = NotificationMessages.InvalidModelState;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
-            return RedirectToAction("Index", "TableAndSection");
+            return PartialView("_addSection", model);
         }
 
 
@@ -88,15 +86,13 @@ public class TableAndSectionController : Controller
         // Checking for Add or Update
         if (result.Equals("true"))
         {
-            TempData["NotificationMessage"] = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Section");
-            TempData["NotificationType"] = NotificationType.Success.ToString();
+            var message = string.Format(isCreated ? NotificationMessages.EntityCreated : NotificationMessages.EntityUpdated, "Section");
+            return Json(new { success = true, message = message });
         }
         else
         {
-            TempData["NotificationMessage"] = result;
-            TempData["NotificationType"] = NotificationType.Error.ToString();
+            return Json(new { success = false, errorMessage = result});
         }
-        return RedirectToAction("Index", "TableAndSection");
     }
     #endregion
 
@@ -151,7 +147,7 @@ public class TableAndSectionController : Controller
         if (!ModelState.IsValid)
         {
             model.SectionList = await _tableSectionService.GetSectionsList();
-            return View(model);
+           return PartialView("_addTable", model);
         }
 
 

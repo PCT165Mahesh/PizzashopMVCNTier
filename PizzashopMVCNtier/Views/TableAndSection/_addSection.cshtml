@@ -8,6 +8,7 @@
         <input type="hidden" asp-for="@Model.SectionID" id="ModalSectionId">
         <div class="mb-3 w-100">
             <input asp-for="@Model.Name" type="text" class="form-control" id="modalSectionName" placeholder="Name">
+            <span class="text-danger" asp-validation-for="Name"></span>
         </div>
         <div class="mb-3 w-100">
             <textarea rows="5" asp-for="@Model.Description" type="text" class="form-control" id="modalSectionDescription"

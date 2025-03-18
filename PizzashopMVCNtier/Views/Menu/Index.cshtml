@@ -541,8 +541,8 @@
     
     // --------------------------------------------------------------------------------------- Add Item Form  Submission----------------------
      $(document).on("click", "#submitAddItemForm", function (e) {
-        e.preventDefault(); // Prevent default form submission
-        SubmitAddItem(); // Handle modifier selection if needed
+        e.preventDefault(); 
+        SubmitAddItem();
 
         var form = $("#menuItemForm");
         var formData = new FormData(form[0]);
@@ -566,9 +566,9 @@
                       toastr.error(response.errorMessage);
                     }
                     else{
-                      // Keep modal open and show validation errors
+                      
                       $("#addItemModalContent").html(response);
-                      $('#addItemModal').modal('show'); // Ensure modal remains visible
+                      $('#addItemModal').modal('show'); 
                     }
                 }
             },

@@ -12,9 +12,9 @@ public class TableViewModel
     [Required(ErrorMessage = "Table Name is required")]
     public string? TableName { get; set; }
 
+    [Required(ErrorMessage = "Capacity is requied")]
     [Range(1, int.MaxValue, ErrorMessage = "Capacity must be at least 1")]
     public int Capacity { get; set; }
     public bool IsOccupied { get; set; }
-
     public IEnumerable<SectionViewModel>? SectionList { get; set; }
 }
