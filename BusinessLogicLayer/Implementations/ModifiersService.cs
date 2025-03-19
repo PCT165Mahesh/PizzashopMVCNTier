@@ -101,9 +101,9 @@ public class ModifiersService : IModifiersService
         return model;
     }
 
-    public async Task<AddEditModifierViewModel> GetModifierById(long modifierId)
+    public async Task<AddEditModifierViewModel> GetModifierById(long modifierId,long modifierGroupId)
     {
-        return await _modifiersRepository.GetModifierByIdAsync(modifierId);
+        return await _modifiersRepository.GetModifierByIdAsync(modifierId, modifierGroupId);
     }
 
     public async Task<string> AddModifierItem(AddEditModifierViewModel model, long userId)

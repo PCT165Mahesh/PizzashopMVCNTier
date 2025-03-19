@@ -11,8 +11,6 @@ public partial class Modifieritem
 
     public string? Description { get; set; }
 
-    public long ModifierGroupId { get; set; }
-
     public decimal? Rate { get; set; }
 
     public long Unitid { get; set; }
@@ -30,8 +28,6 @@ public partial class Modifieritem
     public bool Isdeleted { get; set; }
 
     public virtual User CreatedByNavigation { get; set; } = null!;
-
-    public virtual Modifiergroup ModifierGroup { get; set; } = null!;
 
     public virtual ICollection<Modifiergroupitemmap> Modifiergroupitemmaps { get; set; } = new List<Modifiergroupitemmap>();
 

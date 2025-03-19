@@ -16,7 +16,7 @@ public interface IModifiersService
 
     #region Modifier Items CRUD
     public Task<ModifierItemListViewModel> GetModfierItems(long modifierGroupId, int pageNo, int pageSize, string search);  //Item List for Modifier Page
-    public Task<AddEditModifierViewModel> GetModifierById(long modifierId); //For Edit Modifier Item
+    public Task<AddEditModifierViewModel> GetModifierById(long modifierId, long modifierGroupId); //For Edit Modifier Item
     public Task<string> AddModifierItem(AddEditModifierViewModel model, long userId);
     public Task<string> EditModifierItem(AddEditModifierViewModel model, long userId);
     public Task<bool> DeleteModifierItem(long modifierGroupId,long modifierId, string userName);

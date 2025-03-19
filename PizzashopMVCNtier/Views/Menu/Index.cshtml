@@ -996,10 +996,11 @@
   <!-- ----------------------------------------------------------- Modifier Items Add Edit Javascript--------------------------------------------------------->
   <script>
     function loadModifierItemModal(id) {
+      var ModifierGroupId =$('.modifier_active').data("mgid");
       $.ajax({
         url: '@Url.Action("SaveModifier", "Menu")',
         type: "GET",
-        data: { id: id },
+        data: {modifierGroupId:ModifierGroupId, id: id },
         dataType: "html",
         success: function (data) {
           $("#addModifierModalContent").html(data);
@@ -1019,7 +1020,7 @@
 
     $(document).on("click", '.modifierEditBtn', function () {
       $("#addModifierGroupContent").empty();
-      loadModifierItemModal($(this).data("mg-item-id"));
+      loadModifierItemModal($(this).data("mg-item-id"),);
     });
 
     $(document).on("click", "#confirmModifierBtn", function (e) {

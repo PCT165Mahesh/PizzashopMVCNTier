@@ -36,8 +36,13 @@ public class LoginService : ILoginService
 
         string? token = context.Session.GetString("SuperSecretAuthToken");
 
+        if(!string.IsNullOrEmpty(token))
+        {
+            return true;
+        }
+
         // If session is expired but "Remember Me" cookie exists, refresh the JWT token
-        if(string.IsNullOrEmpty(token) && context.Request.Cookies["UserEmail"] != null){
+        if(context.Request.Cookies["UserEmail"] != null){
             string? userEmail = context.Request.Cookies["UserEmail"];
 
             User user = await _userRepository.GetUserByEmail(userEmail);

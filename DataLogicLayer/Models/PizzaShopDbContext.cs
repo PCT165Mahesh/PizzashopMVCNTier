@@ -619,7 +619,6 @@ public partial class PizzaShopDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
-            entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
@@ -639,11 +638,6 @@ public partial class PizzaShopDbContext : DbContext
                 .HasForeignKey(d => d.CreatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("modifieritems_created_by_fkey");
-
-            entity.HasOne(d => d.ModifierGroup).WithMany(p => p.Modifieritems)
-                .HasForeignKey(d => d.ModifierGroupId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("modifieritems_modifier_group_id_fkey");
 
             entity.HasOne(d => d.Unit).WithMany(p => p.Modifieritems)
                 .HasForeignKey(d => d.Unitid)

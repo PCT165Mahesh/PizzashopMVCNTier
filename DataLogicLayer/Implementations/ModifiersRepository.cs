@@ -55,18 +55,19 @@ public class ModifiersRepository : IModifiersRepository
     public async Task<ModifierGroupViewModel> GetModifierItemByIdAsync(long modifierGroupId)
     {
         ModifierGroupViewModel? modifiergroup = await _context.Modifiergroups.Where(m => m.Id == modifierGroupId).
-                                    Include(m => m.Modifieritems).
-                                    Select(m => new ModifierGroupViewModel
+                                    Include(m => m.Modifiergroupitemmaps)
+                                    .ThenInclude(mm => mm.ModifierItem)
+                                    .Select(m => new ModifierGroupViewModel
                                     {
                                         ModifierId = m.Id,
                                         Name = m.Name,
                                         Description = m.Description,
-                                        ModifierItemList = m.Modifieritems.Select(i => new ModifierItemViewModel
+                                        ModifierItemList = m.Modifiergroupitemmaps.Select(i => new ModifierItemViewModel
                                         {
-                                            ModifierItemId = i.Id,
-                                            Name = i.Name,
-                                            Rate = i.Rate,
-                                            Quantity = i.Quantity,
+                                            ModifierItemId = i.ModifierItem.Id,
+                                            Name = i.ModifierItem.Name,
+                                            Rate = i.ModifierItem.Rate,
+                                            Quantity = i.ModifierItem.Quantity,
                                         }).ToList()
                                     }).FirstOrDefaultAsync();
 
@@ -271,22 +272,21 @@ public class ModifiersRepository : IModifiersRepository
 
 
 
-    public async Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId)
+    public async Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId, long modifierGroupId)
     {
-        AddEditModifierViewModel? model = await _context.Modifieritems.Include(mi => mi.ModifierGroup)
-                                        .Where(mi => mi.Id == modifierId && !mi.Isdeleted)
-                                        .Select(mi => new AddEditModifierViewModel
-                                        {
-                                            ModifierGroupId = mi.ModifierGroup.Id,
-                                            OldModifierGroupId = mi.ModifierGroup.Id,
-                                            ModifierItemId = modifierId,
-                                            Name = mi.Name,
-                                            Description = mi.Description,
-                                            Rate = mi.Rate,
-                                            Quantity = mi.Quantity,
-                                            UnitId = mi.Unitid,
-                                        }).FirstOrDefaultAsync();
-
+        AddEditModifierViewModel? model = await _context.Modifiergroupitemmaps.Include(mm => mm.ModifierGroup)
+                                                .Where(mm => !mm.Isdeleted && mm.ModifierItemId == modifierId && mm.ModifierGroupId == modifierGroupId)
+                                                .Select(mm => new AddEditModifierViewModel
+                                                {
+                                                    ModifierGroupId = mm.ModifierGroupId,
+                                                    OldModifierGroupId = mm.ModifierGroupId,
+                                                    ModifierItemId = modifierId,
+                                                    Name = mm.ModifierItem.Name,
+                                                    Description = mm.ModifierItem.Description,
+                                                    Rate = mm.ModifierItem.Rate,
+                                                    Quantity = mm.ModifierItem.Quantity,
+                                                    UnitId = mm.ModifierItem.Unitid,
+                                                }).FirstOrDefaultAsync();
 
         return model;
     }
@@ -311,7 +311,6 @@ public class ModifiersRepository : IModifiersRepository
         {
             Modifieritem modifierItem = new Modifieritem
             {
-                ModifierGroupId = model.ModifierGroupId,
                 Name = model.Name,
                 Description = model.Description,
                 Rate = model.Rate,
@@ -365,7 +364,6 @@ public class ModifiersRepository : IModifiersRepository
             modifierItem.Rate = model.Rate;
             modifierItem.Quantity = model.Quantity;
             modifierItem.Unitid = model.UnitId;
-            modifierItem.ModifierGroupId = model.ModifierGroupId;
             modifierItem.UpdatedAt = DateTime.Now;
             modifierItem.UpdatedBy = userId;
 
@@ -432,19 +430,24 @@ public class ModifiersRepository : IModifiersRepository
     public async Task<List<ItemModifierGroupListViewModel>> GetModifierItemByItemId(long itemId)
     {
         List<ItemModifierGroupListViewModel> model = await _context.Itemmodifiergroups.
-        Where(i => i.Itemid == itemId && !i.Isdeleted).Select(i => new ItemModifierGroupListViewModel
+        Include(mm => mm.ModifierGroup.Modifiergroupitemmaps)
+        .ThenInclude(mim => mim.ModifierItem)
+        .Where(i => i.Itemid == itemId && !i.Isdeleted)
+        .Select(i => new ItemModifierGroupListViewModel
         {
             ItemId = i.Itemid,
             ModifierGroupId = i.ModifierGroupId,
             Name = i.ModifierGroup.Name,
             MinAllowed = i.MinAllowed,
             MaxAllowed = i.MaxAllowed,
-            ModifierItemList = i.ModifierGroup.Modifieritems.Select(i => new ModifierItemViewModel
+            ModifierItemList = i.ModifierGroup.Modifiergroupitemmaps
+            .Where(m => !m.Isdeleted && !m.ModifierItem.Isdeleted)
+            .Select(i => new ModifierItemViewModel
             {
                 ModifierItemId = i.Id,
-                Name = i.Name,
-                Rate = i.Rate,
-                Quantity = i.Quantity
+                Name = i.ModifierItem.Name,
+                Rate = i.ModifierItem.Rate,
+                Quantity = i.ModifierItem.Quantity
             }).ToList()
         }).ToListAsync();
         return model;
