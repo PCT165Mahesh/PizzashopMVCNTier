@@ -16,12 +16,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PizzashopMVCProject</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/2.0.1/spinkit.min.css"> *@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 </head>
 
 <body>
+    <div id="loader">
+        <div class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+        </div>
+    </div>
+    <!-- Loader -->
+    @* <div id="loader">
+        <div class="pizza-spinner"></div>
+    </div> *@
     <!-- Navbar Upper Starts -->
     <nav class="navbar navbar-expand-lg upper_navbar p-0">
         <div class="container-fluid p-0">
@@ -40,17 +56,14 @@
             </div>
             <!-- User Profile Image -->
             <div class="dropdown">
-                <img 
-                @* src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
-                src="@profileImage"
-                 class="rounded-circle me-3" height="50px" width="50px"
-                class="me-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img @* src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
+ src="@profileImage" class="rounded-circle me-3" height="50px" width="50px"
+                    class="me-3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="border-bottom"><a class="dropdown-item">
                             @* <img src="@(string.IsNullOrEmpty(ViewData["ImgUrl"] as string) ? "/uploads/Default_pfp.svg.png" : ViewData["ImgUrl"])" *@
-                            <img src="@profileImage"
-                             alt="" width="40px" height="40px" class="rounded-circle">
+                            <img src="@profileImage" alt="" width="40px" height="40px" class="rounded-circle">
                             <span class="ms-2">@userName</span>
                         </a></li>
                     <li class="mt-2"><a class="dropdown-item" asp-action="ProfileDetails" asp-controller="Dashboard">
@@ -82,7 +95,7 @@
                         <span class="sidebar_desc">Dashboard</span>
                     </a>
                 </li>
-                @if(permissions.Contains("Users_View"))
+                @if (permissions.Contains("Users_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
                         <a asp-action="Index" asp-controller="User">
@@ -91,16 +104,16 @@
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("RoleAndPermission_View"))
+                @if (permissions.Contains("RoleAndPermission_View"))
                 {
-                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "") text-nowrap">
+                    <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
                         <a asp-action="Role" asp-controller="RolePermission">
                             <img src="~/images/icons/person-gear.svg" alt="" />
                             <span class="sidebar_desc">Roles and Permisions</span>
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("Menu_View"))
+                @if (permissions.Contains("Menu_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
                         <a asp-action="Index" asp-controller="Menu">
@@ -109,7 +122,7 @@
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("TableAndSection_View"))
+                @if (permissions.Contains("TableAndSection_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
                         <a asp-action="Index" asp-controller="TableAndSection">
@@ -118,16 +131,16 @@
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("TaxAndFee_View"))
+                @if (permissions.Contains("TaxAndFee_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                        <a asp-action="Index" asp-controller="TaxesAndFees">
+                        <a href="">
                             <img src="~/images/icons/cash-coin.svg" alt="" />
                             <span class="sidebar_desc">Taxes and Fees</span>
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("Order_View"))
+                @if (permissions.Contains("Order_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
                         <a href="">
@@ -136,7 +149,7 @@
                         </a>
                     </li>
                 }
-                @if(permissions.Contains("Customers_View"))
+                @if (permissions.Contains("Customers_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
                         <a href="">
@@ -169,7 +182,7 @@
                                 <span class="sidebar_desc">Dashboard</span>
                             </a>
                         </li>
-                        @if(permissions.Contains("Users_View"))
+                        @if (permissions.Contains("Users_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "User" ? "active" : "")">
                                 <a asp-action="Index" asp-controller="User">
@@ -178,16 +191,16 @@
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("RoleAndPermission_View"))
+                        @if (permissions.Contains("RoleAndPermission_View"))
                         {
-                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "") text-nowrap">
+                            <li class="@((ViewData["ActiveLink"] as string) == "Role" ? "active" : "")">
                                 <a asp-action="Role" asp-controller="RolePermission">
                                     <img src="~/images/icons/person-gear.svg" alt="" />
                                     <span class="sidebar_desc">Roles and Permisions</span>
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("Menu_View"))
+                        @if (permissions.Contains("Menu_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Menu" ? "active" : "")">
                                 <a asp-action="Index" asp-controller="Menu">
@@ -196,7 +209,7 @@
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("TableAndSection_View"))
+                        @if (permissions.Contains("TableAndSection_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Tables" ? "active" : "")">
                                 <a asp-action="Index" asp-controller="TableAndSection">
@@ -205,16 +218,16 @@
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("TaxAndFee_View"))
+                        @if (permissions.Contains("TaxAndFee_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                                <a asp-action="Index" asp-controller="TaxesAndFees">
+                                <a href="">
                                     <img src="~/images/icons/cash-coin.svg" alt="" />
                                     <span class="sidebar_desc">Taxes and Fees</span>
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("Order_View"))
+                        @if (permissions.Contains("Order_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Order" ? "active" : "")">
                                 <a href="">
@@ -223,7 +236,7 @@
                                 </a>
                             </li>
                         }
-                        @if(permissions.Contains("Customers_View"))
+                        @if (permissions.Contains("Customers_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Customers" ? "active" : "")">
                                 <a href="">
@@ -240,7 +253,8 @@
 
 
         <!-- Delete user Modal -->
-        <div class="modal fade" tabindex="-1" id="logoutModal" aria-labelleby="modal-title" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal fade" tabindex="-1" id="logoutModal" aria-labelleby="modal-title" data-bs-backdrop="static"
+            data-bs-keyboard="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header border-0 pb-0">
@@ -264,12 +278,16 @@
             </div>
         </div>
         @RenderBody()
+
+
+
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- Load jQuery Validation Plugins -->
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/1.19.5/jquery.validate.unobtrusive.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/1.19.5/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/custom.js" asp-append-version="true"></script>
@@ -278,6 +296,7 @@
     @await Html.PartialAsync("_ToastrNotification")
     @await Html.PartialAsync("_ValidationScriptsPartial")
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>

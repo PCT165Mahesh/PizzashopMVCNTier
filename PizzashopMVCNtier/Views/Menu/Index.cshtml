@@ -557,9 +557,6 @@
                 if (response.success) {
                     $('#addItemModal').modal('hide');
                     toastr.success(response.message);
-                    @* setTimeout(function () {
-                      location.reload(); // Refresh menu items
-                    }, 3000); *@
                     paginationAjax(1);
                 } else {
                     if(response.errorMessage){

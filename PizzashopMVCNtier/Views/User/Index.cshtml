@@ -13,11 +13,11 @@
         </div>
         <!-- Search box and button starts-->
         <div class="d-flex flex-sm-row flex-column">
-            <form class="d-flex position-relative" role="search">
-                <input class="form-control me-2 search-user" type="search" placeholder="Search" id="search"
+            <div class="d-flex position-relative" role="search">
+                <input class="form-control me-2 search-user" type="search" placeholder="Search" id="userSearch"
                     aria-label="Search" />
-                <label for="search" class="search_icon"><img src="~/images/icons/search.svg" alt="" /></label>
-            </form>
+                <label for="search" class="search_icon" id="userSearchLabel"><img src="~/images/icons/search.svg" alt="" /></label>
+            </div>
             <button type="button" class="btn add_user_btn">
                 <a asp-action="SaveUser" asp-controller="User" class="text-white text-decoration-none">+Add User</a>
             </button>
@@ -69,7 +69,7 @@
         let sortOrder = "";
         function paginationAjax(currentPage) {
             let pageSize = $('#selectPageSize').val();
-            let searchQuery = $('#search').val();
+            let searchQuery = $('#userSearch').val();
             if (pageSize == 0 || pageSize == null) pageSize = 3;
             if (searchQuery == null) searchQuery = "";
             $.ajax({
@@ -87,10 +87,16 @@
         }
 
 
-        $("#search").on("input", function () {
+        $(document).on("click", "#userSearchLabel",function () {
             currentPage = 1;
             paginationAjax(currentPage);
         });
+
+        $("#userSearch").on("keyup",function(e){
+            if(e.key === "Enter" || e.keyCode === 13){
+                paginationAjax(1);
+            }
+        })
 
         $(document).on("click", ".sort-btn", function () {
             columnName = $(this).data("name");
