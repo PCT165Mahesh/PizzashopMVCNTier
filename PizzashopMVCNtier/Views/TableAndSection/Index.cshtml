@@ -68,12 +68,12 @@
           <p class="heading_color fs-4 fw-bold ms-2">Tables</p>
           <div class="items_header_buttons d-flex justify-content-end me-3">
             <div class="d-flex flex-row">
-              <form class="d-flex position-relative" role="search">
+              <div class="d-flex position-relative" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" id="tableSearch"
                   aria-label="Search" />
-                <label for="search" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
+                <label for="search" id="tableSearchBtn" class="search_icon d-none d-md-block"><img src="~/images/icons/search.svg"
                     alt="" /></label>
-              </form>
+              </div>
               <button class="btn border border-black me-2" id="MassDeleteTableBtn"
                 data-bs-target="#MassDeleteTableModal" data-bs-toggle="modal" disabled>
                 <img src="~/images/icons/delete-trash-icon.svg" alt="" />
@@ -228,6 +228,7 @@
       sectionId = $('.category_active').data("sectionid");
       if (pageSize == 0 || pageSize == null) pageSize = 3;
       if (searchQuery == null) searchQuery = "";
+      
       $.ajax({
         url: '@Url.Action("GetTableList", "TableAndSection")',
         type: "GET",
@@ -245,10 +246,17 @@
 
     //Items Display With Search Javascript
 
-    $("#tableSearch").on("input", function () {
+
+    $(document).on("click", "#tableSearchBtn", function () {
       currentPage = 1;
       loadTablesAjax(currentPage);
     });
+
+    $("#tableSearch").on("keyup", function (e) {
+      if (e.key === "Enter" || e.keyCode === 13) {
+        loadTablesAjax(1);
+      }
+    })
   </script>
 
   <!-- ----------------------------------------------------------- Load Add/Edit Section Modal Javascript--------------------------------------------------------->
@@ -296,9 +304,9 @@
           if (response.success) {
             $('#addEditSectionModal').modal('hide');
             toastr.success(response.message);
-            setTimeout(function(){
+            setTimeout(function () {
               location.reload();
-            },3000)
+            }, 3000)
           } else {
             if (response.errorMessage) {
               toastr.error(response.errorMessage);
@@ -416,7 +424,7 @@
   </script>
 
 
-  <!-- ----------------------------------------------------------- Handle Delete Modifier Javascript--------------------------------------------------------->
+  <!-- ----------------------------------------------------------- Handle Delete table Javascript--------------------------------------------------------->
   <script>
     $(document).on("click", ".tableDeleteBtn", function () {
       sectionId = $(this).data("sectionid");
@@ -435,7 +443,7 @@
                 @* setTimeout(function () {
                   location.reload(); // Refresh Sections list
                 }, 3000); *@
-                } else {
+                  } else {
                 toastr.error(response.message);
               }
             },
@@ -460,7 +468,7 @@
     }
 
     $(document).on("change", "#tableSuperCheckBox", function () {
-      $(".modifierCheckbox").each(function () {
+      $(".tableCheckbox").each(function () {
         $(this).prop("checked", $("#tableSuperCheckBox").prop("checked"));
       });
       toggleMasterDeleteBtn();

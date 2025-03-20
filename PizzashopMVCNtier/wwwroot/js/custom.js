@@ -16,13 +16,13 @@ $(document).on("submit", "form", function (e) {
     $("#loader").hide();
   
     // Loader on Ajax
-    $(document).ajaxStart(function () {
-      $("#loader").show();
-    });
+    // $(document).ajaxStart(function () {
+    //   $("#loader").show();
+    // });
   
-    $(document).ajaxStop(function () {
-      $("#loader").hide();
-    });
+    // $(document).ajaxStop(function () {
+    //   $("#loader").hide();
+    // });
   
     $(document).on("submit", "form", function (e) {
         $("#loader").show();

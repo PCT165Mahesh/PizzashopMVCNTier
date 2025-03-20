@@ -134,7 +134,7 @@
                 @if (permissions.Contains("TaxAndFee_View"))
                 {
                     <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                        <a href="">
+                        <a asp-action="Index" asp-controller="TaxesAndFees">
                             <img src="~/images/icons/cash-coin.svg" alt="" />
                             <span class="sidebar_desc">Taxes and Fees</span>
                         </a>
@@ -221,7 +221,7 @@
                         @if (permissions.Contains("TaxAndFee_View"))
                         {
                             <li class="@((ViewData["ActiveLink"] as string) == "Texes" ? "active" : "")">
-                                <a href="">
+                                <a asp-action="Index" asp-controller="TaxesAndFees">
                                     <img src="~/images/icons/cash-coin.svg" alt="" />
                                     <span class="sidebar_desc">Taxes and Fees</span>
                                 </a>
@@ -285,9 +285,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- Load jQuery Validation Plugins -->
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/1.19.5/jquery.validate.unobtrusive.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/1.19.5/jquery.validate.unobtrusive.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/custom.js" asp-append-version="true"></script>

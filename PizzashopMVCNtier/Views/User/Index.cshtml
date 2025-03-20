@@ -16,7 +16,8 @@
             <div class="d-flex position-relative" role="search">
                 <input class="form-control me-2 search-user" type="search" placeholder="Search" id="userSearch"
                     aria-label="Search" />
-                <label for="search" class="search_icon" id="userSearchLabel"><img src="~/images/icons/search.svg" alt="" /></label>
+                <label for="search" class="search_icon" id="userSearchLabel"><img src="~/images/icons/search.svg"
+                        alt="" /></label>
             </div>
             <button type="button" class="btn add_user_btn">
                 <a asp-action="SaveUser" asp-controller="User" class="text-white text-decoration-none">+Add User</a>
@@ -37,7 +38,8 @@
 
 
     <!-- Delete user Modal -->
-    <div class="modal fade" tabindex="-1" id="myModal" aria-labelledby="modal-title" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" tabindex="-1" id="myModal" aria-labelledby="modal-title" data-bs-backdrop="static"
+        data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
@@ -86,16 +88,8 @@
             })
         }
 
-
-        $(document).on("click", "#userSearchLabel",function () {
-            currentPage = 1;
-            paginationAjax(currentPage);
-        });
-
-        $("#userSearch").on("keyup",function(e){
-            if(e.key === "Enter" || e.keyCode === 13){
-                paginationAjax(1);
-            }
+        $("#userSearch").on("input", function (e) {
+            paginationAjax(1);
         })
 
         $(document).on("click", ".sort-btn", function () {
@@ -132,7 +126,7 @@
                                 @* setTimeout(function () {
                                     location.reload(); // Refresh user list
                                 }, 1000); *@
-                                paginationAjax(1);
+                                    paginationAjax(1);
                             } else {
                                 toastr.error(response.message);
                             }
