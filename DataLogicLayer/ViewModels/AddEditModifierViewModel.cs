@@ -10,7 +10,7 @@ public class AddEditModifierViewModel
 
     public string? SelectedModifierGroups { get; set; }
 
-    [Required(ErrorMessage = "Modifier Group is required")]
+    // [MinLength(1, ErrorMessage = "Atleast one modifier group must be selected")]
     public List<long> ModifierGroupIds { get; set; } = new List<long>(); 
     public long OldModifierGroupId { get; set; } = 0;
 

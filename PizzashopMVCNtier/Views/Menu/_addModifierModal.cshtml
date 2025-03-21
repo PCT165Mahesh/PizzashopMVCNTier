@@ -28,8 +28,8 @@
                         }
                     </ul>
                 </div>
-                <input type="text" asp-for="@Model.SelectedModifierGroups" id="selectedModifierGroups">
-                @* <span class="text-danger" asp-validation-for="ModifierGroupId"></span> *@
+                <input type="hidden" asp-for="@Model.SelectedModifierGroups" id="selectedModifierGroups">
+                <span class="text-danger" asp-validation-for="@Model.ModifierGroupIds"></span>
             </div>
 
             <div class="form-floating col-md-6">
