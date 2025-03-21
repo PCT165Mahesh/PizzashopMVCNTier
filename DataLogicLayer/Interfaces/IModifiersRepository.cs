@@ -18,6 +18,7 @@ public interface IModifiersRepository
     #region Modifier Items CRUD
     public Task<(IEnumerable<ModifierItemViewModel> modifierItems, int totalRecords)> GetModifierItemAsync(long modifierGroupId, int pageNo, int pageSize, string search);
     public Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId, long modifierGroupId); //For Edit Modifier Item
+    public List<long> GetSelectedModifierGroupForModifer(long modifierId);
     public Task<string> AddModifierItemAsync(AddEditModifierViewModel model, long userId);
     public Task<string> EditModifierItemAsync(AddEditModifierViewModel model, long userId);
     public Task<bool> DeleteModifierItemAsync(long modifierGroupId,long modifierId, long userId);

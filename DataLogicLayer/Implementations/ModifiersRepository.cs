@@ -275,11 +275,11 @@ public class ModifiersRepository : IModifiersRepository
     public async Task<AddEditModifierViewModel> GetModifierByIdAsync(long modifierId, long modifierGroupId)
     {
         AddEditModifierViewModel? model = await _context.Modifiergroupitemmaps.Include(mm => mm.ModifierGroup)
-                                                .Where(mm => !mm.Isdeleted && mm.ModifierItemId == modifierId && mm.ModifierGroupId == modifierGroupId)
+                                                .Where(mm => !mm.Isdeleted && mm.ModifierItemId == modifierId)
                                                 .Select(mm => new AddEditModifierViewModel
                                                 {
-                                                    ModifierGroupId = mm.ModifierGroupId,
-                                                    OldModifierGroupId = mm.ModifierGroupId,
+                                                    // ModifierGroupId = mm.ModifierGroupId,
+                                                    // OldModifierGroupId = mm.ModifierGroupId,
                                                     ModifierItemId = modifierId,
                                                     Name = mm.ModifierItem.Name,
                                                     Description = mm.ModifierItem.Description,
@@ -289,6 +289,12 @@ public class ModifiersRepository : IModifiersRepository
                                                 }).FirstOrDefaultAsync();
 
         return model;
+    }
+
+    public List<long> GetSelectedModifierGroupForModifer(long modifierId)
+    {
+        List<long> modifierGroupIds = _context.Modifiergroupitemmaps.Where(mm => mm.ModifierItemId == modifierId && !mm.Isdeleted).Select(mm => mm.ModifierGroupId).ToList();
+        return modifierGroupIds;
     }
 
 
@@ -370,12 +376,9 @@ public class ModifiersRepository : IModifiersRepository
             _context.Modifieritems.Update(modifierItem);
             await _context.SaveChangesAsync();
 
-            //check if new modifier group is different
-            if (!model.ModifierGroupId.Equals(model.OldModifierGroupId))
-            {
-                await SaveModifierItem(modifierItem.Id, model, userId);
-
-            }
+            
+            await SaveModifierItem(modifierItem.Id, model, userId);
+            
             return "true";
         }
         catch (Exception ex)
@@ -387,7 +390,7 @@ public class ModifiersRepository : IModifiersRepository
 
 
 
-    public async Task<bool> DeleteModifierItemAsync(long modifierGroupId,long modifierId, long userId)
+    public async Task<bool> DeleteModifierItemAsync(long modifierGroupId, long modifierId, long userId)
     {
         // Modifieritem? modifierItem = _context.Modifieritems.Where(mi => mi.Id == modifierId && !mi.Isdeleted).FirstOrDefault();
         List<Modifiergroupitemmap> modifierGroupItems = _context.Modifiergroupitemmaps.Where(i => i.ModifierItemId == modifierId && i.ModifierGroupId == modifierGroupId && !i.Isdeleted).ToList();
@@ -471,7 +474,7 @@ public class ModifiersRepository : IModifiersRepository
             {
                 foreach (var deleteItem in toBeRemoved)
                 {
-                    await DeleteExistingModifiers(modifierGroupId,deleteItem, userId);
+                    await DeleteExistingModifiers(modifierGroupId, deleteItem, userId);
                 }
             }
 
@@ -508,7 +511,7 @@ public class ModifiersRepository : IModifiersRepository
     #endregion
 
     #region Delete Modifier Items In Mapping Table
-    public async Task<bool> DeleteExistingModifiers(long modifierGroupId,long id, long userId)
+    public async Task<bool> DeleteExistingModifiers(long modifierGroupId, long id, long userId)
     {
         try
         {
@@ -535,53 +538,57 @@ public class ModifiersRepository : IModifiersRepository
         }
     }
     #endregion
- 
+
     /*---------------------------------------------------------------------------Save Modifier Item with Different Groups In Add Modifier Item------------------------------------------------------------------------------*/
 
     #region Save Modifier Items In Mapping Table
     public async Task SaveModifierItem(long modifierId, AddEditModifierViewModel model, long userId)
     {
-        if (model.OldModifierGroupId != 0)
+
+        List<long> existingSelectedModifierIds = _context.Modifiergroupitemmaps.Where(mi => mi.ModifierItemId == modifierId && !mi.Isdeleted)
+                                                .Select(mi => mi.ModifierGroupId).ToList();
+
+        List<long> toRomoved = existingSelectedModifierIds.Except(model.ModifierGroupIds).ToList();
+
+        foreach (long mgId in toRomoved)
         {
-            Modifiergroupitemmap? oldModifier = await _context.Modifiergroupitemmaps
-                                            .Where(im => im.ModifierGroupId == model.OldModifierGroupId && im.ModifierItemId == modifierId && !im.Isdeleted)
+            await DeleteExistingModifiers(mgId, modifierId, userId);
+        }
+
+        foreach (long modifiergroupid in model.ModifierGroupIds)
+        {
+            Modifiergroupitemmap? existingOne = await _context.Modifiergroupitemmaps
+                                            .Where(im => im.ModifierGroupId == modifiergroupid && im.ModifierItemId == modifierId && !im.Isdeleted)
                                             .FirstOrDefaultAsync();
 
-            if (oldModifier != null)
+            if (existingOne != null)
             {
+                existingOne.UpdatedBy = userId;
+                existingOne.UpdatedAt = DateTime.Now;
+                _context.Modifiergroupitemmaps.Update(existingOne);
+                await _context.SaveChangesAsync();
+                continue;
+            }
 
-                //Delete the existing Modifer and Group Mapping
-                oldModifier.Isdeleted = true;
-                oldModifier.UpdatedBy = userId;
-                oldModifier.UpdatedAt = DateTime.Now;
-                _context.Modifiergroupitemmaps.Update(oldModifier);
+            //If Existing Item is Not Found Add It to Items Mapping
+            Modifiergroupitemmap modifiergroupitemmap = new Modifiergroupitemmap
+            {
+                ModifierGroupId = modifiergroupid,
+                ModifierItemId = modifierId,
+                CreatedBy = userId,
+                CreatedAt = DateTime.Now,
+
+            };
+            try
+            {
+                _context.Modifiergroupitemmaps.Add(modifiergroupitemmap);
                 await _context.SaveChangesAsync();
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception in Saving Modifieri Item Map", ex.Message);
+            }
         }
-        Modifiergroupitemmap? existingOne = await _context.Modifiergroupitemmaps
-                                            .Where(im => im.ModifierGroupId == model.ModifierGroupId && im.ModifierItemId == modifierId && !im.Isdeleted)
-                                            .FirstOrDefaultAsync();
-
-        if (existingOne != null)
-        {
-            existingOne.UpdatedBy = userId;
-            existingOne.UpdatedAt = DateTime.Now;
-            _context.Modifiergroupitemmaps.Update(existingOne);
-            await _context.SaveChangesAsync();
-            return;
-        }
-
-        //If Existing Item is Not Found Add It to Items Mapping
-        Modifiergroupitemmap modifiergroupitemmap = new Modifiergroupitemmap
-        {
-            ModifierGroupId = model.ModifierGroupId,
-            ModifierItemId = modifierId,
-            CreatedBy = userId,
-            CreatedAt = DateTime.Now,
-
-        };
-        _context.Modifiergroupitemmaps.Add(modifiergroupitemmap);
-        await _context.SaveChangesAsync();
     }
     #endregion
 }

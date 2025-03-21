@@ -13,15 +13,25 @@
         <!-- row 1-->
         <div class="row mb-3">
             <div class="form-floating mb-3 col-md-6">
-                <select asp-for="@Model.ModifierGroupId" class="form-select" id="modifierSelect">
-                        <option value="-2">Select Modifier Group(s)</option>
+                <div class="dropdown">
+                    <button class="btn btn-light form-control text-start dropdown-toggle" type="button" id="modifierDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Modifier Group(s)
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="modifierDropdown">
                         @foreach (var modifierGroup in Model.ModifierGroupList)
                         {
-                            <option value="@modifierGroup.ModifierId">@modifierGroup.Name</option>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="modifier-checkbox" value="@modifierGroup.ModifierId"> @modifierGroup.Name
+                                </label>
+                            </li>
                         }
-                    </select>
-                    <span class="text-danger" asp-validation-for="ModifierGroupId"></span>
+                    </ul>
+                </div>
+                <input type="text" asp-for="@Model.SelectedModifierGroups" id="selectedModifierGroups">
+                @* <span class="text-danger" asp-validation-for="ModifierGroupId"></span> *@
             </div>
+
             <div class="form-floating col-md-6">
                 <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Enter name" required>
                 <label class="form-label txt-color">Name*</label>
@@ -70,3 +80,96 @@
         <button type="button" class="btn cancle_btn" data-bs-dismiss="modal">No</button>
     </div>
 </form>
+
+@* <script>
+    $(document).ready(function () {
+        let selectedModifiers = [];
+
+        $(".modifier-checkbox").change(function () {
+            let value = $(this).data("modifiergroupid");
+            if ($(this).is(":checked")) {
+                selectedModifiers.push(value);
+            } else {
+                selectedModifiers = selectedModifiers.pop(item => item !== value);
+            }
+
+            $("#selectedModifierGroups").val(selectedModifiers.join(","));
+
+
+            if (selectedModifiers.length > 0) {
+                $("#modifierDropdown").text(selectedModifiers.length + " Selected");
+            } else {
+                $("#modifierDropdown").text("Select Modifier Group(s)");
+            }
+        });
+
+
+        $("#modifierItemForm").submit(function () {
+            $("#selectedModifierGroups").val(selectedModifiers.join(","));
+        });
+
+
+        let preselectedValues = $("#selectedModifierGroups").val();
+        if (preselectedValues) {
+            let preselectedArray = preselectedValues.split(",");
+            console.log(preselectedArray);
+            $(".modifier-checkbox").each(function () {
+                if (preselectedArray.includes($(this).data("modifiergroupid"))) {
+                    $(this).prop("checked", true);
+                    console.log($(this).data("modifiergroupid"));
+                    selectedModifiers.push($(this).data("modifiergroupid"));
+                }
+            });
+
+            console.log(selectedModifiers);
+            if (selectedModifiers.length > 0) {
+                $("#modifierDropdown").text(selectedModifiers.length + " Selected");
+            }
+        }
+    });
+
+</script> *@
+
+<script>
+    $(document).ready(function () {
+        let selectedModifiers = [];
+
+        $(".modifier-checkbox").change(function () {
+            let value = $(this).val();
+            if ($(this).is(":checked")) {
+                selectedModifiers.push(value);
+            } else {
+                selectedModifiers = selectedModifiers.filter(item => item !== value);
+            }
+
+            $("#selectedModifierGroups").val(selectedModifiers.join(","));
+
+            if (selectedModifiers.length > 0) {
+                $("#modifierDropdown").text(selectedModifiers.length + " Selected");
+            } else {
+                $("#modifierDropdown").text("Select Modifier Group(s)");
+            }
+        });
+
+        $("#modifierItemForm").submit(function () {
+            $("#selectedModifierGroups").val(selectedModifiers.join(","));
+        });
+
+        let preselectedValues = $("#selectedModifierGroups").val();
+        if (preselectedValues) {
+            let preselectedArray = preselectedValues.split(",");
+            $(".modifier-checkbox").each(function () {
+                if (preselectedArray.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                    selectedModifiers.push($(this).val());
+                }
+            });
+
+            // Update button text
+            if (selectedModifiers.length > 0) {
+                $("#modifierDropdown").text(selectedModifiers.length + " Selected");
+            }
+        }
+    });
+
+</script>

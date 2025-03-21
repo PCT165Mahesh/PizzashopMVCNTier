@@ -106,6 +106,11 @@ public class ModifiersService : IModifiersService
         return await _modifiersRepository.GetModifierByIdAsync(modifierId, modifierGroupId);
     }
 
+    public List<long> GetModifierGroupForModifierItem(long modifierId)
+    {
+        return _modifiersRepository.GetSelectedModifierGroupForModifer(modifierId);
+    }
+
     public async Task<string> AddModifierItem(AddEditModifierViewModel model, long userId)
     {
         if (model == null)
